@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,127 +24,125 @@ namespace Pvz1
     {
         List<Timer> Timerlist = new List<Timer>();
 
-        private class Interval
-        {
-            public float x1;
-            public float x2;
-            public bool done;
-        }
 
-        public Form1()
+        //PIRMA UZDUOTIS
+        public static decimal[,] mulMatrix(decimal[,] a, decimal[,] b)
         {
-            InitializeComponent();
-            Initialize();
-        }
-
-        float x1, x2, xtemp, zingsnis, x_nueita, x1prad, x2prad;
-        int N = 1000;
-        int iii, i_interval, current;
-
-        Series Fx, X1X2, XMid, Iv;
-        float[] a = { 128.68f, 4.03f, -23.05f, 0.07f, 0.89f };
-        float[] a_neg = { 128.68f, -4.03f, -23.05f, -0.07f, 0.89f };
-        List<Interval> intervalsArray;
-        Interval[] intervals;
-
-        /// <summary>
-        /// Sprendžiama F(x) = 0.89𝑥^4 + 0.07𝑥^3 − 23.05𝑥^2 + 4.03𝑥 + 128.68
-        /// </summary>
-        /// <param name="x">daugianario argumentas</param>
-        /// <returns></returns>
-        private double F(double x)
-        {
-            return (double)(a[4] * Math.Pow(x, 4) + a[3] * Math.Pow(x, 3) + a[2] * Math.Pow(x, 2) + a[1] * x + a[0]);
-        }
-
-        /// <summary>
-        /// Sprendžiama G(x) = e^-x (cos(x)/(x-6)); -5 <= x <= 5
-        /// </summary>
-        /// <param name="x">funkcijos argumentas</param>
-        /// <returns></returns>
-        private double G(double x)
-        {
-            return (double)(Math.Pow(Math.E, -x) * (Math.Cos(x) / (x - 6)));
-        }
-        private float PreciseInterval(float[] array)
-        {
-            int k = array.Length - 1;
-            float B = Math.Abs(array[0]);
-            for (int i = 1; i < array.Length; i++)
+            decimal[,] ret = new decimal[a.GetLength(1), b.GetLength(0)];
+            for (int i = 0; i < ret.GetLength(0); i++)
             {
-                if (Math.Abs(array[i]) > B && array[i] < 0)
+                for (int j = 0; j < ret.GetLength(1); j++)
                 {
-                    B = Math.Abs(array[i]);
+                    ret[i, j] = 0;
+                    for (int k = 0; k < ret.GetLength(0); k++)
+                    {
+                        ret[i, j] += a[i, k] * b[k, j];
+                    }
                 }
             }
-            for (int i = array.Length - 1; i >= 0; i--)
-            {
-                if (array[i] < 0)
-                {
-                    k = i;
-                    i = -1;
-                }
-            }
-            k = array.Length - k;
-            return (float)(1 + Math.Pow((B / a[a.Length - 1]), 1.0 / k));
+            return ret;
         }
-
-        private void BigInterval(ref float x1, ref float x2)
+        public static string printMatrix(decimal[,] A)
         {
-            float R, R_positive, R_negative;
-            R = 1 + a.MaximumAbsolute() / a[a.Length - 1];
-            R_positive = PreciseInterval(a);
-            R_negative = PreciseInterval(a_neg);
-            x2 = Math.Min(R, R_positive);
-            x1 = -Math.Min(R, R_negative);
+            StringBuilder ret = new StringBuilder();
+            for (int i = 0; i < A.GetLength(0); i++)
+            {
+                for (int u = 0; u < A.GetLength(1); u++)
+                {
+                    ret.Append(string.Format("{0, 12:F6}", A[i, u]));
+                }
+                ret.Append("\n");
+            }
+            ret.Append("\n");
+            return ret.ToString();
         }
-
         private void button2_Click(object sender, EventArgs e)
         {
             ClearForm1();
-            PreparareForm(-15, 10, -40, 10);
-            BigInterval(ref x1, ref x2);
-            iii = 0;
-            richTextBox1.AppendText("Sprendžiamas daugianaris F(x) = 0.89x^4 + 0.07x^3 − 23.05x^2 + 4.03x + 128.68\n\n");
-            richTextBox1.AppendText(string.Format("Nustatytas daugianario šaknų intervalas grubiu ir tikslesniu įverčiais: ({0}, {1})\n\n", x1, x2));
-            Fx = chart1.Series.Add("F(x)");
-            Fx.ChartType = SeriesChartType.Line;
-            double x = -10;
-            for (int i = 0; i < 250; i++)
+            richTextBox1.AppendText("Sprendžiama lygčių sistema: [A][X]=[B]\n\n");
+            decimal[,] A = { { 9, 1, -2, 1 }, { 0, 11, 3, 4 }, { 1, 3, 12, -3 }, { 0, -1, 2, 2 } };
+            decimal[,] A_test = { { 9, 1, -2, 1 }, { 0, 11, 3, 4 }, { 1, 3, 12, -3 }, { 0, -1, 2, 2 } };
+            decimal[] B = { 47, -24, 27, -5 };
+            decimal[] X = new decimal[B.Length];
+            Array.ForEach(X, element => element = 0);
+            richTextBox1.AppendText("[A] = \n");
+            richTextBox1.AppendText(printMatrix(A));
+            richTextBox1.AppendText("[B] = \n");
+            Array.ForEach(B, element => richTextBox1.AppendText(string.Format("{0, 12}\n", element)));
+            int n = A.GetLength(0);
+            //---
+            decimal[,] L = new decimal[n, n];
+            decimal[,] U = new decimal[n, n];
+            for (int i = 0; i < n; i++)
             {
-                Fx.Points.AddXY(x, F(x));
-                x = x + (2 * Math.PI) / 50;
+                for (int u = 0; u < n; u++)
+                {
+                    U[i, u] = 0;
+                    L[i, u] = (i == u) ? 1 : 0;
+                }
             }
-            Fx.BorderWidth = 3;
-
-
-            X1X2 = chart1.Series.Add("X1X2");
-            X1X2.MarkerStyle = MarkerStyle.Circle;
-            X1X2.MarkerSize = 8;
-            X1X2.ChartType = SeriesChartType.Point;
-            X1X2.ChartType = SeriesChartType.Line;
-
-            XMid = chart1.Series.Add("Šaknies pozicija");
-            XMid.MarkerStyle = MarkerStyle.Circle;
-            X1X2.ChartType = SeriesChartType.Point;
-            X1X2.ChartType = SeriesChartType.Line;
-            XMid.MarkerSize = 8;
-
-            Iv = chart1.Series.Add("Šaknų intervalas");
-            Iv.MarkerStyle = MarkerStyle.Cross;
-            Iv.MarkerSize = 8;
-            Iv.ChartType = SeriesChartType.Point;
-            Iv.Points.AddXY(x1, 0);
-            Iv.Points.AddXY(x2, 0);
-
-            intervalsArray = new List<Interval>();
-            x_nueita = x1;
-            zingsnis = 0.5f;
-            i_interval = 0;
-            richTextBox1.AppendText(string.Format("Skenuojamas intervalas ({0}, {1}) su žingsniu: {2} atskirti šaknų intervalus\n", x1, x2, zingsnis));
-            timer4.Enabled = true;
-            timer4.Interval = 500;
-            timer4.Start();
+            //---
+            richTextBox1.AppendText("[L] = \n");
+            richTextBox1.AppendText(printMatrix(L));
+            richTextBox1.AppendText("[U] = \n");
+            richTextBox1.AppendText(printMatrix(U));
+            //---
+            for (int i = 0; i < n; i++) U[0, i] = A[0, i];
+            decimal r = 0;
+            for (int i = 0; i < n - 1; i++) //Eilute
+            {
+                for (int u = i + 1; u < n; u++) //Likusios eilutes
+                {
+                    r = A[u, i] / A[i, i];
+                    for (int y = i; y < n; y++)
+                    {
+                        U[u, y] = A[u, y] - A[i, y] * r;
+                        A[u, y] = A[u, y] - A[i, y] * r;
+                    }
+                    L[u, i] = r;
+                }
+                richTextBox1.AppendText(string.Format("Nuliai po {0} stulp. Pertvarkyta matrica [A]=\n", i + 1));
+                richTextBox1.AppendText(printMatrix(A));
+            }
+            //---
+            richTextBox1.AppendText("Skaičiavimai baigti. Rezultatai:\n\n");
+            richTextBox1.AppendText("[L] = \n");
+            richTextBox1.AppendText(printMatrix(L));
+            richTextBox1.AppendText("[U] = \n");
+            richTextBox1.AppendText(printMatrix(U));
+            //---
+            for (int i = n - 1; i >= 0; i--)
+            {
+                decimal value = 0;
+                for (int u = n - 1; u > i; u--)
+                {
+                    value += U[i, u] * X[u];
+                }
+                X[i] = (B[i] - value) / U[i, i];
+            }
+            richTextBox1.AppendText("Sprendinys [X] = \n");
+            Array.ForEach(X, element => richTextBox1.AppendText(string.Format("{0, 12:F6}\n", element)));
+            //---
+            //Tikrinimas
+            richTextBox1.AppendText("\nTikrinimas = \n");
+            //1. L*U
+            decimal[,] ats = mulMatrix(L, U);
+            richTextBox1.AppendText("1) [L]*[U] = \n");
+            richTextBox1.AppendText(printMatrix(ats));
+            //2. Reiksmiu istatymas
+            richTextBox1.AppendText("2) Reikšmių įstatymas į pradinę matricą =\n");
+            for (int i = 0; i < A_test.GetLength(0); i++)
+            {
+                richTextBox1.AppendText(string.Format("Tikrinama {0} pradinės matricos eilutė = \n", i + 1));
+                decimal ats2 = 0;
+                for (int u = 0; u < A_test.GetLength(1); u++)
+                {
+                    ats2 += A_test[i, u] * X[u];
+                    richTextBox1.AppendText(string.Format("{0, 0:F2} * {1, 0:F2}", A_test[i, u], X[u]));
+                    if (u + 1 < A_test.GetLength(1)) richTextBox1.AppendText(" + ");
+                }
+                richTextBox1.AppendText(string.Format(" = {0, 0:F2}. B[{1}] = {2, 0:F2}\n", ats2, i+1, B[i]));
+            }
 
         }
 
@@ -352,6 +351,90 @@ namespace Pvz1
                 timer2.Stop();
             }
         }
+
+
+
+
+
+
+
+
+        private class Interval
+        {
+            public float x1;
+            public float x2;
+            public bool done;
+        }
+
+        public Form1()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        float x1, x2, xtemp, zingsnis, x_nueita, x1prad, x2prad;
+        int N = 1000;
+        int iii, i_interval, current;
+
+        Series Fx, X1X2, XMid, Iv;
+        float[] a = { 128.68f, 4.03f, -23.05f, 0.07f, 0.89f };
+        float[] a_neg = { 128.68f, -4.03f, -23.05f, -0.07f, 0.89f };
+        List<Interval> intervalsArray;
+        Interval[] intervals;
+
+        /// <summary>
+        /// Sprendžiama F(x) = 0.89𝑥^4 + 0.07𝑥^3 − 23.05𝑥^2 + 4.03𝑥 + 128.68
+        /// </summary>
+        /// <param name="x">daugianario argumentas</param>
+        /// <returns></returns>
+        private double F(double x)
+        {
+            return (double)(a[4] * Math.Pow(x, 4) + a[3] * Math.Pow(x, 3) + a[2] * Math.Pow(x, 2) + a[1] * x + a[0]);
+        }
+
+        /// <summary>
+        /// Sprendžiama G(x) = e^-x (cos(x)/(x-6)); -5 <= x <= 5
+        /// </summary>
+        /// <param name="x">funkcijos argumentas</param>
+        /// <returns></returns>
+        private double G(double x)
+        {
+            return (double)(Math.Pow(Math.E, -x) * (Math.Cos(x) / (x - 6)));
+        }
+        private float PreciseInterval(float[] array)
+        {
+            int k = array.Length - 1;
+            float B = Math.Abs(array[0]);
+            for (int i = 1; i < array.Length; i++)
+            {
+                if (Math.Abs(array[i]) > B && array[i] < 0)
+                {
+                    B = Math.Abs(array[i]);
+                }
+            }
+            for (int i = array.Length - 1; i >= 0; i--)
+            {
+                if (array[i] < 0)
+                {
+                    k = i;
+                    i = -1;
+                }
+            }
+            k = array.Length - k;
+            return (float)(1 + Math.Pow((B / a[a.Length - 1]), 1.0 / k));
+        }
+
+        private void BigInterval(ref float x1, ref float x2)
+        {
+            float R, R_positive, R_negative;
+            R = 1 + a.MaximumAbsolute() / a[a.Length - 1];
+            R_positive = PreciseInterval(a);
+            R_negative = PreciseInterval(a_neg);
+            x2 = Math.Min(R, R_positive);
+            x1 = -Math.Min(R, R_negative);
+        }
+
+
         /// <summary>
         /// timer2 iteracijoje atliekami veiksmai
         /// </summary>
@@ -655,7 +738,7 @@ namespace Pvz1
         ///
         /// Antra uzduotis
         /// <summary>
-        
+
         private double V(double c)
         {
             double m = 80;
@@ -663,7 +746,7 @@ namespace Pvz1
             double v = 36;
             double g = 9.8;
             if (c == 0) c = 0.00000001;
-            return ((m * g) / c) * (1 - Math.Pow(Math.E, -(c / m) * t))-v;
+            return ((m * g) / c) * (1 - Math.Pow(Math.E, -(c / m) * t)) - v;
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -943,7 +1026,7 @@ namespace Pvz1
                 richTextBox1.AppendText("\nSkaičiavimai baigti.\n\n");
                 double[] y_rez = y_gynimo.ToArray();
                 richTextBox1.AppendText("Rasti sprendiniai (x, y):\n");
-                for (int i = 0; i < y_rez.Length; i++) 
+                for (int i = 0; i < y_rez.Length; i++)
                 {
                     richTextBox1.AppendText(string.Format("({0}, {1})\n", -Math.Pow(y_rez[i], 2), y_rez[i]));
                 }

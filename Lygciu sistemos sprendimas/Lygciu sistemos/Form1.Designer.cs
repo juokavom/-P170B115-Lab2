@@ -123,7 +123,7 @@ namespace Pvz1
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(156, 25);
             this.button2.TabIndex = 4;
-            this.button2.Text = "f(x) daugianaris";
+            this.button2.Text = "Pirma uzduotis";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
