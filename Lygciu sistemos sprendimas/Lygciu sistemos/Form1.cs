@@ -24,6 +24,11 @@ namespace Pvz1
     {
         List<Timer> Timerlist = new List<Timer>();
 
+        public Form1()
+        {
+            InitializeComponent();
+            Initialize();
+        }
 
         //PIRMA UZDUOTIS
         public static decimal[,] mulMatrix(decimal[,] a, decimal[,] b)
@@ -141,9 +146,73 @@ namespace Pvz1
                     richTextBox1.AppendText(string.Format("{0, 0:F2} * {1, 0:F2}", A_test[i, u], X[u]));
                     if (u + 1 < A_test.GetLength(1)) richTextBox1.AppendText(" + ");
                 }
-                richTextBox1.AppendText(string.Format(" = {0, 0:F2}. B[{1}] = {2, 0:F2}\n", ats2, i+1, B[i]));
+                richTextBox1.AppendText(string.Format(" = {0, 0:F2}. B[{1}] = {2, 0:F2}\n", ats2, i + 1, B[i]));
             }
 
+        }
+
+        //ANTRA UZDUOTIS
+
+        //2.1
+        private double Y11(double x)
+        {
+            return Math.Sqrt(-((-Math.Pow(x, 2)+1+Math.Sqrt(Math.Pow(x, 4)+2*Math.Pow(x, 2)+40*x+1))/2));
+
+        }
+        private double Y12(double x)
+        {
+            return -Math.Sqrt(-((-Math.Pow(x, 2)+1+Math.Sqrt(Math.Pow(x, 4)+2*Math.Pow(x, 2)+40*x+1))/2));
+
+        }
+        private double Y13(double x)
+        {
+            return Math.Sqrt(-((-Math.Pow(x, 2)+1-Math.Sqrt(Math.Pow(x, 4)+2*Math.Pow(x, 2)+40*x+1))/2));
+
+        }
+        private double Y14(double x)
+        {
+            return -Math.Sqrt(-((-Math.Pow(x, 2)+1-Math.Sqrt(Math.Pow(x, 4)+2*Math.Pow(x, 2)+40*x+1))/2));
+
+        }
+        private double Y21(double x)
+        {
+            return Math.Sqrt((-Math.Pow(x, 2) + 32) / 2);
+        }
+        private double Y22(double x)
+        {
+            return -Math.Sqrt((-Math.Pow(x, 2) + 32) / 2);
+        }
+        private double Z1(double x, double y) 
+        {
+            return (10 * x) / (Math.Pow(y, 2) + 1) + Math.Pow(x, 2) - Math.Pow(y, 2);
+        }
+        Series z1, z2;
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ClearForm1();
+            PreparareForm(-15, 10, -5, 5);
+            x1 = -5;
+            x2 = 5;
+            iii = 0;
+            z1 = chart1.Series.Add("Pirma lygtis");
+            z1.ChartType = SeriesChartType.Point;
+            z2 = chart1.Series.Add("Antra lygtis");
+            z2.ChartType = SeriesChartType.Point;
+            double x = -5;
+            int count = 0;
+            for (double i = -15; i < 8; i += 0.001f)
+            {
+                z1.Points.AddXY(i, Y11(i));
+                z1.Points.AddXY(i, Y12(i));
+                z1.Points.AddXY(i, Y13(i));
+                z1.Points.AddXY(i, Y14(i));
+                z2.Points.AddXY(i, Y21(i));
+                z2.Points.AddXY(i, Y22(i));
+            }
+            richTextBox1.AppendText("Nupiesta\n");
+
+            z1.BorderWidth = 1;
+            z2.BorderWidth = 1;
         }
 
         /// <summary>
@@ -366,11 +435,6 @@ namespace Pvz1
             public bool done;
         }
 
-        public Form1()
-        {
-            InitializeComponent();
-            Initialize();
-        }
 
         float x1, x2, xtemp, zingsnis, x_nueita, x1prad, x2prad;
         int N = 1000;
@@ -458,53 +522,7 @@ namespace Pvz1
                 SkenavimoMetodas();
             }
         }
-        private void button3_Click(object sender, EventArgs e)
-        {
-            ClearForm1();
-            PreparareForm(-10, 10, -5, 5);
-            x1 = -5;
-            x2 = 5;
-            iii = 0;
-            richTextBox1.AppendText("Sprendžiama funkcija G(x) = e^-x (cos(x)/(x-6))\n\n");
-            Fx = chart1.Series.Add("G(x)");
-            Fx.ChartType = SeriesChartType.Line;
-            double x = -5;
-            for (int i = 0; i < 250; i++)
-            {
-                if (x > 5) break;
-                Fx.Points.AddXY(x, G(x));
-                x = x + (2 * Math.PI) / 50;
-            }
-            Fx.BorderWidth = 3;
 
-            X1X2 = chart1.Series.Add("X1X2");
-            X1X2.MarkerStyle = MarkerStyle.Circle;
-            X1X2.MarkerSize = 8;
-            X1X2.ChartType = SeriesChartType.Point;
-            X1X2.ChartType = SeriesChartType.Line;
-
-            XMid = chart1.Series.Add("Šaknies pozicija");
-            XMid.MarkerStyle = MarkerStyle.Circle;
-            X1X2.ChartType = SeriesChartType.Point;
-            X1X2.ChartType = SeriesChartType.Line;
-            XMid.MarkerSize = 8;
-
-            Iv = chart1.Series.Add("Šaknų intervalas");
-            Iv.MarkerStyle = MarkerStyle.Cross;
-            Iv.MarkerSize = 8;
-            Iv.ChartType = SeriesChartType.Point;
-            Iv.Points.AddXY(x1, 0);
-            Iv.Points.AddXY(x2, 0);
-
-            intervalsArray = new List<Interval>();
-            x_nueita = x1;
-            zingsnis = 0.5f;
-            i_interval = 0;
-            richTextBox1.AppendText(string.Format("Skenuojamas intervalas ({0}, {1}) su žingsniu: {2} atskirti šaknų intervalus\n", x1, x2, zingsnis));
-            timer3.Enabled = true;
-            timer3.Interval = 500;
-            timer3.Start();
-        }
         /// <summary>
         /// timer2 iteracijoje atliekami veiksmai
         /// </summary>

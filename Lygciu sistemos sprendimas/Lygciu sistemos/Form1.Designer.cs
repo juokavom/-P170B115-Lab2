@@ -56,8 +56,6 @@ namespace Pvz1
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
             this.stygu = new System.Windows.Forms.RadioButton();
             this.iteraciju = new System.Windows.Forms.RadioButton();
             this.skenavimo = new System.Windows.Forms.RadioButton();
@@ -97,16 +95,6 @@ namespace Pvz1
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // timer2
-            // 
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
-            this.timer3.Tick += new System.EventHandler(this.timer3_Tick);
-            this.timer4.Tick += new System.EventHandler(this.timer4_Tick);
-            this.timer5.Tick += new System.EventHandler(this.timer5_Tick);
-            this.timer6.Tick += new System.EventHandler(this.timer6_Tick);
-            this.timer7.Tick += new System.EventHandler(this.timer7_Tick);
-            this.timer8.Tick += new System.EventHandler(this.timer8_Tick);
-            this.timer9.Tick += new System.EventHandler(this.timer9_Tick);
             // 
             // 
             // 
@@ -133,28 +121,10 @@ namespace Pvz1
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(156, 23);
             this.button3.TabIndex = 5;
-            this.button3.Text = "g(x) transcendentinė funkcija";
+            this.button3.Text = "Antra uzduotis";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // button2
-            // 
-            this.button5.Location = new System.Drawing.Point(692, 300);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(156, 23);
-            this.button3.TabIndex = 5;
-            this.button5.Text = "Antra užduotis";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // button4
-            // 
-            this.button6.Location = new System.Drawing.Point(692, 400);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(156, 23);
-            this.button6.TabIndex = 5;
-            this.button6.Text = "Gynimo užduotis";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // button4
             // 
@@ -172,8 +142,6 @@ namespace Pvz1
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(858, 678);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -183,7 +151,7 @@ namespace Pvz1
             this.Controls.Add(this.skenavimo);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.chart1);
-            this.Name = "Lab1";
+            this.Name = "Lab2";
             this.Text = "Skaitiniai metodai ir Algoritmai";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
@@ -207,7 +175,6 @@ namespace Pvz1
         /// </summary>
         public void PreparareForm(float xmin, float xmax, float ymin, float ymax)
         {
-
             float x_grids = 10;
             //double xmin = 0; double xmax = 2 * Math.PI;
             chart1.ChartAreas[0].AxisX.MajorGrid.Interval = (xmax - xmin) / x_grids;
@@ -253,8 +220,6 @@ namespace Pvz1
         private RadioButton skenavimo;
         private Button button3;
         private Button button4;
-        private Button button5;
-        private Button button6;
     }
 
 
