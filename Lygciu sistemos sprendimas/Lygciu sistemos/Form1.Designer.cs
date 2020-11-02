@@ -56,9 +56,8 @@ namespace Pvz1
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.stygu = new System.Windows.Forms.RadioButton();
-            this.iteraciju = new System.Windows.Forms.RadioButton();
-            this.skenavimo = new System.Windows.Forms.RadioButton();
+            this.var1 = new System.Windows.Forms.RadioButton();
+            this.var2 = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // chart1
@@ -97,17 +96,9 @@ namespace Pvz1
             // 
             // 
             // 
-            // 
-            this.stygu.Location = new System.Drawing.Point(692, 10);
-            this.stygu.Text = "1.Stygų m.";
-            this.iteraciju.Location = new System.Drawing.Point(692, 50);
-            this.iteraciju.Text = "2.Paprastųjų it.";
-            this.skenavimo.Location = new System.Drawing.Point(692, 90);
-            this.skenavimo.Text = "5.Skenavimo maž.";
-            // 
             //
             //
-            this.button2.Location = new System.Drawing.Point(692, 140);
+            this.button2.Location = new System.Drawing.Point(692, 10);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(156, 25);
             this.button2.TabIndex = 4;
@@ -117,7 +108,7 @@ namespace Pvz1
             // 
             // button2
             // 
-            this.button3.Location = new System.Drawing.Point(692, 190);
+            this.button3.Location = new System.Drawing.Point(692, 50);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(156, 23);
             this.button3.TabIndex = 5;
@@ -126,6 +117,12 @@ namespace Pvz1
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // button2
             // 
+            // 
+            // 
+            this.var1.Location = new System.Drawing.Point(692, 70);
+            this.var1.Text = "I L.S.";
+            this.var2.Location = new System.Drawing.Point(692, 90);
+            this.var2.Text = "II L.S.";
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -146,9 +143,8 @@ namespace Pvz1
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.stygu);
-            this.Controls.Add(this.iteraciju);
-            this.Controls.Add(this.skenavimo);
+            this.Controls.Add(this.var1);
+            this.Controls.Add(this.var2);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.chart1);
             this.Name = "Lab2";
@@ -215,9 +211,8 @@ namespace Pvz1
         private System.Windows.Forms.Timer timer8;
         private System.Windows.Forms.Timer timer9;
         private System.Windows.Forms.Button button2;
-        private RadioButton stygu;
-        private RadioButton iteraciju;
-        private RadioButton skenavimo;
+        private RadioButton var1;
+        private RadioButton var2;
         private Button button3;
         private Button button4;
     }
