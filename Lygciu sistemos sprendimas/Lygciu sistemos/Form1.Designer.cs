@@ -161,10 +161,7 @@ namespace Pvz1
         /// </summary>
         private void Initialize()
         {
-            // pridedam timerius
-            Timerlist.Clear();
-            Timerlist.Add(timer1);
-            Timerlist.Add(timer2);
+
         }
 
         /// <summary>

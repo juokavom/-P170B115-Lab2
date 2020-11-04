@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -23,7 +24,6 @@ namespace Pvz1
 
     public partial class Form1 : Form
     {
-        List<Timer> Timerlist = new List<Timer>();
 
         public Form1()
         {
@@ -187,7 +187,7 @@ namespace Pvz1
         {
             return (10 * x) / (Math.Pow(y, 2) + 1) + Math.Pow(x, 2) - Math.Pow(y, 2);
         }
-        Series z1, z2, line;
+        Series z1, z2, line1, line2, line3, line4;
         private void button3_Click(object sender, EventArgs e)
         {
             if (var1.Checked) nlsPirmas();
@@ -205,8 +205,6 @@ namespace Pvz1
             z1.ChartType = SeriesChartType.Point;
             z2 = chart1.Series.Add("Antra lygtis");
             z2.ChartType = SeriesChartType.Point;
-            double x = -5;
-            int count = 0;
             for (double i = -15; i < 8; i += 0.001f)
             {
                 z1.Points.AddXY(i, Y11(i));
@@ -221,7 +219,15 @@ namespace Pvz1
             z1.BorderWidth = 1;
             z2.BorderWidth = 1;
 
-            Niutono();
+            line1 = chart1.Series.Add("Sprendinys 1");
+            line2 = chart1.Series.Add("Sprendinys 2");
+            line3 = chart1.Series.Add("Sprendinys 3");
+            line4 = chart1.Series.Add("Sprendinys 4");
+
+            Niutono( 2, -8, line1);
+            Niutono( 5, 10, line2);
+            Niutono( -7, 5, line3);
+            Niutono( 0, 1, line4);
         }
 
         private double f211(double x, double y)
@@ -249,21 +255,57 @@ namespace Pvz1
             return 4 * y;
         }
 
-        double[] x = { 2, -8 }; //Pradinis artinys
+        double[] x = new double[2]; //Pradinis artinys
         double[,] J = new double[2, 2]; //Jakobio matrica
         double[] F = new double[2]; //Funkcijos reiksmes
         double[] deltaX = new double[2]; //Delta X vektorius
-        int it = 0;
+        int it;
+        int count = 0;
 
-        private void Niutono()
+        private void Niutono(double x0_art, double x1_art, Series line)
         {
-            line = chart1.Series.Add("Sprendinys");
+            it = 0;
             line.ChartType = SeriesChartType.Line;
+            x[0] = x0_art;
+            x[1] = x1_art;
 
-            timer4.Enabled = true;
-            timer4.Interval = 5;
-            timer4.Start();
+            double tikslumas = Double.MaxValue;
+            while (tikslumas > 1e-3) 
+            {
+                
+                J[0, 0] = dFx211(x[0], x[1]);
+                J[0, 1] = dFy211(x[0], x[1]);
+                J[1, 0] = deltaFx212(x[0], x[1]);
+                J[1, 1] = dFy212(x[0], x[1]);
 
+                F[0] = f211(x[0], x[1]);
+
+                F[1] = f212(x[0], x[1]);
+
+                double k = J[1, 0] / J[0, 0]; //Jakobio matrica sprendžiama gauso metodu
+                J[1, 0] -= J[0, 0] * k;
+                J[1, 1] -= J[0, 1] * k;
+                F[1] -= F[0] * k;
+
+                deltaX[1] = -F[1] / J[1, 1];
+                deltaX[0] = (-F[0] - deltaX[1] * J[0, 1]) / J[0, 0];
+
+                line.Points.AddXY(x[0], x[1]);
+
+                tikslumas = Math.Abs(f211(x[0], x[1]) - f212(x[0], x[1]));
+                it++;
+
+                if (tikslumas < 0.001 || it > 1000) break;
+                else
+                {
+                    x[0] += deltaX[0];
+                    x[1] += deltaX[1];
+                    Thread.Sleep(300);
+                }
+            }
+
+            richTextBox1.AppendText(string.Format("Pradinis artinys: [{0}; {1}], tiksumas: {2, 0:F5}, iteracijų sk.: {3}\nSprendinys {6}: [{4, 0:F5}; {5, 0:F5}]\n", 
+                x0_art, x1_art, tikslumas, it, x[0], x[1], ++count));
             line.BorderWidth = 3;
 
         }
@@ -277,32 +319,7 @@ namespace Pvz1
 
         private void timer4_Tick(object sender, EventArgs e)
         {
-            double tikslumas;
-            J[0, 0] = dFx211(x[0], x[1]);
-            J[0, 1] = dFy211(x[0], x[1]);
-            J[1, 0] = deltaFx212(x[0], x[1]);
-            J[1, 1] = dFy212(x[0], x[1]);
-
-            F[0] = f211(x[0], x[1]);
-
-            F[1] = f212(x[0], x[1]);
-
-            double k = J[1, 0] / J[0, 0]; //Jakobio matrica sprendžiama gauso metodu
-            J[1, 0] -= J[0, 0] * k;
-            J[1, 1] -= J[0, 1] * k;
-            F[1] -= F[0] * k;
-
-            deltaX[1] = -F[1] / J[1, 1];
-            deltaX[0] = (-F[0] - deltaX[1] * J[0, 1]) / J[0, 0];
-
-            line.Points.AddXY(x[0], x[1]);
-
-            tikslumas = Math.Abs(f211(x[0], x[1]) - f212(x[0], x[1]));
-            richTextBox1.AppendText(string.Format("artinys: {0},{1}, tiksumas: {2}, iteracija: {3}\n", x[0], x[1], tikslumas, it++));
-
-            x[0] += deltaX[0];
-            x[1] += deltaX[1];
-            if (tikslumas < 0.001) timer4.Stop();
+           
         }
 
         private void nlsAntras()
@@ -332,11 +349,6 @@ namespace Pvz1
         public void ClearForm1()
         {
             richTextBox1.Clear(); // isvalomas richTextBox1
-            // sustabdomi timeriai jei tokiu yra
-            foreach (var timer in Timerlist)
-            {
-                timer.Stop();
-            }
 
             // isvalomos visos nubreztos kreives
             chart1.Series.Clear();
