@@ -135,6 +135,7 @@ namespace Pvz1
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // Form1
+            this.timer4.Tick += new System.EventHandler(this.timer4_Tick);
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

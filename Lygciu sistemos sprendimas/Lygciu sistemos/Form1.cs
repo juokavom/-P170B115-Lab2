@@ -20,7 +20,7 @@ using MathNet.Numerics.Statistics;
 
 namespace Pvz1
 {
-   
+
     public partial class Form1 : Form
     {
         List<Timer> Timerlist = new List<Timer>();
@@ -157,22 +157,22 @@ namespace Pvz1
         //2.1
         private double Y11(double x)
         {
-            return Math.Sqrt(-((-Math.Pow(x, 2)+1+Math.Sqrt(Math.Pow(x, 4)+2*Math.Pow(x, 2)+40*x+1))/2));
+            return Math.Sqrt(-((-Math.Pow(x, 2) + 1 + Math.Sqrt(Math.Pow(x, 4) + 2 * Math.Pow(x, 2) + 40 * x + 1)) / 2));
 
         }
         private double Y12(double x)
         {
-            return -Math.Sqrt(-((-Math.Pow(x, 2)+1+Math.Sqrt(Math.Pow(x, 4)+2*Math.Pow(x, 2)+40*x+1))/2));
+            return -Math.Sqrt(-((-Math.Pow(x, 2) + 1 + Math.Sqrt(Math.Pow(x, 4) + 2 * Math.Pow(x, 2) + 40 * x + 1)) / 2));
 
         }
         private double Y13(double x)
         {
-            return Math.Sqrt(-((-Math.Pow(x, 2)+1-Math.Sqrt(Math.Pow(x, 4)+2*Math.Pow(x, 2)+40*x+1))/2));
+            return Math.Sqrt(-((-Math.Pow(x, 2) + 1 - Math.Sqrt(Math.Pow(x, 4) + 2 * Math.Pow(x, 2) + 40 * x + 1)) / 2));
 
         }
         private double Y14(double x)
         {
-            return -Math.Sqrt(-((-Math.Pow(x, 2)+1-Math.Sqrt(Math.Pow(x, 4)+2*Math.Pow(x, 2)+40*x+1))/2));
+            return -Math.Sqrt(-((-Math.Pow(x, 2) + 1 - Math.Sqrt(Math.Pow(x, 4) + 2 * Math.Pow(x, 2) + 40 * x + 1)) / 2));
 
         }
         private double Y21(double x)
@@ -183,19 +183,19 @@ namespace Pvz1
         {
             return -Math.Sqrt((-Math.Pow(x, 2) + 32) / 2);
         }
-        private double Z1(double x, double y) 
+        private double Z1(double x, double y)
         {
             return (10 * x) / (Math.Pow(y, 2) + 1) + Math.Pow(x, 2) - Math.Pow(y, 2);
         }
-        Series z1, z2;
+        Series z1, z2, line;
         private void button3_Click(object sender, EventArgs e)
         {
             if (var1.Checked) nlsPirmas();
             else if (var2.Checked) nlsAntras();
-            
+
         }
 
-        private void nlsPirmas() 
+        private void nlsPirmas()
         {
             PracticalGuideCharts.Form1 trimateForma = new PracticalGuideCharts.Form1();
             trimateForma.ShowDialog();
@@ -220,9 +220,105 @@ namespace Pvz1
 
             z1.BorderWidth = 1;
             z2.BorderWidth = 1;
+
+            Niutono();
         }
 
-        private void nlsAntras() 
+        private double f211(double x, double y)
+        {
+            return 10 * x / (Math.Pow(y, 2) + 1) + Math.Pow(x, 2) - Math.Pow(y, 2);
+        }
+        private double dFx211(double x, double y)
+        {
+            return 10 / (Math.Pow(y, 2) + 1) + 2 * Math.Pow(x, 2);
+        }
+        private double dFy211(double x, double y)
+        {
+            return -20 * x * y / (Math.Pow((Math.Pow(y, 2) + 1), 2)) - 2 * y;
+        }
+        private double f212(double x, double y)
+        {
+            return Math.Pow(x, 2) + 2 * Math.Pow(y, 2) - 32;
+        }
+        private double deltaFx212(double x, double y)
+        {
+            return 2 * x;
+        }
+        private double dFy212(double x, double y)
+        {
+            return 4 * y;
+        }
+
+        double[] x = { 2, -8 }; //Pradinis artinys
+        double[,] J = new double[2, 2]; //Jakobio matrica
+        double[] F = new double[2]; //Funkcijos reiksmes
+        double[] deltaX = new double[2]; //Delta X vektorius
+        int it = 0;
+
+        private void Niutono()
+        {
+            line = chart1.Series.Add("Sprendinys");
+            line.ChartType = SeriesChartType.Line;
+
+            timer4.Enabled = true;
+            timer4.Interval = 50;
+            timer4.Start();
+
+            line.BorderWidth = 3;
+
+        }
+
+        private string printMatrix(double[,] a) 
+        {
+            string sb = string.Format("[{0, 3:F2} {1, 3:F2}\n{2, 3:F2} {3, 3:F2}]", a[0,0], a[0,1], a[1, 0], a[1,1]);
+
+            return sb;
+        }
+
+        private void timer4_Tick(object sender, EventArgs e)
+        {
+            J[0, 0] = dFx211(x[0], x[1]);
+            J[0, 1] = dFy211(x[0], x[1]);
+            J[1, 0] = deltaFx212(x[0], x[1]);
+            J[1, 1] = dFy212(x[0], x[1]);
+
+            F[0] = f211(x[0], x[1]);
+
+            F[1] = f212(x[0], x[1]);
+
+            System.Diagnostics.Debug.WriteLine("---------------Pries pertvarkyma---------------------------");
+            System.Diagnostics.Debug.WriteLine("iteracija: " + it);
+            System.Diagnostics.Debug.WriteLine("J = " + printMatrix(J));
+            System.Diagnostics.Debug.WriteLine("F = " + string.Join(", ", F));
+            System.Diagnostics.Debug.WriteLine("deltaX = " + string.Join(", ", deltaX));
+            System.Diagnostics.Debug.WriteLine("x = " + string.Join(", ", x));
+            System.Diagnostics.Debug.WriteLine("------------------------------------------");
+
+            double k = J[1, 0] / J[0, 0]; //Jakobio matrica sprendžiama gauso metodu
+            J[1, 0] -= J[0, 0] * k;
+            J[1, 1] -= J[0, 1] * k;
+            F[1] -= F[0] * k;
+
+            deltaX[1] = F[1] / J[1, 1];
+            deltaX[0] = (F[0] - deltaX[1] * J[0, 1]) / J[0, 0];
+
+            line.Points.AddXY(x[0], x[1]);
+            System.Diagnostics.Debug.WriteLine("--------------Po pertvarkymo----------------------------");
+            System.Diagnostics.Debug.WriteLine("iteracija: " + it);
+            System.Diagnostics.Debug.WriteLine("J = " + printMatrix(J));
+            System.Diagnostics.Debug.WriteLine("F = " + string.Join(", ", F));
+            System.Diagnostics.Debug.WriteLine("deltaX = " + string.Join(", ", deltaX));
+            System.Diagnostics.Debug.WriteLine("x = " + string.Join(", ", x));
+            System.Diagnostics.Debug.WriteLine("------------------------------------------");
+
+            richTextBox1.AppendText(string.Format("artinys: {0},{1}, tiksumas: {2}, iteracija: {3}\n", x[0], x[1], null, it++));
+
+            x[0] += deltaX[0];
+            x[1] += deltaX[1];
+            if (it == 100) timer4.Stop();
+        }
+
+        private void nlsAntras()
         {
             ClearForm1();
         }
