@@ -9,6 +9,7 @@ using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -192,7 +193,6 @@ namespace Pvz1
         {
             if (var1.Checked) nlsPirmas();
             else if (var2.Checked) nlsAntras();
-
         }
 
         private void nlsPirmas()
@@ -224,10 +224,10 @@ namespace Pvz1
             line3 = chart1.Series.Add("Sprendinys 3");
             line4 = chart1.Series.Add("Sprendinys 4");
 
-            Niutono( 2, -8, line1);
-            Niutono( 5, 10, line2);
-            Niutono( -7, 5, line3);
-            Niutono( 0, 1, line4);
+            Niutono(2, -8, line1);
+            Niutono(5, 10, line2);
+            Niutono(-7, 5, line3);
+            Niutono(0, 1, line4);
         }
 
         private double f211(double x, double y)
@@ -270,9 +270,9 @@ namespace Pvz1
             x[1] = x1_art;
 
             double tikslumas = Double.MaxValue;
-            while (tikslumas > 1e-3) 
+            while (tikslumas > 1e-3)
             {
-                
+
                 J[0, 0] = dFx211(x[0], x[1]);
                 J[0, 1] = dFy211(x[0], x[1]);
                 J[1, 0] = deltaFx212(x[0], x[1]);
@@ -304,27 +304,126 @@ namespace Pvz1
                 }
             }
 
-            richTextBox1.AppendText(string.Format("Pradinis artinys: [{0}; {1}], tiksumas: {2, 0:F5}, iteracijų sk.: {3}\nSprendinys {6}: [{4, 0:F5}; {5, 0:F5}]\n", 
+            richTextBox1.AppendText(string.Format("Pradinis artinys: [{0}; {1}], tikslumas: {2, 0:F5}, iteracijų sk.: {3}\nSprendinys {6}: [{4, 0:F5}; {5, 0:F5}]\n",
                 x0_art, x1_art, tikslumas, it, x[0], x[1], ++count));
             line.BorderWidth = 3;
 
         }
 
-        private string printMatrix(double[,] a) 
+        private string print2DMatrix(double[,] a)
         {
-            string sb = string.Format("[{0, 3:F2} {1, 3:F2}\n{2, 3:F2} {3, 3:F2}]", a[0,0], a[0,1], a[1, 0], a[1,1]);
+            string sb = string.Format("[{0, 3:F2} {1, 3:F2}\n{2, 3:F2} {3, 3:F2}]", a[0, 0], a[0, 1], a[1, 0], a[1, 1]);
 
             return sb;
         }
-
-        private void timer4_Tick(object sender, EventArgs e)
+        private string print4DMatrix(double[,] a)
         {
-           
+            string sb = "[\n";
+            for (int i = 0; i < a.GetLength(0); i++)
+            {
+                for (int u = 0; u < a.GetLength(1); u++)
+                {
+                    sb += string.Format("{0, 3:F2} ", a[i, u]);
+                }
+                sb += "\n";
+            }
+            sb += "]";
+            return sb;
         }
+
+        private double[] f221(double[] x)
+        {
+            double[] ret = new double[4];
+            ret[0] = x[0] + 4 * x[1] + x[2] - 22;
+            ret[1] = x[1] * x[2] - 2 * x[2] - 18;
+            ret[2] = -Math.Pow(x[1], 2) + 2 * Math.Pow(x[3], 3) - 3 * x[0] * x[3] + 335;
+            ret[3] = 2 * x[2] - 12 * x[1] + 2 * x[3] + 58;
+
+            return ret;
+        }
+        private double[,] df221(double[] x, double[] f)
+        {
+            double[,] ret = new double[4, 5];
+            ret[0, 0] = 1; ret[0, 1] = 4; ret[0, 2] = 1; ret[0, 3] = 0; ret[0, 4] = f[0];
+            ret[1, 0] = 0; ret[1, 1] = x[2]; ret[1, 2] = x[1] - 2; ret[1, 3] = 0; ret[1, 4] = f[1];
+            ret[2, 0] = -3 * x[3]; ret[2, 1] = -2 * x[1]; ret[2, 2] = 0; ret[2, 3] = 6 * Math.Pow(x[3], 2) - 3 * x[0]; ret[2, 4] = f[2];
+            ret[3, 0] = 0; ret[3, 1] = -12; ret[3, 2] = 2; ret[3, 3] = 2; ret[3, 4] = f[3];
+
+            return ret;
+        }
+
+        static void SolveGaussian(double[,] a, int n)
+        {
+            int i, j, k = 0, c;
+
+            for (i = 0; i < n; i++)
+            {
+                if (a[i, i] == 0)
+                {
+                    c = 1;
+                    while ((i + c) < n && a[i + c, i] == 0)
+                        c++;
+                    if ((i + c) == n)
+                    {
+                        break;
+                    }
+                    for (j = i, k = 0; k <= n; k++)
+                    {
+                        double temp = a[j, k];
+                        a[j, k] = a[j + c, k];
+                        a[j + c, k] = temp;
+                    }
+                }
+
+                for (j = 0; j < n; j++)
+                {
+                    if (i != j)
+                    {
+                        double p = a[j, i] / a[i, i];
+
+                        for (k = 0; k <= n; k++)
+                            a[j, k] = a[j, k] - (a[i, k]) * p;
+                    }
+                }
+            }
+        }
+
 
         private void nlsAntras()
         {
             ClearForm1();
+            double[] x = { 1, 1, 1, 1 };
+            double[] x_prad = new double[x.GetLength(0)];
+            Array.Copy(x, x_prad, x.GetLength(0));
+            double[] deltaX = new double[4];
+            int n = x.GetLength(0);
+            int it = 0;
+            double tikslumas = Double.MaxValue;
+
+            while (tikslumas > 1e-3)
+            {
+                double[] F = f221(x);
+                double[,] J = df221(x, F);
+                SolveGaussian(J, 4);
+
+                for (int i = 0; i < n; i++)
+                {
+                    deltaX[i] = -J[i, n] / J[i, i];
+                }
+
+                tikslumas = Math.Abs(F.Max() - F.Min());
+                it++;
+
+                x[0] += deltaX[0];
+                x[1] += deltaX[1];
+                x[2] += deltaX[2];
+                x[3] += deltaX[3];
+
+                richTextBox1.AppendText(string.Format("Artinys: [{0, 0:F5}; {1, 0:F5}; {2, 0:F5}; {3, 0:F5}], tikslumas: {4, 0:F5}, iteracija : {5}\n",
+                    x[0], x[1], x[2], x[3], tikslumas, it));
+            }
+            richTextBox1.AppendText(string.Format("Pradinis artinys: [{0}; {1}; {2}; {3}], tikslumas: {4, 0:F5}, iteracijų sk.: {5}\nSprendinys:  [{6, 0:F5}; {7, 0:F5}; {8, 0:F5}; {9, 0:F5}]\n",
+                x_prad[0], x_prad[1], x_prad[2], x_prad[3], tikslumas, it, x[0], x[1], x[2], x[3]));
         }
 
         // ---------------------------------------------- KITI METODAI ----------------------------------------------
