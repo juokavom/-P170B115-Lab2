@@ -261,7 +261,7 @@ namespace Pvz1
             line.ChartType = SeriesChartType.Line;
 
             timer4.Enabled = true;
-            timer4.Interval = 50;
+            timer4.Interval = 5;
             timer4.Start();
 
             line.BorderWidth = 3;
@@ -277,6 +277,7 @@ namespace Pvz1
 
         private void timer4_Tick(object sender, EventArgs e)
         {
+            double tikslumas;
             J[0, 0] = dFx211(x[0], x[1]);
             J[0, 1] = dFy211(x[0], x[1]);
             J[1, 0] = deltaFx212(x[0], x[1]);
@@ -286,36 +287,22 @@ namespace Pvz1
 
             F[1] = f212(x[0], x[1]);
 
-            System.Diagnostics.Debug.WriteLine("---------------Pries pertvarkyma---------------------------");
-            System.Diagnostics.Debug.WriteLine("iteracija: " + it);
-            System.Diagnostics.Debug.WriteLine("J = " + printMatrix(J));
-            System.Diagnostics.Debug.WriteLine("F = " + string.Join(", ", F));
-            System.Diagnostics.Debug.WriteLine("deltaX = " + string.Join(", ", deltaX));
-            System.Diagnostics.Debug.WriteLine("x = " + string.Join(", ", x));
-            System.Diagnostics.Debug.WriteLine("------------------------------------------");
-
             double k = J[1, 0] / J[0, 0]; //Jakobio matrica sprendžiama gauso metodu
             J[1, 0] -= J[0, 0] * k;
             J[1, 1] -= J[0, 1] * k;
             F[1] -= F[0] * k;
 
-            deltaX[1] = F[1] / J[1, 1];
-            deltaX[0] = (F[0] - deltaX[1] * J[0, 1]) / J[0, 0];
+            deltaX[1] = -F[1] / J[1, 1];
+            deltaX[0] = (-F[0] - deltaX[1] * J[0, 1]) / J[0, 0];
 
             line.Points.AddXY(x[0], x[1]);
-            System.Diagnostics.Debug.WriteLine("--------------Po pertvarkymo----------------------------");
-            System.Diagnostics.Debug.WriteLine("iteracija: " + it);
-            System.Diagnostics.Debug.WriteLine("J = " + printMatrix(J));
-            System.Diagnostics.Debug.WriteLine("F = " + string.Join(", ", F));
-            System.Diagnostics.Debug.WriteLine("deltaX = " + string.Join(", ", deltaX));
-            System.Diagnostics.Debug.WriteLine("x = " + string.Join(", ", x));
-            System.Diagnostics.Debug.WriteLine("------------------------------------------");
 
-            richTextBox1.AppendText(string.Format("artinys: {0},{1}, tiksumas: {2}, iteracija: {3}\n", x[0], x[1], null, it++));
+            tikslumas = Math.Abs(f211(x[0], x[1]) - f212(x[0], x[1]));
+            richTextBox1.AppendText(string.Format("artinys: {0},{1}, tiksumas: {2}, iteracija: {3}\n", x[0], x[1], tikslumas, it++));
 
             x[0] += deltaX[0];
             x[1] += deltaX[1];
-            if (it == 100) timer4.Stop();
+            if (tikslumas < 0.001) timer4.Stop();
         }
 
         private void nlsAntras()
