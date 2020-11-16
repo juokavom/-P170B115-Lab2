@@ -19,6 +19,7 @@ using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Factorization;
 using MathNet.Numerics.Optimization;
 using MathNet.Numerics.Statistics;
+using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Pvz1
 {
@@ -188,7 +189,7 @@ namespace Pvz1
         {
             return (10 * x) / (Math.Pow(y, 2) + 1) + Math.Pow(x, 2) - Math.Pow(y, 2);
         }
-        Series z1, z2, line1, line2, line3, line4;
+        Series z1, p1, z2, line1, line2, line3, line4;
         private void button3_Click(object sender, EventArgs e)
         {
             if (var1.Checked) nlsPirmas();
@@ -424,6 +425,195 @@ namespace Pvz1
             }
             richTextBox1.AppendText(string.Format("Pradinis artinys: [{0}; {1}; {2}; {3}], tikslumas: {4, 0:F5}, iteracijų sk.: {5}\nSprendinys:  [{6, 0:F5}; {7, 0:F5}; {8, 0:F5}; {9, 0:F5}]\n",
                 x_prad[0], x_prad[1], x_prad[2], x_prad[3], tikslumas, it, x[0], x[1], x[2], x[3]));
+        }
+        //TRECIA UZDUOTIS
+        private void button5_Click(object sender, EventArgs e)
+        {
+            ClearForm1();
+            PreparareForm(-10, 10, -10, 10);
+            //---
+            double s = 50;
+            double[] x = { 0, 5, 8, 4 };
+            double[] y = { 0, 8, 2, 4 };
+            //---
+            z1 = chart1.Series.Add("Pradiniai taskai");
+            z1.ChartType = SeriesChartType.Line;
+            z1.Color = Color.Blue;
+            //---
+            p1 = chart1.Series.Add("Taskai");
+            p1.ChartType = SeriesChartType.Point;
+            p1.Color = Color.Black;
+            //---
+            z2 = chart1.Series.Add("Galutiniai taskai");
+            z2.ChartType = SeriesChartType.Line;
+            z2.Color = Color.Red;
+            for (int i = 0; i < x.Length; i++)
+            {
+                p1.Points.AddXY(x[i], y[i]);
+                for (int u = i+1; u < x.Length; u++)
+                {
+                    z1.Points.AddXY(x[i], y[i]);
+                    z1.Points.AddXY(x[u], y[u]);
+                    p1.Points.AddXY(x[u], y[u]);
+                    z1.Points.AddXY(x[i], y[i]);
+                }
+            }
+            richTextBox1.AppendText("Nupiesta pradiniai\n");
+
+            //Sprendimas
+            optimization(x, y, s);
+
+            for (int i = 0; i < x.Length; i++)
+            {
+                p1.Points.AddXY(x[i], y[i]);
+                for (int u = i + 1; u < x.Length; u++)
+                {
+                    z2.Points.AddXY(x[i], y[i]);
+                    z2.Points.AddXY(x[u], y[u]);
+                    p1.Points.AddXY(x[u], y[u]);
+                    z2.Points.AddXY(x[i], y[i]);
+                }
+            }
+            richTextBox1.AppendText("Nupiesta rezultatai\n");
+
+            z1.BorderWidth = 1;
+            p1.BorderWidth = 3;
+            z2.BorderWidth = 1;
+        }
+
+        private void optimization(double[] x, double[] y, double s) 
+        {
+            double eps = 1e-16;
+            int maxIter = 500;
+            double zingsnis = 0.1;
+
+            for (int i = 0; i < maxIter; i++) 
+            {
+                double vid = vidurkis(x, y);
+                int n = x.Length;
+                double[,] grad = gradientas(x, y, vid, s);
+                double f0 = tikslo(x, y, vid, s);
+                double[,] deltaX = gradiento_norma(grad, zingsnis);
+                for(int u = 1; u < n; u++)
+                {
+                    x[u] -= deltaX[u, 0];
+                    y[u] -= deltaX[u, 1];
+                }
+                double f1 = tikslo(x, y, vid, s);
+                if (f1 > f0)
+                {
+                    for (int u = 1; u < n; u++)
+                    {
+                        x[u] += deltaX[u, 0];
+                        y[u] += deltaX[u, 1];
+                    }
+                    zingsnis /= 2;
+                }
+                else 
+                {
+                    zingsnis *= 2;
+                }
+                double tks = Math.Abs(f0-f1)/(Math.Abs(f0)+Math.Abs(f1));
+                if (tks < eps)
+                {
+                    richTextBox1.AppendText("Baigta sekmingai\n");
+                    break;
+                }
+                else if (i == maxIter - 1)
+                {
+                    richTextBox1.AppendText("Baigta nesekmingai\n");
+                }
+            }
+        }
+
+        private double[,] gradiento_norma(double[,] gradientas, double zingsnis)
+        {
+            double suma = 0;
+            for (int i = 0; i < gradientas.GetLength(0); i++)
+            {
+                for (int u = 0; u < gradientas.GetLength(1); u++)
+                {
+                    suma += Math.Pow(gradientas[i, u], 2);
+                }
+            }
+            double normale = Math.Sqrt(suma);
+            double[,] copy = new double[gradientas.GetLength(0), gradientas.GetLength(1)];
+            for (int i = 0; i < gradientas.GetLength(0); i++)
+            {
+                for (int u = 0; u < gradientas.GetLength(1); u++)
+                {
+                    copy[i, u] = gradientas[i, u] / normale * zingsnis;
+                }
+            }
+            return copy;
+        }
+
+        private double vidurkis(double[] x, double[] y)
+        {
+            double n = x.Length;
+            double suma = 0;
+            int count = 0;
+            for (int i = 0; i < n; i++) 
+            {
+                for (int u = i + 1; u < n; u++) 
+                {
+                    suma += Math.Sqrt(Math.Pow(x[u]-x[i], 2) + Math.Pow(y[u] - y[i], 2));
+                    count++;
+                }
+            }
+            return suma / count;
+        }
+        private double ilgis(double[] x, double[] y)
+        {
+            double n = x.Length;
+            double suma = 0;
+            for (int i = 0; i < n; i++)
+            {
+                for (int u = i + 1; u < n; u++)
+                {
+                    suma += Math.Sqrt(Math.Pow(x[u] - x[i], 2) + Math.Pow(y[u] - y[i], 2));
+                }
+            }
+            return suma;
+        }
+
+        private double[,] gradientas(double[] x, double[] y, double vid, double s)
+        {
+            int n = x.Length;
+            double zingsnis = 0.0001;
+            double[,] grad = new double[n, 2]; 
+            double f0 = tikslo(x, y, vid, s);
+
+            for (int i = 0; i < n; i++)
+            {
+                grad[i, 0] = (tikslo(f1(x, i, zingsnis), y, vid, s) - f0) / zingsnis;
+                grad[i, 1] = (tikslo(x, f1(y, i, zingsnis), vid, s) - f0) / zingsnis;
+            }
+
+            return grad;
+        }
+
+        private double[] f1(double[] a, int i, double zing)
+        {
+            int n = a.Length;
+            double[] copy = new double[n];
+            Array.Copy(a, copy, n);
+            copy[i] += zing;
+            return copy;
+        }
+
+        private double tikslo(double[] x, double[] y, double vid, double s)
+        {
+            int n = x.Length;
+            double suma = 0;
+            for (int i = 0; i < n; i++)
+            {
+                for (int u = i + 1; u < n; u++)
+                {
+                    suma += Math.Pow(Math.Sqrt(Math.Pow(x[u] - x[i], 2) + Math.Pow(y[u] - y[i], 2)) - vid, 2);
+                }
+            }
+            return suma + Math.Abs(ilgis(x, y) - s);
         }
 
         // ---------------------------------------------- KITI METODAI ----------------------------------------------
