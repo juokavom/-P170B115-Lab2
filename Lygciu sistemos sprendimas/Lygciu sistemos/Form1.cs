@@ -1,6 +1,6 @@
 ﻿//Jokubas Akramas IFF-8/12 7 var.
 //P170B115 Skaitiniai metodai ir algoritmai (6 kr.)
-//I projektinė užduotis
+//II projektinė užduotis
 
 using System;
 using System.Collections.Generic;

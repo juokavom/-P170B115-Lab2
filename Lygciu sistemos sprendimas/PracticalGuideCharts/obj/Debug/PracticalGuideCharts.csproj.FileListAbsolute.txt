@@ -1,0 +1,19 @@
+E:\DA\MODULIAI\P170M103_3D_aproksimacija\2017\Temp\PracticalGuideCharts\PracticalGuideCharts\bin\Debug\PracticalGuideCharts.exe.config
+E:\DA\MODULIAI\P170M103_3D_aproksimacija\2017\Temp\PracticalGuideCharts\PracticalGuideCharts\bin\Debug\PracticalGuideCharts.exe
+E:\DA\MODULIAI\P170M103_3D_aproksimacija\2017\Temp\PracticalGuideCharts\PracticalGuideCharts\bin\Debug\PracticalGuideCharts.pdb
+E:\DA\MODULIAI\P170M103_3D_aproksimacija\2017\Temp\PracticalGuideCharts\PracticalGuideCharts\obj\Debug\PracticalGuideCharts.Form1.resources
+E:\DA\MODULIAI\P170M103_3D_aproksimacija\2017\Temp\PracticalGuideCharts\PracticalGuideCharts\obj\Debug\PracticalGuideCharts.Properties.Resources.resources
+E:\DA\MODULIAI\P170M103_3D_aproksimacija\2017\Temp\PracticalGuideCharts\PracticalGuideCharts\obj\Debug\PracticalGuideCharts.csproj.GenerateResource.Cache
+E:\DA\MODULIAI\P170M103_3D_aproksimacija\2017\Temp\PracticalGuideCharts\PracticalGuideCharts\obj\Debug\PracticalGuideCharts.exe
+E:\DA\MODULIAI\P170M103_3D_aproksimacija\2017\Temp\PracticalGuideCharts\PracticalGuideCharts\obj\Debug\PracticalGuideCharts.pdb
+E:\DA\MODULIAI\P170M103_3D_aproksimacija\2017\Temp\PracticalGuideCharts\PracticalGuideCharts\obj\Debug\PracticalGuideCharts.csprojResolveAssemblyReference.cache
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Lygciu sistemos sprendimas\PracticalGuideCharts\bin\Debug\PracticalGuideCharts.exe.config
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Lygciu sistemos sprendimas\PracticalGuideCharts\bin\Debug\PracticalGuideCharts.exe
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Lygciu sistemos sprendimas\PracticalGuideCharts\bin\Debug\PracticalGuideCharts.pdb
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Lygciu sistemos sprendimas\PracticalGuideCharts\obj\Debug\PracticalGuideCharts.csprojAssemblyReference.cache
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Lygciu sistemos sprendimas\PracticalGuideCharts\obj\Debug\PracticalGuideCharts.Form1.resources
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Lygciu sistemos sprendimas\PracticalGuideCharts\obj\Debug\PracticalGuideCharts.Properties.Resources.resources
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Lygciu sistemos sprendimas\PracticalGuideCharts\obj\Debug\PracticalGuideCharts.csproj.GenerateResource.cache
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Lygciu sistemos sprendimas\PracticalGuideCharts\obj\Debug\PracticalGuideCharts.csproj.CoreCompileInputs.cache
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Lygciu sistemos sprendimas\PracticalGuideCharts\obj\Debug\PracticalGuideCharts.exe
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Lygciu sistemos sprendimas\PracticalGuideCharts\obj\Debug\PracticalGuideCharts.pdb

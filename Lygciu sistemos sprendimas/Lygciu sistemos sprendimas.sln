@@ -4,8 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lygciu sistemos", "Lygciu sistemos\Lygciu sistemos.csproj", "{54C75689-101B-4144-953E-90D545E50750}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1866D34E-AB53-47CD-A727-0E6FD9603E24} = {1866D34E-AB53-47CD-A727-0E6FD9603E24}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticalGuideCharts", "..\..\..\..\Desktop\PracticalGuideCharts\PracticalGuideCharts.csproj", "{1866D34E-AB53-47CD-A727-0E6FD9603E24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticalGuideCharts", "PracticalGuideCharts\PracticalGuideCharts.csproj", "{1866D34E-AB53-47CD-A727-0E6FD9603E24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
