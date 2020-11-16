@@ -189,7 +189,7 @@ namespace Pvz1
         {
             return (10 * x) / (Math.Pow(y, 2) + 1) + Math.Pow(x, 2) - Math.Pow(y, 2);
         }
-        Series z1, p1, z2, line1, line2, line3, line4;
+        Series z1, p1, z2, p2, line1, line2, line3, line4;
         private void button3_Click(object sender, EventArgs e)
         {
             if (var1.Checked) nlsPirmas();
@@ -432,21 +432,34 @@ namespace Pvz1
             ClearForm1();
             PreparareForm(-10, 10, -10, 10);
             //---
-            double s = 50;
-            double[] x = { 0, 5, 8, 4 };
-            double[] y = { 0, 8, 2, 4 };
+            double s = 500;
+            int count = 6;
             //---
-            z1 = chart1.Series.Add("Pradiniai taskai");
+            Random randNum = new Random();
+            double[] x = Enumerable.Repeat(0, count).Select(i => randNum.NextDouble()*20-10).ToArray();
+            double[] y = Enumerable.Repeat(0, count).Select(i => randNum.NextDouble()*20-10).ToArray();
+            x[0] = 0;
+            y[0] = 0;
+           
+            //double[] x = { 0, 5, 8, 4 }; 
+            //double[] y = { 0, 8, 2, 4 };
+            //---
+            z1 = chart1.Series.Add("Pradiniai kontūrai");
             z1.ChartType = SeriesChartType.Line;
             z1.Color = Color.Blue;
             //---
-            p1 = chart1.Series.Add("Taskai");
+            p1 = chart1.Series.Add("Pradiniai taskai");
             p1.ChartType = SeriesChartType.Point;
             p1.Color = Color.Black;
             //---
-            z2 = chart1.Series.Add("Galutiniai taskai");
+            z2 = chart1.Series.Add("Galutiniai kontūrai");
             z2.ChartType = SeriesChartType.Line;
             z2.Color = Color.Red;
+            //---
+            p2 = chart1.Series.Add("Galutiniai taskai");
+            p2.ChartType = SeriesChartType.Point;
+            p2.Color = Color.Blue;
+            //---
             for (int i = 0; i < x.Length; i++)
             {
                 p1.Points.AddXY(x[i], y[i]);
@@ -458,11 +471,18 @@ namespace Pvz1
                     z1.Points.AddXY(x[i], y[i]);
                 }
             }
-            richTextBox1.AppendText("Nupiesta pradiniai\n");
+            z1.BorderWidth = 1;
+            p1.BorderWidth = 3;
+            p2.BorderWidth = 3;
+            z2.BorderWidth = 1;
 
             //Sprendimas
             optimization(x, y, s);
-
+        }
+        public void printPoints(double[] x, double[] y)
+        {
+            z2.Points.Clear();
+            p2.Points.Clear();
             for (int i = 0; i < x.Length; i++)
             {
                 p1.Points.AddXY(x[i], y[i]);
@@ -470,25 +490,23 @@ namespace Pvz1
                 {
                     z2.Points.AddXY(x[i], y[i]);
                     z2.Points.AddXY(x[u], y[u]);
-                    p1.Points.AddXY(x[u], y[u]);
+                    p2.Points.AddXY(x[u], y[u]);
                     z2.Points.AddXY(x[i], y[i]);
                 }
             }
-            richTextBox1.AppendText("Nupiesta rezultatai\n");
-
-            z1.BorderWidth = 1;
-            p1.BorderWidth = 3;
-            z2.BorderWidth = 1;
         }
 
         private void optimization(double[] x, double[] y, double s) 
         {
-            double eps = 1e-16;
+            double eps = 1e-6;
             int maxIter = 500;
             double zingsnis = 0.1;
+            double tikslumas = Double.MaxValue;
+            int iteracija = 0;
 
-            for (int i = 0; i < maxIter; i++) 
+            for (; iteracija < maxIter; iteracija++) 
             {
+                //printPoints(x, y);
                 double vid = vidurkis(x, y);
                 int n = x.Length;
                 double[,] grad = gradientas(x, y, vid, s);
@@ -513,17 +531,20 @@ namespace Pvz1
                 {
                     zingsnis *= 2;
                 }
-                double tks = Math.Abs(f0-f1)/(Math.Abs(f0)+Math.Abs(f1));
-                if (tks < eps)
+                tikslumas = Math.Abs(f0-f1)/(Math.Abs(f0)+Math.Abs(f1));
+                if (tikslumas < eps)
                 {
                     richTextBox1.AppendText("Baigta sekmingai\n");
                     break;
                 }
-                else if (i == maxIter - 1)
+                else if (iteracija == maxIter - 1)
                 {
                     richTextBox1.AppendText("Baigta nesekmingai\n");
                 }
+                richTextBox1.AppendText(string.Format("Iteracija: {0}, tikslumas: {1}, tikslo f-ija: {2, 0:F2}\n", iteracija, tikslumas, f1));
             }
+            richTextBox1.AppendText(string.Format("Iteracijų skaičius = {0}, tikslumas = {1}\n", iteracija, tikslumas));
+            printPoints(x, y);
         }
 
         private double[,] gradiento_norma(double[,] gradientas, double zingsnis)
