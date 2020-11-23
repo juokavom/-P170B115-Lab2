@@ -115,7 +115,7 @@ namespace Pvz1
             this.button3.TabIndex = 5;
             this.button3.Text = "Antra uzduotis";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+          //  this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             this.button5.Location = new System.Drawing.Point(692, 110);
             this.button5.Name = "button5";
@@ -123,7 +123,7 @@ namespace Pvz1
             this.button5.TabIndex = 5;
             this.button5.Text = "Trecia uzduotis";
             this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+          //  this.button5.Click += new System.EventHandler(this.button5_Click);
             // button2
             // 
             // 

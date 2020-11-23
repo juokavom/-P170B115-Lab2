@@ -33,19 +33,17 @@ namespace Pvz1
             Initialize();
         }
 
+        Series z1, p1, z2, p2, line1, line2, line3, line4;
         //PIRMA UZDUOTIS
-        public static decimal[,] mulMatrix(decimal[,] a, decimal[,] b)
+        public static double[] mulMatrix(double[,] a, double[] b)
         {
-            decimal[,] ret = new decimal[a.GetLength(1), b.GetLength(0)];
-            for (int i = 0; i < ret.GetLength(0); i++)
+            double[] ret = new double[a.GetLength(0)];
+            for (int i = 0; i < ret.Length; i++)
             {
-                for (int j = 0; j < ret.GetLength(1); j++)
+                ret[i] = 0;
+                for (int j = 0; j < ret.Length; j++)
                 {
-                    ret[i, j] = 0;
-                    for (int k = 0; k < ret.GetLength(0); k++)
-                    {
-                        ret[i, j] += a[i, k] * b[k, j];
-                    }
+                    ret[i] += a[i, j] * b[j];
                 }
             }
             return ret;
@@ -64,97 +62,57 @@ namespace Pvz1
             ret.Append("\n");
             return ret.ToString();
         }
+        private double F(double x)
+        {
+            return Math.Cos(2 * x) * (Math.Sin(2 * x) + 1.5) - Math.Cos(x / 5);
+        }
         private void button2_Click(object sender, EventArgs e)
         {
+
             ClearForm1();
-            richTextBox1.AppendText("TEST");
-            richTextBox1.AppendText("Sprendžiama lygčių sistema: [A][X]=[B]\n\n");
-            decimal[,] A = { { 9, 1, -2, 1 }, { 0, 11, 3, 4 }, { 1, 3, 12, -3 }, { 0, -1, 2, 2 } };
-            decimal[,] A_test = { { 9, 1, -2, 1 }, { 0, 11, 3, 4 }, { 1, 3, 12, -3 }, { 0, -1, 2, 2 } };
-            decimal[] B = { 47, -24, 27, -5 };
-            decimal[] X = new decimal[B.Length];
-            Array.ForEach(X, element => element = 0);
-            richTextBox1.AppendText("[A] = \n");
-            richTextBox1.AppendText(printMatrix(A));
-            richTextBox1.AppendText("[B] = \n");
-            Array.ForEach(B, element => richTextBox1.AppendText(string.Format("{0, 12}\n", element)));
-            int n = A.GetLength(0);
+            PreparareForm(-3, 4, -4, 2);
             //---
-            decimal[,] L = new decimal[n, n];
-            decimal[,] U = new decimal[n, n];
+            double n = 6;
+            double[] X = { -2, 3 };
+            //---
+            double[] taskai = new double[(int)n];
+            double zingsnis = (X[1] - X[0]) / (n - 1);
             for (int i = 0; i < n; i++)
             {
-                for (int u = 0; u < n; u++)
-                {
-                    U[i, u] = 0;
-                    L[i, u] = (i == u) ? 1 : 0;
-                }
+                taskai[i] = X[0] + zingsnis * i;
             }
             //---
-            richTextBox1.AppendText("[L] = \n");
-            richTextBox1.AppendText(printMatrix(L));
-            richTextBox1.AppendText("[U] = \n");
-            richTextBox1.AppendText(printMatrix(U));
+            z1 = chart1.Series.Add("Pradinė funkcija");
+            z1.ChartType = SeriesChartType.Line;
+            z1.Color = Color.Blue;
             //---
-            for (int i = 0; i < n; i++) U[0, i] = A[0, i];
-            decimal r = 0;
-            for (int i = 0; i < n - 1; i++) //Eilute
+            p1 = chart1.Series.Add("Pradiniai taskai");
+            p1.ChartType = SeriesChartType.Point;
+            p1.Color = Color.Black;
+            //---
+            z2 = chart1.Series.Add("Gauta funkcija");
+            z2.ChartType = SeriesChartType.Line;
+            z2.Color = Color.Red;
+            //---
+            p2 = chart1.Series.Add("Galutiniai taskai");
+            p2.ChartType = SeriesChartType.Point;
+            p2.Color = Color.Blue;
+            //---      
+            for (double i = X[0]; i <= X[1] + 0.1; i += 0.1)
             {
-                for (int u = i + 1; u < n; u++) //Likusios eilutes
-                {
-                    r = A[u, i] / A[i, i];
-                    for (int y = i; y < n; y++)
-                    {
-                        U[u, y] = A[u, y] - A[i, y] * r;
-                        A[u, y] = A[u, y] - A[i, y] * r;
-                    }
-                    L[u, i] = r;
-                }
-                richTextBox1.AppendText(string.Format("Nuliai po {0} stulp. Pertvarkyta matrica [A]=\n", i + 1));
-                richTextBox1.AppendText(printMatrix(A));
+                z1.Points.AddXY(i, F(i));
             }
-            //---
-            richTextBox1.AppendText("Skaičiavimai baigti. Rezultatai:\n\n");
-            richTextBox1.AppendText("[L] = \n");
-            richTextBox1.AppendText(printMatrix(L));
-            richTextBox1.AppendText("[U] = \n");
-            richTextBox1.AppendText(printMatrix(U));
-            //---
-            for (int i = n - 1; i >= 0; i--)
+            for (int i = 0; i < taskai.Length; i++)
             {
-                decimal value = 0;
-                for (int u = n - 1; u > i; u--)
-                {
-                    value += U[i, u] * X[u];
-                }
-                X[i] = (B[i] - value) / U[i, i];
+                p1.Points.AddXY(taskai[i], F(taskai[i]));
             }
-            richTextBox1.AppendText("Sprendinys [X] = \n");
-            Array.ForEach(X, element => richTextBox1.AppendText(string.Format("{0, 12:F6}\n", element)));
-            //---
-            //Tikrinimas
-            richTextBox1.AppendText("\nTikrinimas = \n");
-            //1. L*U
-            decimal[,] ats = mulMatrix(L, U);
-            richTextBox1.AppendText("1) [L]*[U] = \n");
-            richTextBox1.AppendText(printMatrix(ats));
-            //2. Reiksmiu istatymas
-            richTextBox1.AppendText("2) Reikšmių įstatymas į pradinę matricą =\n");
-            for (int i = 0; i < A_test.GetLength(0); i++)
-            {
-                richTextBox1.AppendText(string.Format("Tikrinama {0} pradinės matricos eilutė = \n", i + 1));
-                decimal ats2 = 0;
-                for (int u = 0; u < A_test.GetLength(1); u++)
-                {
-                    ats2 += A_test[i, u] * X[u];
-                    richTextBox1.AppendText(string.Format("{0, 0:F2} * {1, 0:F2}", A_test[i, u], X[u]));
-                    if (u + 1 < A_test.GetLength(1)) richTextBox1.AppendText(" + ");
-                }
-                richTextBox1.AppendText(string.Format(" = {0, 0:F2}. B[{1}] = {2, 0:F2}\n", ats2, i + 1, B[i]));
-            }
-
+           
+            z1.BorderWidth = 1;
+            p1.BorderWidth = 3;
+            p2.BorderWidth = 3;
+            z2.BorderWidth = 1;
         }
-
+        /*
         //ANTRA UZDUOTIS
 
         //2.1
@@ -190,7 +148,6 @@ namespace Pvz1
         {
             return (10 * x) / (Math.Pow(y, 2) + 1) + Math.Pow(x, 2) - Math.Pow(y, 2);
         }
-        Series z1, p1, z2, p2, line1, line2, line3, line4;
         private void button3_Click(object sender, EventArgs e)
         {
             if (var1.Checked) nlsPirmas();
@@ -637,7 +594,7 @@ namespace Pvz1
             }
             return suma + Math.Abs(ilgis(x, y) - s);
         }
-
+        */
         // ---------------------------------------------- KITI METODAI ----------------------------------------------
 
         /// <summary>
