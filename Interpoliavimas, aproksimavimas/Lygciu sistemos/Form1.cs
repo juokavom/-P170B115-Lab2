@@ -35,36 +35,21 @@ namespace Pvz1
 
         Series z1, p1, z2, p2, line1, line2, line3, line4;
         //PIRMA UZDUOTIS
-        public static double[] mulMatrix(double[,] a, double[] b)
-        {
-            double[] ret = new double[a.GetLength(0)];
-            for (int i = 0; i < ret.Length; i++)
-            {
-                ret[i] = 0;
-                for (int j = 0; j < ret.Length; j++)
-                {
-                    ret[i] += a[i, j] * b[j];
-                }
-            }
-            return ret;
-        }
-        public static string printMatrix(decimal[,] A)
-        {
-            StringBuilder ret = new StringBuilder();
-            for (int i = 0; i < A.GetLength(0); i++)
-            {
-                for (int u = 0; u < A.GetLength(1); u++)
-                {
-                    ret.Append(string.Format("{0, 12:F6}", A[i, u]));
-                }
-                ret.Append("\n");
-            }
-            ret.Append("\n");
-            return ret.ToString();
-        }
         private double F(double x)
         {
             return Math.Cos(2 * x) * (Math.Sin(2 * x) + 1.5) - Math.Cos(x / 5);
+        }
+        private double calcL(double x, int j, double[] taskai)
+        {
+            double suma = 1;
+            for (int i = 0; i < taskai.Length; i++)
+            {
+                if (i != j)
+                {
+                    suma *= (x - taskai[i]) / (taskai[j] - taskai[i]);
+                }
+            }
+            return suma;
         }
         private void button2_Click(object sender, EventArgs e)
         {
@@ -98,7 +83,7 @@ namespace Pvz1
             p2.ChartType = SeriesChartType.Point;
             p2.Color = Color.Blue;
             //---      
-            for (double i = X[0]; i <= X[1] + 0.1; i += 0.1)
+            for (double i = X[0]; i <= X[1] + 0.01; i += 0.01)
             {
                 z1.Points.AddXY(i, F(i));
             }
@@ -106,11 +91,34 @@ namespace Pvz1
             {
                 p1.Points.AddXY(taskai[i], F(taskai[i]));
             }
-           
+            //---
             z1.BorderWidth = 1;
             p1.BorderWidth = 3;
             p2.BorderWidth = 3;
             z2.BorderWidth = 1;
+            //---
+            double deltaX = 0.1;
+            int N = (int)Math.Round((X[1] - X[0]) / deltaX);
+            double[,] L = new double[N, (int)n];
+            double[] XValues = new double[N];
+            double[] YValues = new double[N];
+            double[] FValues = new double[N];
+            for (int i = 0; i < L.GetLength(0); i++)
+            {
+                XValues[i] = X[0] + i*deltaX;
+                YValues[i] = F(XValues[i]);
+                FValues[i] = 0;
+                for (int u = 0; u < L.GetLength(1); u++)
+                {
+                    L[i, u] = calcL(XValues[i], u, taskai);
+                    FValues[i] += L[i, u];
+                }
+                FValues[i] *= YValues[i];
+            }
+            for(int i = 0; i < FValues.Length; i++)
+            {
+                z2.Points.AddXY(XValues[i], FValues[i]);
+            }
         }
         /*
         //ANTRA UZDUOTIS
