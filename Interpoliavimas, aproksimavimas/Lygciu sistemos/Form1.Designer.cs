@@ -39,8 +39,8 @@ namespace Pvz1
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -59,17 +59,22 @@ namespace Pvz1
             this.button5 = new System.Windows.Forms.Button();
             this.var1 = new System.Windows.Forms.RadioButton();
             this.var2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.label1 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
             // chart1
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chart1.Legends.Add(legend2);
-            this.chart1.Location = new System.Drawing.Point(12, 12);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
+            this.chart1.Location = new System.Drawing.Point(32, 29);
+            this.chart1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.chart1.Name = "chart1";
-            this.chart1.Size = new System.Drawing.Size(669, 394);
+            this.chart1.Size = new System.Drawing.Size(1784, 940);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
             // 
@@ -78,76 +83,121 @@ namespace Pvz1
             this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.richTextBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
-            this.richTextBox1.Location = new System.Drawing.Point(12, 412);
+            this.richTextBox1.Location = new System.Drawing.Point(32, 982);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(669, 251);
+            this.richTextBox1.Size = new System.Drawing.Size(1777, 593);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
             // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(773, 643);
+            this.button1.Location = new System.Drawing.Point(2061, 1533);
+            this.button1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(200, 55);
             this.button1.TabIndex = 2;
             this.button1.Text = "Baigti";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // button2
             // 
-            // 
-            //
-            //
-            this.button2.Location = new System.Drawing.Point(692, 10);
+            this.button2.Location = new System.Drawing.Point(1845, 33);
+            this.button2.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(156, 25);
+            this.button2.Size = new System.Drawing.Size(416, 60);
             this.button2.TabIndex = 4;
-            this.button2.Text = "Pirma uzduotis";
+            this.button2.Text = "Pirma užduotis";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button2
+            // button3
             // 
-            this.button3.Location = new System.Drawing.Point(692, 50);
+            this.button3.Location = new System.Drawing.Point(1845, 338);
+            this.button3.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(156, 23);
+            this.button3.Size = new System.Drawing.Size(416, 55);
             this.button3.TabIndex = 5;
             this.button3.Text = "Antra uzduotis";
             this.button3.UseVisualStyleBackColor = true;
-          //  this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            this.button5.Location = new System.Drawing.Point(692, 110);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(156, 23);
-            this.button5.TabIndex = 5;
-            this.button5.Text = "Trecia uzduotis";
-            this.button5.UseVisualStyleBackColor = true;
-          //  this.button5.Click += new System.EventHandler(this.button5_Click);
-            // button2
-            // 
-            // 
-            // 
-            this.var1.Location = new System.Drawing.Point(692, 70);
-            this.var1.Text = "I L.S.";
-            this.var2.Location = new System.Drawing.Point(692, 90);
-            this.var2.Text = "II L.S.";
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(692, 643);
+            this.button4.Location = new System.Drawing.Point(1845, 1533);
+            this.button4.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.Size = new System.Drawing.Size(200, 55);
             this.button4.TabIndex = 6;
             this.button4.Text = "Valyti";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(1855, 577);
+            this.button5.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(416, 55);
+            this.button5.TabIndex = 5;
+            this.button5.Text = "Trecia uzduotis";
+            this.button5.UseVisualStyleBackColor = true;
+            // 
+            // var1
+            // 
+            this.var1.Location = new System.Drawing.Point(1855, 407);
+            this.var1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.var1.Name = "var1";
+            this.var1.Size = new System.Drawing.Size(277, 57);
+            this.var1.TabIndex = 7;
+            this.var1.Text = "I L.S.";
+            // 
+            // var2
+            // 
+            this.var2.Location = new System.Drawing.Point(1855, 493);
+            this.var2.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.var2.Name = "var2";
+            this.var2.Size = new System.Drawing.Size(277, 57);
+            this.var2.TabIndex = 8;
+            this.var2.Text = "II L.S.";
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.Location = new System.Drawing.Point(1845, 157);
+            this.radioButton1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(367, 57);
+            this.radioButton1.TabIndex = 9;
+            this.radioButton1.Text = "Pasiskirstę tolygiai";
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.Location = new System.Drawing.Point(1845, 214);
+            this.radioButton2.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(277, 57);
+            this.radioButton2.TabIndex = 10;
+            this.radioButton2.Text = "Pagal Čiobyševą";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(1905, 104);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(285, 32);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "Taškų pasiskirstymas";
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(858, 678);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.radioButton2);
+            this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -157,7 +207,7 @@ namespace Pvz1
             this.Controls.Add(this.var2);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.chart1);
-            this.Name = "Lab2";
+            this.Name = "Lab3";
             this.Text = "Skaitiniai metodai ir Algoritmai";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
@@ -223,6 +273,9 @@ namespace Pvz1
         private Button button3;
         private Button button4;
         private Button button5;
+        private RadioButton radioButton1;
+        private RadioButton radioButton2;
+        private Label label1;
     }
 
 
