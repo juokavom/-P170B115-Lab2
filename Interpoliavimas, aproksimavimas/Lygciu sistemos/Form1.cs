@@ -51,6 +51,23 @@ namespace Pvz1
             }
             return suma;
         }
+        private double T(double x, int j)
+        {
+            double t;
+            if (j == 0)
+            {
+                t = 1;
+            }
+            else if (j == 1)
+            {
+                t = x;
+            }
+            else
+            {
+                t = 2 * x * T(x, j - 1) - T(x, j - 2);
+            }
+            return t;
+        }
         private void button2_Click(object sender, EventArgs e)
         {
 
@@ -110,11 +127,15 @@ namespace Pvz1
                 FValues[i] = 0;
                 for (int u = 0; u < L.GetLength(1); u++)
                 {
-                    L[i, u] = calcL(XValues[i], u, taskai);
+                    //Lagranzas
+                    //L[i, u] = calcL(XValues[i], u, taskai);
+                    //Ciobysevas
+                    L[i, u] = T(XValues[i], u);
                     FValues[i] += L[i, u];
                 }
                 FValues[i] *= YValues[i];
             }
+            //---
             for(int i = 0; i < FValues.Length; i++)
             {
                 z2.Points.AddXY(XValues[i], FValues[i]);
