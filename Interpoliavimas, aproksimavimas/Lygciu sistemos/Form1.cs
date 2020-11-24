@@ -40,44 +40,6 @@ namespace Pvz1
         {
             return Math.Cos(2 * x) * (Math.Sin(2 * x) + 1.5) - Math.Cos(x / 5);
         }
-        /* private double calcL(double x, int j, double[] taskai)
-         {
-             double suma = 1;
-             for (int i = 0; i < taskai.Length; i++)
-             {
-                 if (i != j)
-                 {
-                     suma *= (x - taskai[i]) / (taskai[j] - taskai[i]);
-                 }
-             }
-             return suma;
-         }
-         private void Ciobysevas(double n, double[] X, double[] taskai, Series z, out double[] XValues, out double[] FValues)
-         {
-             double deltaX = 0.1;
-             int N = (int)Math.Round((X[1] - X[0]) / deltaX);
-             double[,] L = new double[N, (int)n];
-             XValues = new double[N];
-             FValues = new double[N];
-             for (int i = 0; i < L.GetLength(0); i++)
-             {
-                 XValues[i] = X[0] + i * deltaX;
-                 FValues[i] = 0;
-                 for (int u = 0; u < L.GetLength(1); u++)
-                 {
-                     L[i, u] = calcL(XValues[i], u, taskai) * F(taskai[u]);
-                     FValues[i] += L[i, u];
-                 }
-             }
-             //---
-             if (z != null)
-             {
-                 for (int i = 0; i < FValues.Length; i++)
-                 {
-                     z.Points.AddXY(XValues[i], FValues[i]);
-                 }
-             }
-         }*/
         private double T(double x, int j)
         {
             if (j == 0)
@@ -101,31 +63,82 @@ namespace Pvz1
         {
             return (((b - a)/2)*X) + ((b + a) / 2);
         }
+        static void Gausas(double[,] a, int n)
+        {
+            int i, j, k = 0, c;
+
+            for (i = 0; i < n; i++)
+            {
+                if (a[i, i] == 0)
+                {
+                    c = 1;
+                    while ((i + c) < n && a[i + c, i] == 0)
+                        c++;
+                    if ((i + c) == n)
+                    {
+                        break;
+                    }
+                    for (j = i, k = 0; k <= n; k++)
+                    {
+                        double temp = a[j, k];
+                        a[j, k] = a[j + c, k];
+                        a[j + c, k] = temp;
+                    }
+                }
+
+                for (j = 0; j < n; j++)
+                {
+                    if (i != j)
+                    {
+                        double p = a[j, i] / a[i, i];
+
+                        for (k = 0; k <= n; k++)
+                            a[j, k] = a[j, k] - (a[i, k]) * p;
+                    }
+                }
+            }
+        }
         private void Ciobysevas(double n, double[] X, double[] taskai, Series z, out double[] XValues, out double[] FValues)
         {
+            //Čiobyševo daugianarių suvedimas į matricą su y reikšme paskutiniame stulpelyje
+            double[,] TT = new double[(int)n, (int)n+1];
+            for (int i = 0; i < TT.GetLength(0); i++)
+            {
+                for (int u = 0; u < TT.GetLength(1) - 1; u++)
+                {
+                    TT[i, u] = T(CiobysevoForma(taskai[i], X[0], X[1]), u);
+                }
+                TT[i, TT.GetLength(1) - 1] = F(taskai[i]);
+            }
+            //Čiobyševo daugianarių matricos sprendimas gauso metodu
+            Gausas(TT, (int)n);
+            //Išsprendus matricą galime gauti daugiklių reikšmes
+            double[] AValues = new double[(int)n];
+            for (int i = 0; i < AValues.Length; i++)
+            {
+                AValues[i] = TT[i, (int)n] / TT[i, i];
+            }
+            //Interpoliuotos funkcijos reikšmių surašymas į masyvus pagal (x) reikšmes
             double deltaX = 0.1;
             int N = (int)Math.Round((X[1] - X[0]) / deltaX);
-            double[,] L = new double[N, (int)n];
             XValues = new double[N];
             FValues = new double[N];
-            for (int i = 0; i < L.GetLength(0); i++)
+            for (int i = 0; i < N; i++)
             {
                 XValues[i] = CiobysevoForma(X[0] + i * deltaX, X[0], X[1]);
                 FValues[i] = 0;
-                for (int u = 0; u < L.GetLength(1)-1; u++)
-                {
-                    L[i, u] = T(XValues[i], u) * F(taskai[u]);
-                    FValues[i] += L[i, u];
+                for (int u = 0; u < (int)n; u++)
+                {                    
+                    FValues[i] += T(XValues[i], u) * AValues[u];
                 }
             }
-            //---
+            //Gautos interpoliuotos funkcijos braižymas ekrane
             if (z != null)
             {
                 for (int i = 0; i < FValues.Length; i++)
                 {
-                    //XValues[i] = NormaliForma(XValues[i], X[0], X[1]);
+                    XValues[i] = NormaliForma(XValues[i], X[0], X[1]);
                     z.Points.AddXY(XValues[i], FValues[i]);
-                    System.Diagnostics.Debug.WriteLine(XValues[i] + " " + FValues[i]);
                 }
             }
         }
@@ -157,7 +170,7 @@ namespace Pvz1
             ClearForm1();
             PreparareForm(-3, 4, -4, 2);
             //---
-            double n = 10; //Tasku skaicius
+            double n = 15; //Tasku skaicius
             int taskuMetodas = 1; //0 - tolygiai, 1 - pagal ciobyseva
             if (radioButton1.Checked) 
             {
@@ -187,7 +200,7 @@ namespace Pvz1
             //---      
             for (int i = 0; i < taskai.Length; i++)
             {
-                p1.Points.AddXY(CiobysevoForma(taskai[i], X[0], X[1]), F(taskai[i]));
+                p1.Points.AddXY(taskai[i], F(taskai[i]));
             }
             //---
             z1.BorderWidth = 1;
@@ -199,18 +212,16 @@ namespace Pvz1
             double[] FValues1;
             double[] FValues2;
             //---
-            Ciobysevas(n, X, taskai, z2, out XValues1, out FValues1);
-            Ciobysevas(n+1, X, taskai2, null, out XValues2, out FValues2);
+            Ciobysevas(n, X, taskai, z2, out XValues1, out FValues1); //Interpoliuojama funkcija su n mazgų
+            Ciobysevas(n+1, X, taskai2, null, out XValues2, out FValues2); //Interpoliuojama funkcija su n+1 mazgų
             //---
-            /*
-            for(int i = 1; i < XValues1.Length; i++)
+            for(int i = 1; i < XValues1.Length; i++) //Netikties braižymas
             {
                 z3.Points.AddXY(XValues1[i], FValues1[i] - FValues2[i]);
             }
-            */
-            for (double i = X[0]; i <= X[1] + 0.01; i += 0.01)
+            for (double i = X[0]; i <= X[1] + 0.01; i += 0.01) //Funkcijos braižymas
             {
-                z1.Points.AddXY(CiobysevoForma(i, X[0], X[1]), F(i));
+                z1.Points.AddXY(i, F(i));
             }
         }
 
