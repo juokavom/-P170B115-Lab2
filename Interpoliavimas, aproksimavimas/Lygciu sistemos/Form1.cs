@@ -78,57 +78,6 @@ namespace Pvz1
                  }
              }
          }
-        /*private double T(double x, int j)
-        {
-            if (j == 0)
-            {
-                return 1;
-            }
-            else if (j == 1)
-            {
-                return x;
-            }
-            else
-            {
-                return 2 * x * T(x, j - 1) - T(x, j - 2);
-            }
-        }
-        private double CiobysevoForma(double X, double a, double b)
-        {
-            return ((2 * X) / (b - a)) - ((b + a) / (b - a));
-        }
-        private double NormaliForma(double X, double a, double b)
-        {
-            return (((b - a)/2)*X) + ((b + a) / 2);
-        }
-        private void Ciobysevas(double n, double[] X, double[] taskai, Series z, out double[] XValues, out double[] FValues)
-        {
-            double deltaX = 0.1;
-            int N = (int)Math.Round((X[1] - X[0]) / deltaX);
-            double[,] L = new double[N, (int)n];
-            XValues = new double[N];
-            FValues = new double[N];
-            for (int i = 0; i < L.GetLength(0); i++)
-            {
-                XValues[i] = CiobysevoForma(X[0] + i * deltaX, X[0], X[1]);
-                FValues[i] = 0;
-                for (int u = 0; u < L.GetLength(1)-1; u++)
-                {
-                    L[i, u] = T(XValues[i], u) * F(taskai[u]);
-                    FValues[i] += L[i, u];
-                }
-            }
-            //---
-            if (z != null)
-            {
-                for (int i = 0; i < FValues.Length; i++)
-                {
-                    //XValues[i] = NormaliForma(XValues[i], X[0], X[1]);
-                    z.Points.AddXY(XValues[i], FValues[i]);
-                    System.Diagnostics.Debug.WriteLine(XValues[i] + " " + FValues[i]);
-                }
-            }
-        }*/
         private double[] taskuRinkinys(double n, int pozymis, double[] X)
         {
             double[] taskai = new double[(int)n];
