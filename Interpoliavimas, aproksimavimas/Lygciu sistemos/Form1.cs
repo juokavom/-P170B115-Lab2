@@ -40,17 +40,66 @@ namespace Pvz1
         {
             return Math.Cos(2 * x) * (Math.Sin(2 * x) + 1.5) - Math.Cos(x / 5);
         }
-        private double calcL(double x, int j, double[] taskai)
+        /* private double calcL(double x, int j, double[] taskai)
+         {
+             double suma = 1;
+             for (int i = 0; i < taskai.Length; i++)
+             {
+                 if (i != j)
+                 {
+                     suma *= (x - taskai[i]) / (taskai[j] - taskai[i]);
+                 }
+             }
+             return suma;
+         }
+         private void Ciobysevas(double n, double[] X, double[] taskai, Series z, out double[] XValues, out double[] FValues)
+         {
+             double deltaX = 0.1;
+             int N = (int)Math.Round((X[1] - X[0]) / deltaX);
+             double[,] L = new double[N, (int)n];
+             XValues = new double[N];
+             FValues = new double[N];
+             for (int i = 0; i < L.GetLength(0); i++)
+             {
+                 XValues[i] = X[0] + i * deltaX;
+                 FValues[i] = 0;
+                 for (int u = 0; u < L.GetLength(1); u++)
+                 {
+                     L[i, u] = calcL(XValues[i], u, taskai) * F(taskai[u]);
+                     FValues[i] += L[i, u];
+                 }
+             }
+             //---
+             if (z != null)
+             {
+                 for (int i = 0; i < FValues.Length; i++)
+                 {
+                     z.Points.AddXY(XValues[i], FValues[i]);
+                 }
+             }
+         }*/
+        private double T(double x, int j)
         {
-            double suma = 1;
-            for (int i = 0; i < taskai.Length; i++)
+            if (j == 0)
             {
-                if (i != j)
-                {
-                    suma *= (x - taskai[i]) / (taskai[j] - taskai[i]);
-                }
+                return 1;
             }
-            return suma;
+            else if (j == 1)
+            {
+                return x;
+            }
+            else
+            {
+                return 2 * x * T(x, j - 1) - T(x, j - 2);
+            }
+        }
+        private double CiobysevoForma(double X, double a, double b)
+        {
+            return ((2 * X) / (b - a)) - ((b + a) / (b - a));
+        }
+        private double NormaliForma(double X, double a, double b)
+        {
+            return (((b - a)/2)*X) + ((b + a) / 2);
         }
         private void Ciobysevas(double n, double[] X, double[] taskai, Series z, out double[] XValues, out double[] FValues)
         {
@@ -61,11 +110,11 @@ namespace Pvz1
             FValues = new double[N];
             for (int i = 0; i < L.GetLength(0); i++)
             {
-                XValues[i] = X[0] + i * deltaX;
+                XValues[i] = CiobysevoForma(X[0] + i * deltaX, X[0], X[1]);
                 FValues[i] = 0;
-                for (int u = 0; u < L.GetLength(1); u++)
+                for (int u = 0; u < L.GetLength(1)-1; u++)
                 {
-                    L[i, u] = calcL(XValues[i], u, taskai) * F(taskai[u]);
+                    L[i, u] = T(XValues[i], u) * F(taskai[u]);
                     FValues[i] += L[i, u];
                 }
             }
@@ -74,7 +123,9 @@ namespace Pvz1
             {
                 for (int i = 0; i < FValues.Length; i++)
                 {
+                    //XValues[i] = NormaliForma(XValues[i], X[0], X[1]);
                     z.Points.AddXY(XValues[i], FValues[i]);
+                    System.Diagnostics.Debug.WriteLine(XValues[i] + " " + FValues[i]);
                 }
             }
         }
@@ -136,7 +187,7 @@ namespace Pvz1
             //---      
             for (int i = 0; i < taskai.Length; i++)
             {
-                p1.Points.AddXY(taskai[i], F(taskai[i]));
+                p1.Points.AddXY(CiobysevoForma(taskai[i], X[0], X[1]), F(taskai[i]));
             }
             //---
             z1.BorderWidth = 1;
@@ -149,15 +200,17 @@ namespace Pvz1
             double[] FValues2;
             //---
             Ciobysevas(n, X, taskai, z2, out XValues1, out FValues1);
-            Ciobysevas(n, X, taskai2, null, out XValues2, out FValues2);
+            Ciobysevas(n+1, X, taskai2, null, out XValues2, out FValues2);
             //---
+            /*
             for(int i = 1; i < XValues1.Length; i++)
             {
                 z3.Points.AddXY(XValues1[i], FValues1[i] - FValues2[i]);
             }
+            */
             for (double i = X[0]; i <= X[1] + 0.01; i += 0.01)
             {
-                z1.Points.AddXY(i, F(i));
+                z1.Points.AddXY(CiobysevoForma(i, X[0], X[1]), F(i));
             }
         }
 
