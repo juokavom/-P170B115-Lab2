@@ -170,11 +170,12 @@ namespace Pvz1
             ClearForm1();
             PreparareForm(-3, 4, -4, 2);
             //---
-            double n = 15; //Tasku skaicius
-            int taskuMetodas = 1; //0 - tolygiai, 1 - pagal ciobyseva
-            if (radioButton1.Checked) 
+            //double n = 15; //Tasku skaicius
+            double n = (double)numericUpDown1.Value;
+            int taskuMetodas = 0; //0 - tolygiai, 1 - pagal ciobyseva
+            if (radioButton2.Checked) 
             {
-                taskuMetodas = 0;
+                taskuMetodas = 1;
             }
             //---
             double[] X = { -2, 3 }; //Abscises reziai

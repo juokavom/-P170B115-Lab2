@@ -168,11 +168,13 @@ namespace Pvz1
             // 
             // radioButton1
             // 
+            this.radioButton1.Checked = true;
             this.radioButton1.Location = new System.Drawing.Point(1845, 157);
             this.radioButton1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(367, 57);
             this.radioButton1.TabIndex = 9;
+            this.radioButton1.TabStop = true;
             this.radioButton1.Text = "Pasiskirstę tolygiai";
             // 
             // radioButton2
