@@ -57,15 +57,18 @@ namespace Pvz1
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.var1 = new System.Windows.Forms.RadioButton();
-            this.var2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.label1 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // chart1
@@ -74,10 +77,10 @@ namespace Pvz1
             this.chart1.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(32, 29);
-            this.chart1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.chart1.Location = new System.Drawing.Point(16, 15);
+            this.chart1.Margin = new System.Windows.Forms.Padding(4);
             this.chart1.Name = "chart1";
-            this.chart1.Size = new System.Drawing.Size(1784, 940);
+            this.chart1.Size = new System.Drawing.Size(892, 485);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
             // 
@@ -86,20 +89,20 @@ namespace Pvz1
             this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.richTextBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
-            this.richTextBox1.Location = new System.Drawing.Point(32, 982);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.richTextBox1.Location = new System.Drawing.Point(16, 507);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(4);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(1777, 1880);
+            this.richTextBox1.Size = new System.Drawing.Size(890, 685);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
             // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(3483, 2820);
-            this.button1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.button1.Location = new System.Drawing.Point(1742, 1168);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(200, 55);
+            this.button1.Size = new System.Drawing.Size(100, 28);
             this.button1.TabIndex = 2;
             this.button1.Text = "Baigti";
             this.button1.UseVisualStyleBackColor = true;
@@ -107,10 +110,10 @@ namespace Pvz1
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1845, 33);
-            this.button2.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.button2.Location = new System.Drawing.Point(922, 17);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(416, 60);
+            this.button2.Size = new System.Drawing.Size(208, 31);
             this.button2.TabIndex = 4;
             this.button2.Text = "Pirma užduotis";
             this.button2.UseVisualStyleBackColor = true;
@@ -118,21 +121,22 @@ namespace Pvz1
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(1845, 338);
-            this.button3.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.button3.Location = new System.Drawing.Point(922, 206);
+            this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(416, 55);
+            this.button3.Size = new System.Drawing.Size(208, 28);
             this.button3.TabIndex = 5;
-            this.button3.Text = "Antra uzduotis";
+            this.button3.Text = "Antra užduotis";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(3267, 2820);
-            this.button4.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.button4.Location = new System.Drawing.Point(1634, 1168);
+            this.button4.Margin = new System.Windows.Forms.Padding(4);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(200, 55);
+            this.button4.Size = new System.Drawing.Size(100, 28);
             this.button4.TabIndex = 6;
             this.button4.Text = "Valyti";
             this.button4.UseVisualStyleBackColor = true;
@@ -140,64 +144,38 @@ namespace Pvz1
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(1855, 577);
-            this.button5.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.button5.Location = new System.Drawing.Point(922, 360);
+            this.button5.Margin = new System.Windows.Forms.Padding(4);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(416, 55);
+            this.button5.Size = new System.Drawing.Size(208, 28);
             this.button5.TabIndex = 5;
             this.button5.Text = "Trecia uzduotis";
             this.button5.UseVisualStyleBackColor = true;
             // 
-            // var1
-            // 
-            this.var1.Location = new System.Drawing.Point(1855, 407);
-            this.var1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.var1.Name = "var1";
-            this.var1.Size = new System.Drawing.Size(277, 57);
-            this.var1.TabIndex = 7;
-            this.var1.Text = "I L.S.";
-            // 
-            // var2
-            // 
-            this.var2.Location = new System.Drawing.Point(1855, 493);
-            this.var2.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.var2.Name = "var2";
-            this.var2.Size = new System.Drawing.Size(277, 57);
-            this.var2.TabIndex = 8;
-            this.var2.Text = "II L.S.";
-            // 
             // radioButton1
             // 
             this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(1845, 157);
-            this.radioButton1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.radioButton1.Location = new System.Drawing.Point(7, 22);
+            this.radioButton1.Margin = new System.Windows.Forms.Padding(4);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(367, 57);
+            this.radioButton1.Size = new System.Drawing.Size(184, 29);
             this.radioButton1.TabIndex = 9;
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "Pasiskirstę tolygiai";
             // 
             // radioButton2
             // 
-            this.radioButton2.Location = new System.Drawing.Point(1845, 214);
-            this.radioButton2.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.radioButton2.Location = new System.Drawing.Point(7, 54);
+            this.radioButton2.Margin = new System.Windows.Forms.Padding(4);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(277, 57);
+            this.radioButton2.Size = new System.Drawing.Size(138, 29);
             this.radioButton2.TabIndex = 10;
             this.radioButton2.Text = "Pagal Čiobyševą";
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1905, 104);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(285, 32);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "Taškų pasiskirstymas";
-            // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(2070, 277);
+            this.numericUpDown1.Location = new System.Drawing.Point(1031, 162);
+            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             30,
             0,
@@ -209,46 +187,94 @@ namespace Pvz1
             0,
             0});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 38);
+            this.numericUpDown1.Size = new System.Drawing.Size(60, 22);
             this.numericUpDown1.TabIndex = 12;
             this.numericUpDown1.Value = new decimal(new int[] {
             10,
             0,
             0,
             0});
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.button2_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1849, 283);
+            this.label2.Location = new System.Drawing.Point(925, 164);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(201, 32);
+            this.label2.Size = new System.Drawing.Size(101, 17);
             this.label2.TabIndex = 13;
             this.label2.Text = "Taškų skaičius";
             // 
+            // radioButton3
+            // 
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Checked = true;
+            this.radioButton3.Location = new System.Drawing.Point(6, 31);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(147, 21);
+            this.radioButton3.TabIndex = 15;
+            this.radioButton3.TabStop = true;
+            this.radioButton3.Tag = "";
+            this.radioButton3.Text = "Čiobyševo (1 lent.)";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            // 
+            // radioButton4
+            // 
+            this.radioButton4.AutoSize = true;
+            this.radioButton4.Location = new System.Drawing.Point(6, 59);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(183, 21);
+            this.radioButton4.TabIndex = 16;
+            this.radioButton4.Text = "Globaliu splainu (2 lent.)";
+            this.radioButton4.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.radioButton4);
+            this.groupBox1.Controls.Add(this.radioButton3);
+            this.groupBox1.Location = new System.Drawing.Point(922, 241);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(200, 100);
+            this.groupBox1.TabIndex = 17;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Metodas";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.radioButton2);
+            this.groupBox2.Controls.Add(this.radioButton1);
+            this.groupBox2.Location = new System.Drawing.Point(922, 55);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(208, 100);
+            this.groupBox2.TabIndex = 18;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Taškų pasiskirstymas";
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2280, 1965);
+            this.ClientSize = new System.Drawing.Size(1140, 727);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.numericUpDown1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.radioButton2);
-            this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.var1);
-            this.Controls.Add(this.var2);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.chart1);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
-            this.Text = "Skaitiniai metodai ir Algoritmai";
+            this.Text = "SMA IP_3 Jokūbas Akramas";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -308,16 +334,17 @@ namespace Pvz1
         private System.Windows.Forms.Timer timer8;
         private System.Windows.Forms.Timer timer9;
         private System.Windows.Forms.Button button2;
-        private RadioButton var1;
-        private RadioButton var2;
         private Button button3;
         private Button button4;
         private Button button5;
         private RadioButton radioButton1;
         private RadioButton radioButton2;
-        private Label label1;
         private NumericUpDown numericUpDown1;
         private Label label2;
+        private RadioButton radioButton3;
+        private RadioButton radioButton4;
+        private GroupBox groupBox1;
+        private GroupBox groupBox2;
     }
 
 

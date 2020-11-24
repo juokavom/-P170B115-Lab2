@@ -14,3 +14,4 @@ C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Interpoliavi
 C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Interpoliavimas, aproksimavimas\Lygciu sistemos\obj\Debug\Interpoliavimas.csproj.CopyComplete
 C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Interpoliavimas, aproksimavimas\Lygciu sistemos\obj\Debug\Pvz1.exe
 C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Interpoliavimas, aproksimavimas\Lygciu sistemos\obj\Debug\Pvz1.pdb
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Interpoliavimas, aproksimavimas\Lygciu sistemos\bin\Debug\Data\PER_2008.txt
