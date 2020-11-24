@@ -180,7 +180,7 @@ namespace Pvz1
                 richTextBox1.AppendText("Taškai apskaičiuojami naudojant Čiobyševo abscises.\n");
                 taskuMetodas = 1;
             }
-            else 
+            else
             {
                 richTextBox1.AppendText("Taškai pasiskirstę tolygiai.\n");
             }
@@ -286,7 +286,7 @@ namespace Pvz1
             double[,] T = new double[n - 2, n];
             double[] YY = new double[n - 2];
             //Splaino daugianarių matricos [n-2 x n] sudarymas
-            for (int i = 0; i < T.GetLength(0); i++) 
+            for (int i = 0; i < T.GetLength(0); i++)
             {
                 for (int u = 0; u < T.GetLength(1); u++) T[i, u] = 0;
                 T[i, i] = d[i] / 6;
@@ -296,7 +296,7 @@ namespace Pvz1
             }
             double[,] TT = new double[n - 2, n - 1];
             //Splaino daugianarių matricos be 1 ir n-1 reiksmes stulpeliu pervedimas gauso metodu spręsti ir rezultatais paskutiniame stulpelyje
-            for (int i = 0; i < TT.GetLength(0); i++) 
+            for (int i = 0; i < TT.GetLength(0); i++)
             {
                 for (int u = 0; u < TT.GetLength(1) - 1; u++)
                 {
@@ -305,12 +305,12 @@ namespace Pvz1
                 TT[i, n - 2] = YY[i];
             }
             //Splaino daugianarių TLS sprendžiama gauso metodu
-            Gausas(TT, n - 2); 
+            Gausas(TT, n - 2);
             double[] f_2 = new double[n];
             f_2[0] = 0;
             f_2[n - 1] = 0;
             //Apskaičiuojamos antros eilės išvestinės iš apskaičiuotos matricos ir y reikšmių vektoriaus
-            for (int i = 0; i < n - 2; i++) 
+            for (int i = 0; i < n - 2; i++)
             {
                 f_2[i + 1] = TT[i, n - 2] / T[i, i];
             }
@@ -319,12 +319,12 @@ namespace Pvz1
                 double xmax = x[i + 1];
                 double xmin = x[i];
                 double deltaX = 0.01;
-                int N = (int)Math.Round((xmax - xmin) / deltaX) + 1;
+                int N = (int)Math.Abs(Math.Round((xmax - xmin) / deltaX)) + 1;
 
                 double[] XValues = new double[N];
                 double[] FValues = new double[N];
                 //Pagal apskaičiuotas antros eilės išvestines formuojamos vaizdavimo taškų reikšmės XValues ir FValues vektoriuose
-                for (int u = 0; u < N; u++) 
+                for (int u = 0; u < N; u++)
                 {
                     XValues[u] = xmin + u * deltaX;
                     double s = XValues[u] - x[i];
@@ -334,9 +334,9 @@ namespace Pvz1
                 if (z != null)
                 {
                     //Gautos interpoliuotos funkcijos braižymas ekrane
-                    for (int u = 0; u < FValues.Length; u++) 
+                    for (int u = 0; u < FValues.Length; u++)
                     {
-                        z.Points.AddXY(XValues[u], FValues[u]); 
+                        z.Points.AddXY(XValues[u], FValues[u]);
                     }
                 }
             }
@@ -378,8 +378,149 @@ namespace Pvz1
                 richTextBox1.AppendText("Sprendžiama Globalaus splaino metodu.\n");
             }
         }
-        //------------------------------------------------------------TRECIA UZDUOTIS----------------------------------------------------------------------------
 
+        //------------------------------------------------------------TRECIA UZDUOTIS----------------------------------------------------------------------------
+        private double[][] GlobalusSplainasPeru(double[] x, double[] y, Series z)
+        {
+            int n = x.Length;
+            double[] d = new double[n - 1];
+            for (int i = 0; i < d.Length; i++) d[i] = x[i + 1] - x[i];
+            double[,] T = new double[n - 2, n];
+            double[] YY = new double[n - 2];
+            //Splaino daugianarių matricos [n-2 x n] sudarymas
+            for (int i = 0; i < T.GetLength(0); i++)
+            {
+                for (int u = 0; u < T.GetLength(1); u++) T[i, u] = 0;
+                T[i, i] = d[i] / 6;
+                T[i, i + 1] = (d[i] + d[i + 1]) / 3;
+                T[i, i + 2] = d[i + 1] / 6;
+                YY[i] = ((y[i + 2] - y[i + 1]) / d[i + 1]) - ((y[i + 1] - y[i]) / d[i]);
+            }
+            double[,] TT = new double[n - 2, n - 1];
+            //Splaino daugianarių matricos be 1 ir n-1 reiksmes stulpeliu pervedimas gauso metodu spręsti ir rezultatais paskutiniame stulpelyje
+            for (int i = 0; i < TT.GetLength(0); i++)
+            {
+                for (int u = 0; u < TT.GetLength(1) - 1; u++)
+                {
+                    TT[i, u] = T[i, u + 1];
+                }
+                TT[i, n - 2] = YY[i];
+            }
+            //Splaino daugianarių TLS sprendžiama gauso metodu
+            Gausas(TT, n - 2);
+            double[] f_2 = new double[n];
+            f_2[0] = 0;
+            f_2[n - 1] = 0;
+            //Apskaičiuojamos antros eilės išvestinės iš apskaičiuotos matricos ir y reikšmių vektoriaus
+            for (int i = 0; i < n - 2; i++)
+            {
+                f_2[i + 1] = TT[i, n - 2] / T[i, i];
+            }
+            double[][] array = new double[n-1][];
+            for (int i = 0; i < n - 1; i++)
+            {
+                double xmax = x[i + 1];
+                double xmin = x[i];
+                double deltaX = 0.1;
+                int N = (int)Math.Abs(Math.Round((xmax - xmin) / deltaX)) + 1;
+
+                double[] XValues = new double[N];
+                double[] FValues = new double[N];
+                //Pagal apskaičiuotas antros eilės išvestines formuojamos vaizdavimo taškų reikšmės XValues ir FValues vektoriuose
+                for (int u = 0; u < N; u++)
+                {
+                    XValues[u] = xmin + u * deltaX;
+                    double s = XValues[u] - x[i];
+                    FValues[u] = (f_2[i] * (Math.Pow(s, 2) / 2)) - (f_2[i] * (Math.Pow(s, 3) / (6 * d[i]))) + (f_2[i + 1] * (Math.Pow(s, 3) / (6 * d[i]))) + (((y[i + 1] - y[i]) / d[i]) * s) - (f_2[i] * (d[i] / 3) * s) - (f_2[i + 1] * (d[i] / 6) * s) + y[i];
+                }
+                array[i] = FValues;
+            }
+            return array;
+        }
+        private double[] taskai(double[] data, int n)
+        {
+            int delta = data.Length / n;
+            double[] tsk = new double[n];
+            for (int i = 0; i < tsk.Length; i++)
+            {
+                tsk[i] = data[i * delta];
+            }
+            return tsk;
+        }
+        private double S(double x0, double x1, double y0, double y1)
+        {
+            return Math.Sqrt(Math.Pow((x1 - x0), 2) + Math.Pow((y1 - y0), 2));
+        }
+        private void button5_Click(object sender, EventArgs e)
+        {
+            ClearForm1();
+            PreparareForm(-82, -68, -20, 1);
+            //---
+            int taskuSkaicius = 50;
+            //---
+            double[] taskaiXData = File.ReadAllLines(@"Data/X.txt")[0].Split(',').Select(i => Double.Parse(i)).ToArray();
+            double[] taskaiYData = File.ReadAllLines(@"Data/Y.txt")[0].Split(',').Select(i => Double.Parse(i)).ToArray();
+            double[] taskaiX = taskai(taskaiXData, taskuSkaicius);
+            double[] taskaiY = taskai(taskaiYData, taskuSkaicius);
+            //double[] taskaiT = taskuRinkinys(taskaiX.Length, 1, new double[] { -82, -68});
+            double[] taskaiT = new double[taskaiX.Length];
+            taskaiT[0] = 0;
+            for (int i = 1; i < taskaiT.Length; i++)
+            {
+                double s = S(taskaiX[i - 1], taskaiX[i], taskaiY[i - 1], taskaiY[i]);
+                taskaiT[i] = taskaiT[i-1] + s;
+                System.Diagnostics.Debug.WriteLine(string.Format("x0 {0}, x1{1}, y0 {2}, y1 {3}... S = {4} ... taskaiT[i] = {5}", taskaiX[i - 1], taskaiX[i], taskaiY[i - 1], taskaiY[i], s, taskaiT[i]));
+
+            }
+            //---
+            z1 = chart1.Series.Add("Pradiniai kontūrai");
+            z1.ChartType = SeriesChartType.Line;
+            z1.Color = Color.Blue;
+            //---
+            p1 = chart1.Series.Add("Taškai");
+            p1.ChartType = SeriesChartType.Point;
+            p1.Color = Color.Black;
+            //---
+            z2 = chart1.Series.Add("Gauta funkcija");
+            z2.ChartType = SeriesChartType.Line;
+            z2.Color = Color.Red;
+            //---             
+            for (int i = 0; i < taskaiXData.Length; i++)
+            {
+                z1.Points.AddXY(taskaiXData[i], taskaiYData[i]);
+            }
+            for (int i = 0; i < taskaiX.Length; i++)
+            {
+                p1.Points.AddXY(taskaiX[i], taskaiY[i]);
+            }
+            //---
+            z1.BorderWidth = 1;
+            p1.BorderWidth = 3;
+            z2.BorderWidth = 1;
+            //---
+            var xArray = GlobalusSplainasPeru(taskaiT, taskaiX, z2);
+            var yArray = GlobalusSplainasPeru(taskaiT, taskaiY, z2);
+            for (int i = 0; i < xArray.Length; i++)
+            {
+                //Gautos interpoliuotos funkcijos braižymas ekrane
+                for (int u = 0; u < xArray[i].Length; u++)
+                {
+                    z2.Points.AddXY(xArray[i][u], yArray[i][u]);
+                }
+            }
+            /*           
+            richTextBox1.AppendText("Antra užduotis\n");
+            if (radioButton3.Checked)
+            {
+                Ciobysevas(X, taskaiX, taskaiY, z2);
+                richTextBox1.AppendText("Sprendžiama Čiobyševo metodu.\n");
+            }
+            else if (radioButton4.Checked)
+            {
+                GlobalusSplainas(taskaiX, taskaiY, z2);
+                richTextBox1.AppendText("Sprendžiama Globalaus splaino metodu.\n");
+            }*/
+        }
 
         // ---------------------------------------------- KITI METODAI ----------------------------------------------
 
