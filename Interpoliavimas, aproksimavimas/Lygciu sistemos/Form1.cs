@@ -456,7 +456,7 @@ namespace Pvz1
             ClearForm1();
             PreparareForm(-82, -68, -20, 1);
             //---
-            int taskuSkaicius = 50;
+            int taskuSkaicius = int.Parse((string)listBox1.SelectedItem);
             //---
             double[] taskaiXData = File.ReadAllLines(@"Data/X.txt")[0].Split(',').Select(i => Double.Parse(i)).ToArray();
             double[] taskaiYData = File.ReadAllLines(@"Data/Y.txt")[0].Split(',').Select(i => Double.Parse(i)).ToArray();
@@ -470,7 +470,6 @@ namespace Pvz1
                 double s = S(taskaiX[i - 1], taskaiX[i], taskaiY[i - 1], taskaiY[i]);
                 taskaiT[i] = taskaiT[i-1] + s;
                 System.Diagnostics.Debug.WriteLine(string.Format("x0 {0}, x1{1}, y0 {2}, y1 {3}... S = {4} ... taskaiT[i] = {5}", taskaiX[i - 1], taskaiX[i], taskaiY[i - 1], taskaiY[i], s, taskaiT[i]));
-
             }
             //---
             z1 = chart1.Series.Add("Pradiniai kontūrai");
@@ -508,18 +507,6 @@ namespace Pvz1
                     z2.Points.AddXY(xArray[i][u], yArray[i][u]);
                 }
             }
-            /*           
-            richTextBox1.AppendText("Antra užduotis\n");
-            if (radioButton3.Checked)
-            {
-                Ciobysevas(X, taskaiX, taskaiY, z2);
-                richTextBox1.AppendText("Sprendžiama Čiobyševo metodu.\n");
-            }
-            else if (radioButton4.Checked)
-            {
-                GlobalusSplainas(taskaiX, taskaiY, z2);
-                richTextBox1.AppendText("Sprendžiama Globalaus splaino metodu.\n");
-            }*/
         }
 
         // ---------------------------------------------- KITI METODAI ----------------------------------------------
