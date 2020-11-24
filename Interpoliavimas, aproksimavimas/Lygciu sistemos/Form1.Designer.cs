@@ -99,7 +99,7 @@ namespace Pvz1
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(1742, 1168);
+            this.button1.Location = new System.Drawing.Point(914, 686);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(100, 28);
@@ -133,7 +133,7 @@ namespace Pvz1
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(1634, 1168);
+            this.button4.Location = new System.Drawing.Point(1027, 686);
             this.button4.Margin = new System.Windows.Forms.Padding(4);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(100, 28);
@@ -162,6 +162,7 @@ namespace Pvz1
             this.radioButton1.TabIndex = 9;
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "Pasiskirstę tolygiai";
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.button2_Click);
             // 
             // radioButton2
             // 
@@ -171,6 +172,7 @@ namespace Pvz1
             this.radioButton2.Size = new System.Drawing.Size(138, 29);
             this.radioButton2.TabIndex = 10;
             this.radioButton2.Text = "Pagal Čiobyševą";
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.button2_Click);
             // 
             // numericUpDown1
             // 
@@ -218,6 +220,7 @@ namespace Pvz1
             this.radioButton3.Tag = "";
             this.radioButton3.Text = "Čiobyševo (1 lent.)";
             this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton3.CheckedChanged += new System.EventHandler(this.button3_Click);
             // 
             // radioButton4
             // 
@@ -228,6 +231,7 @@ namespace Pvz1
             this.radioButton4.TabIndex = 16;
             this.radioButton4.Text = "Globaliu splainu (2 lent.)";
             this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioButton4.CheckedChanged += new System.EventHandler(this.button3_Click);
             // 
             // groupBox1
             // 

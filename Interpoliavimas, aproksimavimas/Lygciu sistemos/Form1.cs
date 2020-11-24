@@ -173,9 +173,16 @@ namespace Pvz1
             //double n = 15; //Tasku skaicius
             double n = (double)numericUpDown1.Value;
             int taskuMetodas = 0; //0 - tolygiai, 1 - pagal ciobyseva
+            richTextBox1.AppendText("Pirma užduotis\n");
+            richTextBox1.AppendText("Taškų kiekis = " + n + "\n");
             if (radioButton2.Checked)
             {
+                richTextBox1.AppendText("Taškai apskaičiuojami naudojant Čiobyševo abscises.\n");
                 taskuMetodas = 1;
+            }
+            else 
+            {
+                richTextBox1.AppendText("Taškai pasiskirstę tolygiai.\n");
             }
             //---
             double[] X = { -2, 3 }; //Abscises reziai
@@ -187,7 +194,7 @@ namespace Pvz1
             z1.ChartType = SeriesChartType.Line;
             z1.Color = Color.Blue;
             //---
-            p1 = chart1.Series.Add("Pradiniai taskai");
+            p1 = chart1.Series.Add("Pradiniai taškai");
             p1.ChartType = SeriesChartType.Point;
             p1.Color = Color.Black;
             //---
@@ -195,7 +202,7 @@ namespace Pvz1
             z2.ChartType = SeriesChartType.Line;
             z2.Color = Color.Red;
             //---
-            z3 = chart1.Series.Add("Skirtumas");
+            z3 = chart1.Series.Add("Netiktis");
             z3.ChartType = SeriesChartType.Line;
             z3.Color = Color.Black;
             //---      
@@ -271,20 +278,6 @@ namespace Pvz1
                 }
             }
         }
-        private string print4DMatrix(double[,] a)
-        {
-            string sb = "[\n";
-            for (int i = 0; i < a.GetLength(0); i++)
-            {
-                for (int u = 0; u < a.GetLength(1); u++)
-                {
-                    sb += string.Format("{0, 3:F2} ", a[i, u]);
-                }
-                sb += "\n";
-            }
-            sb += "]";
-            return sb;
-        }
         private void GlobalusSplainas(double[] x, double[] y, Series z)
         {
             int n = x.Length;
@@ -292,7 +285,8 @@ namespace Pvz1
             for (int i = 0; i < d.Length; i++) d[i] = x[i + 1] - x[i];
             double[,] T = new double[n - 2, n];
             double[] YY = new double[n - 2];
-            for (int i = 0; i < T.GetLength(0); i++)
+            //Splaino daugianarių matricos [n-2 x n] sudarymas
+            for (int i = 0; i < T.GetLength(0); i++) 
             {
                 for (int u = 0; u < T.GetLength(1); u++) T[i, u] = 0;
                 T[i, i] = d[i] / 6;
@@ -300,9 +294,9 @@ namespace Pvz1
                 T[i, i + 2] = d[i + 1] / 6;
                 YY[i] = ((y[i + 2] - y[i + 1]) / d[i + 1]) - ((y[i + 1] - y[i]) / d[i]);
             }
-            System.Diagnostics.Debug.WriteLine(print4DMatrix(T));
             double[,] TT = new double[n - 2, n - 1];
-            for (int i = 0; i < TT.GetLength(0); i++)
+            //Splaino daugianarių matricos be 1 ir n-1 reiksmes stulpeliu pervedimas gauso metodu spręsti ir rezultatais paskutiniame stulpelyje
+            for (int i = 0; i < TT.GetLength(0); i++) 
             {
                 for (int u = 0; u < TT.GetLength(1) - 1; u++)
                 {
@@ -310,23 +304,16 @@ namespace Pvz1
                 }
                 TT[i, n - 2] = YY[i];
             }
-            System.Diagnostics.Debug.WriteLine(print4DMatrix(TT));
-            Gausas(TT, n - 2);
-            System.Diagnostics.Debug.WriteLine(print4DMatrix(TT));
+            //Splaino daugianarių TLS sprendžiama gauso metodu
+            Gausas(TT, n - 2); 
             double[] f_2 = new double[n];
             f_2[0] = 0;
             f_2[n - 1] = 0;
-            for (int i = 0; i < n - 2; i++)
+            //Apskaičiuojamos antros eilės išvestinės iš apskaičiuotos matricos ir y reikšmių vektoriaus
+            for (int i = 0; i < n - 2; i++) 
             {
                 f_2[i + 1] = TT[i, n - 2] / T[i, i];
             }
-
-            for (int i = 0; i < f_2.Length; i++)
-            {
-                System.Diagnostics.Debug.WriteLine(f_2[i]);
-
-            }
-
             for (int i = 0; i < n - 1; i++)
             {
                 double xmax = x[i + 1];
@@ -336,23 +323,20 @@ namespace Pvz1
 
                 double[] XValues = new double[N];
                 double[] FValues = new double[N];
-                for (int u = 0; u < N; u++)
+                //Pagal apskaičiuotas antros eilės išvestines formuojamos vaizdavimo taškų reikšmės XValues ir FValues vektoriuose
+                for (int u = 0; u < N; u++) 
                 {
                     XValues[u] = xmin + u * deltaX;
                     double s = XValues[u] - x[i];
                     FValues[u] = (f_2[i] * (Math.Pow(s, 2) / 2)) - (f_2[i] * (Math.Pow(s, 3) / (6 * d[i]))) + (f_2[i + 1] * (Math.Pow(s, 3) / (6 * d[i]))) + (((y[i + 1] - y[i]) / d[i]) * s) - (f_2[i] * (d[i] / 3) * s) - (f_2[i + 1] * (d[i] / 6) * s) + y[i];
                 }
 
-                //Gautos interpoliuotos funkcijos braižymas ekrane
                 if (z != null)
                 {
-                    System.Diagnostics.Debug.WriteLine("VALUES");
-
-                    for (int u = 0; u < FValues.Length; u++)
+                    //Gautos interpoliuotos funkcijos braižymas ekrane
+                    for (int u = 0; u < FValues.Length; u++) 
                     {
                         z.Points.AddXY(XValues[u], FValues[u]); 
-                        System.Diagnostics.Debug.WriteLine(XValues[u]+"  "+FValues[u]);
-
                     }
                 }
             }
@@ -381,18 +365,20 @@ namespace Pvz1
             //---
             p1.BorderWidth = 3;
             z2.BorderWidth = 1;
-            //---
+            //---               
+            richTextBox1.AppendText("Antra užduotis\n");
             if (radioButton3.Checked)
             {
                 Ciobysevas(X, taskaiX, taskaiY, z2);
-                richTextBox1.AppendText("Sprendžiama Čiobyševo metodu");
+                richTextBox1.AppendText("Sprendžiama Čiobyševo metodu.\n");
             }
             else if (radioButton4.Checked)
             {
                 GlobalusSplainas(taskaiX, taskaiY, z2);
-                richTextBox1.AppendText("Sprendžiama Globalaus splaino metodu");
+                richTextBox1.AppendText("Sprendžiama Globalaus splaino metodu.\n");
             }
         }
+        //------------------------------------------------------------TRECIA UZDUOTIS----------------------------------------------------------------------------
 
 
         // ---------------------------------------------- KITI METODAI ----------------------------------------------
