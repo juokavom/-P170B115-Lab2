@@ -33,7 +33,8 @@ namespace Pvz1
             Initialize();
         }
 
-        //PIRMA UZDUOTIS
+        //----------------------------------------------------------------------PIRMA UZDUOTIS----------------------------------------------------------------------
+
         public static decimal[,] mulMatrix(decimal[,] a, decimal[,] b)
         {
             decimal[,] ret = new decimal[a.GetLength(1), b.GetLength(0)];
@@ -154,7 +155,7 @@ namespace Pvz1
 
         }
 
-        //ANTRA UZDUOTIS
+        //----------------------------------------------------------------------ANTRA UZDUOTIS----------------------------------------------------------------------
 
         //2.1
         private double Y11(double x)
@@ -283,7 +284,8 @@ namespace Pvz1
 
                 F[1] = f212(x[0], x[1]);
 
-                double k = J[1, 0] / J[0, 0]; //Jakobio matrica sprendžiama gauso metodu
+                //Jakobio matrica sprendžiama gauso metodu
+                double k = J[1, 0] / J[0, 0]; 
                 J[1, 0] -= J[0, 0] * k;
                 J[1, 1] -= J[0, 1] * k;
                 F[1] -= F[0] * k;
@@ -301,7 +303,6 @@ namespace Pvz1
                 {
                     x[0] += deltaX[0];
                     x[1] += deltaX[1];
-                    Thread.Sleep(300);
                 }
             }
 
@@ -352,8 +353,7 @@ namespace Pvz1
 
             return ret;
         }
-
-        static void SolveGaussian(double[,] a, int n)
+        static void Gausas(double[,] a, int n)
         {
             int i, j, k = 0, c;
 
@@ -388,8 +388,6 @@ namespace Pvz1
                 }
             }
         }
-
-
         private void nlsAntras()
         {
             ClearForm1();
@@ -405,7 +403,7 @@ namespace Pvz1
             {
                 double[] F = f221(x);
                 double[,] J = df221(x, F);
-                SolveGaussian(J, 4);
+                Gausas(J, 4);
 
                 for (int i = 0; i < n; i++)
                 {
@@ -426,7 +424,7 @@ namespace Pvz1
             richTextBox1.AppendText(string.Format("Pradinis artinys: [{0}; {1}; {2}; {3}], tikslumas: {4, 0:F5}, iteracijų sk.: {5}\nSprendinys:  [{6, 0:F5}; {7, 0:F5}; {8, 0:F5}; {9, 0:F5}]\n",
                 x_prad[0], x_prad[1], x_prad[2], x_prad[3], tikslumas, it, x[0], x[1], x[2], x[3]));
         }
-        //TRECIA UZDUOTIS
+        //----------------------------------------------------------------------TRECIA UZDUOTIS----------------------------------------------------------------------
         private void button5_Click(object sender, EventArgs e)
         {
             ClearForm1();
@@ -477,7 +475,7 @@ namespace Pvz1
             z2.BorderWidth = 1;
 
             //Sprendimas
-            optimization(x, y, s);
+            optimizacija(x, y, s);
         }
         public void printPoints(double[] x, double[] y)
         {
@@ -496,7 +494,7 @@ namespace Pvz1
             }
         }
 
-        private void optimization(double[] x, double[] y, double s) 
+        private void optimizacija(double[] x, double[] y, double s) 
         {
             double eps = 1e-6;
             int maxIter = 500;
