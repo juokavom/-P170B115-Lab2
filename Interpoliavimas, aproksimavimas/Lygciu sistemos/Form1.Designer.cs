@@ -67,6 +67,7 @@ namespace Pvz1
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button6 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -296,11 +297,23 @@ namespace Pvz1
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Interpoliavimo taškų skaičius";
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(1844, 1060);
+            this.button6.Margin = new System.Windows.Forms.Padding(8);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(416, 54);
+            this.button6.TabIndex = 21;
+            this.button6.Text = "Ketvirta užduotis";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2280, 1409);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -394,6 +407,7 @@ namespace Pvz1
         private GroupBox groupBox2;
         private ListBox listBox1;
         private GroupBox groupBox3;
+        private Button button6;
     }
 
 

@@ -350,7 +350,7 @@ namespace Pvz1
             double[] taskaiX = taskuRinkinys(12, 0, X); //Taskai suskirstomi pagal - Tiesiogiai (opt.: 0), Čiobyševo abscises (opt.: 1)
             double[] taskaiY = File.ReadLines(@"Data/PER_2008.txt").Select(l => l.Split('\n')).Select(l2 => l2[0].Split(',')).Select(l3 => Double.Parse(l3[0])).ToArray(); //Nuskaitomos temperatūrų reikšmės
             //---
-            p1 = chart1.Series.Add("Pradiniai taskai");
+            p1 = chart1.Series.Add("Pradiniai taškai");
             p1.ChartType = SeriesChartType.Point;
             p1.Color = Color.Black;
             //---
@@ -518,6 +518,35 @@ namespace Pvz1
                     z2.Points.AddXY(xArray[i][u], yArray[i][u]);
                 }
             }
+        }
+
+        //------------------------------------------------------------KETVIRTA UZDUOTIS----------------------------------------------------------------------------
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            ClearForm1();
+            PreparareForm(-1, 13, 17, 23);
+            double[] X = { 0, 11 }; //Abscises reziai
+            double[] taskaiX = taskuRinkinys(12, 0, X); //Taskai suskirstomi pagal - Tiesiogiai (opt.: 0), Čiobyševo abscises (opt.: 1)
+            double[] taskaiY = File.ReadLines(@"Data/PER_2008.txt").Select(l => l.Split('\n')).Select(l2 => l2[0].Split(',')).Select(l3 => Double.Parse(l3[0])).ToArray(); //Nuskaitomos temperatūrų reikšmės
+            //---
+            p1 = chart1.Series.Add("Pradiniai taškai");
+            p1.ChartType = SeriesChartType.Point;
+            p1.Color = Color.Black;
+            //---
+            z2 = chart1.Series.Add("Gauta funkcija");
+            z2.ChartType = SeriesChartType.Line;
+            z2.Color = Color.Red;
+            //---      
+            for (int i = 0; i < taskaiX.Length; i++)
+            {
+                p1.Points.AddXY(taskaiX[i], taskaiY[i]);
+            }
+            //---
+            p1.BorderWidth = 3;
+            z2.BorderWidth = 1;
+            //---               
+            richTextBox1.AppendText("Ketvirta užduotis\n");
         }
 
 
