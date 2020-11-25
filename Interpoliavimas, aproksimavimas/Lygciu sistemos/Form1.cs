@@ -450,7 +450,15 @@ namespace Pvz1
         }
         private double S(double x0, double x1, double y0, double y1)
         {
-            return Math.Sqrt(Math.Pow((x1 - x0), 2) + Math.Pow((y1 - y0), 2));
+            //Grąžinama reikšmė t[i] yra taškų [i] ir [i+1] atstumo skirtumo šaknis.
+            //Šaknis reikalinga tam, kad esant didesniam atstumui tarp vaizdavimo
+            //taškų funkcija kuo mažiau diverguotų.
+
+            //Be šaknies - greitai diverguoja
+            //return Math.Sqrt(Math.Pow((x1 - x0), 2) + Math.Pow((y1 - y0), 2));
+
+            //Su šaknim - lėčiau diverguoja
+            return Math.Sqrt(Math.Sqrt(Math.Pow((x1 - x0), 2) + Math.Pow((y1 - y0), 2)));
         }
         private void button5_Click(object sender, EventArgs e)
         {
