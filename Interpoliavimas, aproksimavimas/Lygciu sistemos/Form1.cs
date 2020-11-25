@@ -416,7 +416,7 @@ namespace Pvz1
             {
                 f_2[i + 1] = TT[i, n - 2] / T[i, i];
             }
-            double[][] array = new double[n-1][];
+            double[][] array = new double[n - 1][];
             for (int i = 0; i < n - 1; i++)
             {
                 double xmax = x[i + 1];
@@ -439,11 +439,14 @@ namespace Pvz1
         }
         private double[] taskai(double[] data, int n)
         {
-            int delta = data.Length / n;
+            double delta = data.Length / n;
             double[] tsk = new double[n];
+            //System.Diagnostics.Debug.WriteLine(string.Format("Delta : {0}, n : {1}, Data.Length : {2}", delta, n, data.Length));
             for (int i = 0; i < tsk.Length; i++)
             {
-                tsk[i] = data[i * delta];
+                int index = (int)Math.Round(i * delta);
+                tsk[i] = data[index];
+                //System.Diagnostics.Debug.WriteLine(string.Format("Index : {0}, Value[Index] = {1}", index, data[index]));
             }
             return tsk;
         }
@@ -462,14 +465,14 @@ namespace Pvz1
             double[] taskaiYData = File.ReadAllLines(@"Data/Y.txt")[0].Split(',').Select(i => Double.Parse(i)).ToArray();
             double[] taskaiX = taskai(taskaiXData, taskuSkaicius);
             double[] taskaiY = taskai(taskaiYData, taskuSkaicius);
-            //double[] taskaiT = taskuRinkinys(taskaiX.Length, 1, new double[] { -82, -68});
             double[] taskaiT = new double[taskaiX.Length];
+            //---
             taskaiT[0] = 0;
             for (int i = 1; i < taskaiT.Length; i++)
             {
                 double s = S(taskaiX[i - 1], taskaiX[i], taskaiY[i - 1], taskaiY[i]);
-                taskaiT[i] = taskaiT[i-1] + s;
-                System.Diagnostics.Debug.WriteLine(string.Format("x0 {0}, x1{1}, y0 {2}, y1 {3}... S = {4} ... taskaiT[i] = {5}", taskaiX[i - 1], taskaiX[i], taskaiY[i - 1], taskaiY[i], s, taskaiT[i]));
+                taskaiT[i] = taskaiT[i - 1] + s;
+                //System.Diagnostics.Debug.WriteLine(string.Format("x0 {0}, x1{1}, y0 {2}, y1 {3}... S = {4} ... taskaiT[i] = {5}", taskaiX[i - 1], taskaiX[i], taskaiY[i - 1], taskaiY[i], s, taskaiT[i]));
             }
             //---
             z1 = chart1.Series.Add("Pradiniai kontūrai");
@@ -508,6 +511,7 @@ namespace Pvz1
                 }
             }
         }
+
 
         // ---------------------------------------------- KITI METODAI ----------------------------------------------
 
