@@ -475,7 +475,7 @@ namespace Pvz1
             //---
             richTextBox1.AppendText("Trečia užduotis\n");
             richTextBox1.AppendText("Taškų skaičius = " + taskuSkaicius + "\n");
-            richTextBox1.AppendText("Sprendžiama Globalaus splaino metodu\n");
+            richTextBox1.AppendText("Sprendžiama Globalaus splaino metodu.\n");
             //---
             taskaiT[0] = 0;
             for (int i = 1; i < taskaiT.Length; i++)
@@ -567,19 +567,12 @@ namespace Pvz1
                 }
                 Y[i, 0] = y[i];
             }
-            System.Diagnostics.Debug.WriteLine("G:");
-            System.Diagnostics.Debug.WriteLine(print4DMatrix(G));
-            System.Diagnostics.Debug.WriteLine("GT");
-            System.Diagnostics.Debug.WriteLine(print4DMatrix(GT));
-            System.Diagnostics.Debug.WriteLine("Y");
-            System.Diagnostics.Debug.WriteLine(print4DMatrix(Y));
             //---
-            
+            //Apskaičiuojamos abi lygties pusės (be C vektoriaus)
             double[,] GTG = mulMatrix(GT, G);
-            System.Diagnostics.Debug.WriteLine("GTG");
-            System.Diagnostics.Debug.WriteLine(print4DMatrix(GTG));
             double[,] GTY = mulMatrix(GT, Y);
             //---
+            //Iš abiejų lygties pusių formuojama matrica TLS sprendimui
             double[,] A = new double[m, m + 1];
             for (int i = 0; i < A.GetLength(0); i++)
             {
@@ -590,8 +583,10 @@ namespace Pvz1
                 A[i, A.GetLength(1) - 1] = GTY[i, 0];
             }
             //---
+            //TLS sprendimas gauso metodu
             Gausas(A, m);
             //---
+            //Apskaičiuojamos C vektoriaus reikšmės
             double[] CValues = new double[m];
             for (int i = 0; i < CValues.Length; i++)
             {
@@ -602,6 +597,7 @@ namespace Pvz1
             int N = (int)Math.Round((X[1] - X[0]) / deltaX) + 1;
             double[] XValues = new double[N];
             double[] FValues = new double[N];
+            //Skaičiuojama vaizdavimo matrica (XValues[], FValues[])
             for (int i = 0; i < N; i++)
             {
                 XValues[i] = X[0] + i * deltaX;
@@ -611,7 +607,7 @@ namespace Pvz1
                     FValues[i] += Math.Pow(XValues[i], u) * CValues[u];
                 }
             }
-            //Gautos interpoliuotos funkcijos braižymas ekrane
+            //Braižoma funkcija pagal vaizdavimo matricą
             if (z != null)
             {
                 for (int i = 0; i < FValues.Length; i++)
@@ -619,6 +615,7 @@ namespace Pvz1
                     z.Points.AddXY(XValues[i], FValues[i]);
                 }
             }
+            //Išvedamos daugianarių išraiškos
             string fname = "f(x) = ";
             for (int i = m-1; i >= 0; i--)
             {
@@ -667,7 +664,6 @@ namespace Pvz1
             Aproksimavimas(eile, X, taskaiX, taskaiY, z2);
             //---
         }
-
 
         // ---------------------------------------------- KITI METODAI ----------------------------------------------
 

@@ -281,6 +281,7 @@ namespace Pvz1
             "20",
             "50",
             "100"});
+            this.listBox1.SelectedIndex = 0;
             this.listBox1.Location = new System.Drawing.Point(46, 72);
             this.listBox1.Margin = new System.Windows.Forms.Padding(6);
             this.listBox1.Name = "listBox1";
@@ -326,7 +327,12 @@ namespace Pvz1
             this.numericUpDown2.Location = new System.Drawing.Point(2097, 1142);
             this.numericUpDown2.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDown2.Maximum = new decimal(new int[] {
-            12,
+            20,
+            0,
+            0,
+            0});
+            this.numericUpDown2.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
