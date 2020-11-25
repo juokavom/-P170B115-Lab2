@@ -441,12 +441,10 @@ namespace Pvz1
         {
             double delta = data.Length / n;
             double[] tsk = new double[n];
-            //System.Diagnostics.Debug.WriteLine(string.Format("Delta : {0}, n : {1}, Data.Length : {2}", delta, n, data.Length));
             for (int i = 0; i < tsk.Length; i++)
             {
                 int index = (int)Math.Round(i * delta);
                 tsk[i] = data[index];
-                //System.Diagnostics.Debug.WriteLine(string.Format("Index : {0}, Value[Index] = {1}", index, data[index]));
             }
             return tsk;
         }
@@ -467,15 +465,17 @@ namespace Pvz1
             double[] taskaiY = taskai(taskaiYData, taskuSkaicius);
             double[] taskaiT = new double[taskaiX.Length];
             //---
+            richTextBox1.AppendText("Trečia užduotis\n");
+            richTextBox1.AppendText("Taškų skaičius = " + taskuSkaicius + "\n");
+            richTextBox1.AppendText("Sprendžiama Globalaus splaino metodu\n");
+            //---
             taskaiT[0] = 0;
             for (int i = 1; i < taskaiT.Length; i++)
             {
-                double s = S(taskaiX[i - 1], taskaiX[i], taskaiY[i - 1], taskaiY[i]);
-                taskaiT[i] = taskaiT[i - 1] + s;
-                //System.Diagnostics.Debug.WriteLine(string.Format("x0 {0}, x1{1}, y0 {2}, y1 {3}... S = {4} ... taskaiT[i] = {5}", taskaiX[i - 1], taskaiX[i], taskaiY[i - 1], taskaiY[i], s, taskaiT[i]));
+                taskaiT[i] = taskaiT[i - 1] + S(taskaiX[i - 1], taskaiX[i], taskaiY[i - 1], taskaiY[i]);
             }
             //---
-            z1 = chart1.Series.Add("Pradiniai kontūrai");
+            z1 = chart1.Series.Add("Pradiniai kontūrai (Peru)");
             z1.ChartType = SeriesChartType.Line;
             z1.Color = Color.Blue;
             //---
