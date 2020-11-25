@@ -521,13 +521,127 @@ namespace Pvz1
         }
 
         //------------------------------------------------------------KETVIRTA UZDUOTIS----------------------------------------------------------------------------
+        public static double[,] mulMatrix(double[,] a, double[,] b)
+        {
+            double[,] ret = new double[a.GetLength(0), b.GetLength(1)];
+            for (int i = 0; i < a.GetLength(0); i++)
+            {
+                for (int u = 0; u < b.GetLength(1); u++)
+                {
+                    ret[i, u] = 0;
+                    for (int j = 0; j < a.GetLength(1); j++)
+                    {
+                        ret[i, u] += a[i, j] * b[j, u];
+                    }
+                }
+            }
+            return ret;
+        }
+        private string print4DMatrix(double[,] a)
+        {
+            string sb = "[\n";
+            for (int i = 0; i < a.GetLength(0); i++)
+            {
+                for (int u = 0; u < a.GetLength(1); u++)
+                {
+                    sb += string.Format("{0, 3:F2} ", a[i, u]);
+                }
+                sb += "\n";
+            }
+            sb += "]";
+            return sb;
+        }
+        private void Aproksimavimas(int m, double[] X, double[] x, double[] y, Series z)
+        {
+            int n = x.Length;
+            double[,] G = new double[n, m];
+            double[,] GT = new double[m, n];
+            double[,] Y = new double[n, 1];
+            //G ir G transponuotos matricų gavimas pagal pateiktas x koordinates
+            for (int i = 0; i < n; i++)
+            {
+                for (int u = 0; u < m; u++)
+                {
+                    G[i, u] = Math.Pow(x[i], u);
+                    GT[u, i] = G[i, u];
+                }
+                Y[i, 0] = y[i];
+            }
+            System.Diagnostics.Debug.WriteLine("G:");
+            System.Diagnostics.Debug.WriteLine(print4DMatrix(G));
+            System.Diagnostics.Debug.WriteLine("GT");
+            System.Diagnostics.Debug.WriteLine(print4DMatrix(GT));
+            System.Diagnostics.Debug.WriteLine("Y");
+            System.Diagnostics.Debug.WriteLine(print4DMatrix(Y));
+            //---
+            
+            double[,] GTG = mulMatrix(GT, G);
+            System.Diagnostics.Debug.WriteLine("GTG");
+            System.Diagnostics.Debug.WriteLine(print4DMatrix(GTG));
+            double[,] GTY = mulMatrix(GT, Y);
+            //---
+            double[,] A = new double[m, m + 1];
+            for (int i = 0; i < A.GetLength(0); i++)
+            {
+                for (int u = 0; u < A.GetLength(1)-1; u++)
+                {
+                    A[i, u] = GTG[i, u];
+                }
+                A[i, A.GetLength(1) - 1] = GTY[i, 0];
+            }
+            //---
+            Gausas(A, m);
+            //---
+            double[] CValues = new double[m];
+            for (int i = 0; i < CValues.Length; i++)
+            {
+                CValues[i] = A[i, m] / A[i, i];
+            }
+            //---
+            double deltaX = 0.1;
+            int N = (int)Math.Round((X[1] - X[0]) / deltaX) + 1;
+            double[] XValues = new double[N];
+            double[] FValues = new double[N];
+            for (int i = 0; i < N; i++)
+            {
+                XValues[i] = X[0] + i * deltaX;
+                FValues[i] = 0;
+                for (int u = 0; u < m; u++)
+                {
+                    FValues[i] += Math.Pow(XValues[i], u) * CValues[u];
+                }
+            }
+            //Gautos interpoliuotos funkcijos braižymas ekrane
+            if (z != null)
+            {
+                for (int i = 0; i < FValues.Length; i++)
+                {
+                    z.Points.AddXY(XValues[i], FValues[i]);
+                }
+            }
+            string fname = "f(x) = ";
+            for (int i = m-1; i >= 0; i--)
+            {
+                if(i > 1) fname += string.Format("{0, 0:F2}x^{1}", CValues[i], i);
+                if(i == 1) fname += string.Format("{0, 0:F2}x", CValues[i]);
+                if(i == 0) fname += string.Format("{0, 0:F2}", CValues[i]);
+                if (i - 1 != -1)
+                {
+                    fname += " + ";
+                }
+            }
+            richTextBox1.AppendText(fname + ".\n");
+        }
 
         private void button6_Click(object sender, EventArgs e)
         {
             ClearForm1();
             PreparareForm(-1, 13, 17, 23);
-            double[] X = { 0, 11 }; //Abscises reziai
-            double[] taskaiX = taskuRinkinys(12, 0, X); //Taskai suskirstomi pagal - Tiesiogiai (opt.: 0), Čiobyševo abscises (opt.: 1)
+            //---
+            int eile = (int)numericUpDown2.Value;
+            //---
+            double[] X = { -1, 13 }; //Abscises reziai
+            double[] taskaiX = taskuRinkinys(12, 0, new double[] { 0, 11}); //Taskai suskirstomi pagal - Tiesiogiai (opt.: 0), Čiobyševo abscises (opt.: 1)
             double[] taskaiY = File.ReadLines(@"Data/PER_2008.txt").Select(l => l.Split('\n')).Select(l2 => l2[0].Split(',')).Select(l3 => Double.Parse(l3[0])).ToArray(); //Nuskaitomos temperatūrų reikšmės
             //---
             p1 = chart1.Series.Add("Pradiniai taškai");
@@ -545,8 +659,13 @@ namespace Pvz1
             //---
             p1.BorderWidth = 3;
             z2.BorderWidth = 1;
-            //---               
+            //---
             richTextBox1.AppendText("Ketvirta užduotis\n");
+            richTextBox1.AppendText("Taškų skaičius = " + taskaiX.Length + "\n");
+            richTextBox1.AppendText("Funkcijų skaičius = " + eile + "\n");
+            //---
+            Aproksimavimas(eile, X, taskaiX, taskaiY, z2);
+            //---
         }
 
 

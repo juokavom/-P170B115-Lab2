@@ -68,11 +68,14 @@ namespace Pvz1
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.button6 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.SuspendLayout();
             // 
             // chart1
@@ -308,11 +311,42 @@ namespace Pvz1
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(1852, 1142);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(234, 32);
+            this.label1.TabIndex = 23;
+            this.label1.Text = "Eilės daugianaris";
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Location = new System.Drawing.Point(2097, 1142);
+            this.numericUpDown2.Margin = new System.Windows.Forms.Padding(4);
+            this.numericUpDown2.Maximum = new decimal(new int[] {
+            12,
+            0,
+            0,
+            0});
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(120, 38);
+            this.numericUpDown2.TabIndex = 22;
+            this.numericUpDown2.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDown2.ValueChanged += new System.EventHandler(this.button6_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2280, 1409);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.numericUpDown2);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -335,6 +369,7 @@ namespace Pvz1
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -408,6 +443,8 @@ namespace Pvz1
         private ListBox listBox1;
         private GroupBox groupBox3;
         private Button button6;
+        private Label label1;
+        private NumericUpDown numericUpDown2;
     }
 
 
