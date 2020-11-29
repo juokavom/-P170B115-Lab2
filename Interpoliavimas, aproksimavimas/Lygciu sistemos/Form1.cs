@@ -635,7 +635,7 @@ namespace Pvz1
             ClearForm1();
             PreparareForm(-1, 13, 17, 23);
             //---
-            int eile = (int)numericUpDown2.Value;
+            int eile = (int)numericUpDown2.Value+1;
             //---
             double[] X = { -1, 13 }; //Abscises reziai
             double[] taskaiX = taskuRinkinys(12, 0, new double[] { 0, 11}); //Taskai suskirstomi pagal - Tiesiogiai (opt.: 0), Čiobyševo abscises (opt.: 1)
