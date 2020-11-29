@@ -619,9 +619,9 @@ namespace Pvz1
             string fname = "f(x) = ";
             for (int i = m-1; i >= 0; i--)
             {
-                if(i > 1) fname += string.Format("{0, 0:F2}x^{1}", CValues[i], i);
-                if(i == 1) fname += string.Format("{0, 0:F2}x", CValues[i]);
-                if(i == 0) fname += string.Format("{0, 0:F2}", CValues[i]);
+                if(i > 1) fname += string.Format("{0, 0:F4}x^{1}", CValues[i], i);
+                if(i == 1) fname += string.Format("{0, 0:F4}x", CValues[i]);
+                if(i == 0) fname += string.Format("{0, 0:F4}", CValues[i]);
                 if (i - 1 != -1)
                 {
                     fname += " + ";
@@ -659,7 +659,7 @@ namespace Pvz1
             //---
             richTextBox1.AppendText("Ketvirta užduotis\n");
             richTextBox1.AppendText("Taškų skaičius = " + taskaiX.Length + "\n");
-            richTextBox1.AppendText("Funkcijų skaičius = " + eile + "\n");
+            richTextBox1.AppendText("Funkcijų skaičius = " + (eile-1) + "\n");
             //---
             Aproksimavimas(eile, X, taskaiX, taskaiY, z2);
             //---
