@@ -87,7 +87,7 @@ namespace Pvz1
                 for (int u = 0; u < n; u++)
                 {
                     U[i, u] = 0;
-                    L[i, u] = (i == u) ? 1 : 0;
+                    L[i, u] = (i == u) ? 1 : 0; //Vienetai po pagrindine įstrižaine
                 }
             }
             //---
@@ -257,7 +257,7 @@ namespace Pvz1
             return 4 * y;
         }
 
-        double[] x = new double[2]; //Pradinis artinys
+        double[] pt = new double[2]; //Pradinis artinys
         double[,] J = new double[2, 2]; //Jakobio matrica
         double[] F = new double[2]; //Funkcijos reiksmes
         double[] deltaX = new double[2]; //Delta X vektorius
@@ -268,21 +268,21 @@ namespace Pvz1
         {
             it = 0;
             line.ChartType = SeriesChartType.Line;
-            x[0] = x0_art;
-            x[1] = x1_art;
+            pt[0] = x0_art;
+            pt[1] = x1_art;
 
             double tikslumas = Double.MaxValue;
             while (tikslumas > 1e-3)
             {
 
-                J[0, 0] = dFx211(x[0], x[1]);
-                J[0, 1] = dFy211(x[0], x[1]);
-                J[1, 0] = deltaFx212(x[0], x[1]);
-                J[1, 1] = dFy212(x[0], x[1]);
+                J[0, 0] = dFx211(pt[0], pt[1]);
+                J[0, 1] = dFy211(pt[0], pt[1]);
+                J[1, 0] = deltaFx212(pt[0], pt[1]);
+                J[1, 1] = dFy212(pt[0], pt[1]);
 
-                F[0] = f211(x[0], x[1]);
+                F[0] = f211(pt[0], pt[1]);
 
-                F[1] = f212(x[0], x[1]);
+                F[1] = f212(pt[0], pt[1]);
 
                 //Jakobio matrica sprendžiama gauso metodu
                 double k = J[1, 0] / J[0, 0]; 
@@ -293,21 +293,21 @@ namespace Pvz1
                 deltaX[1] = -F[1] / J[1, 1];
                 deltaX[0] = (-F[0] - deltaX[1] * J[0, 1]) / J[0, 0];
 
-                line.Points.AddXY(x[0], x[1]);
+                line.Points.AddXY(pt[0], pt[1]);
 
-                tikslumas = Math.Abs(f211(x[0], x[1]) - f212(x[0], x[1]));
+                tikslumas = Math.Abs(f211(pt[0], pt[1]) - f212(pt[0], pt[1]));
                 it++;
 
                 if (tikslumas < 0.001 || it > 1000) break;
                 else
                 {
-                    x[0] += deltaX[0];
-                    x[1] += deltaX[1];
+                    pt[0] += deltaX[0];
+                    pt[1] += deltaX[1];
                 }
             }
 
             richTextBox1.AppendText(string.Format("Pradinis artinys: [{0}; {1}], tikslumas: {2, 0:F5}, iteracijų sk.: {3}\nSprendinys {6}: [{4, 0:F5}; {5, 0:F5}]\n",
-                x0_art, x1_art, tikslumas, it, x[0], x[1], ++count));
+                x0_art, x1_art, tikslumas, it, pt[0], pt[1], ++count));
             line.BorderWidth = 3;
 
         }
@@ -421,7 +421,7 @@ namespace Pvz1
                 richTextBox1.AppendText(string.Format("Artinys: [{0, 0:F5}; {1, 0:F5}; {2, 0:F5}; {3, 0:F5}], tikslumas: {4, 0:F5}, iteracija : {5}\n",
                     x[0], x[1], x[2], x[3], tikslumas, it));
             }
-            richTextBox1.AppendText(string.Format("Pradinis artinys: [{0}; {1}; {2}; {3}], tikslumas: {4, 0:F5}, iteracijų sk.: {5}\nSprendinys:  [{6, 0:F5}; {7, 0:F5}; {8, 0:F5}; {9, 0:F5}]\n",
+            richTextBox1.AppendText(string.Format("Pradinis artinys: [{0}; {1}; {2}; {3}], tikslumas: {4, 0:F8}, iteracijų sk.: {5}\nSprendinys:  [{6, 0:F5}; {7, 0:F5}; {8, 0:F5}; {9, 0:F5}]\n",
                 x_prad[0], x_prad[1], x_prad[2], x_prad[3], tikslumas, it, x[0], x[1], x[2], x[3]));
         }
         //----------------------------------------------------------------------TRECIA UZDUOTIS----------------------------------------------------------------------
@@ -438,9 +438,11 @@ namespace Pvz1
             double[] y = Enumerable.Repeat(0, count).Select(i => randNum.NextDouble()*20-10).ToArray();
             x[0] = 0;
             y[0] = 0;
-           
-            //double[] x = { 0, 5, 8, 4 }; 
-            //double[] y = { 0, 8, 2, 4 };
+            //---
+            double[] x_copy = new double[x.Length];
+            Array.Copy(x, x_copy, x.Length);
+            double[] y_copy = new double[y.Length];
+            Array.Copy(y, y_copy, y.Length);
             //---
             z1 = chart1.Series.Add("Pradiniai kontūrai");
             z1.ChartType = SeriesChartType.Line;
@@ -476,6 +478,24 @@ namespace Pvz1
 
             //Sprendimas
             optimizacija(x, y, s);
+
+            richTextBox1.AppendText("\nPradiniai taškai:\n");
+            logPoints(x_copy, y_copy);
+            richTextBox1.AppendText("\nGauti taškai:\n");
+            logPoints(x, y);
+        }
+        private void logPoints(double[] ptX, double[] ptY)
+        {
+            richTextBox1.AppendText("[");
+            for (int i = 0; i < ptX.Length; i++)
+            {
+                richTextBox1.AppendText(string.Format("({0, 0:F2}, {1, 0:F2})", ptX[i], ptY[i]));
+                if (i < ptX.Length - 1)
+                {
+                    richTextBox1.AppendText(", ");
+                }
+            }
+            richTextBox1.AppendText("]\n");
         }
         public void printPoints(double[] x, double[] y)
         {
