@@ -41,6 +41,8 @@ namespace Pvz1
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -54,28 +56,14 @@ namespace Pvz1
             this.timer8 = new System.Windows.Forms.Timer(this.components);
             this.timer9 = new System.Windows.Forms.Timer(this.components);
             this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.button6 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
             this.SuspendLayout();
             // 
             // chart1
@@ -85,9 +73,9 @@ namespace Pvz1
             legend1.Name = "Legend1";
             this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(16, 15);
-            this.chart1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chart1.Margin = new System.Windows.Forms.Padding(4);
             this.chart1.Name = "chart1";
-            this.chart1.Size = new System.Drawing.Size(892, 485);
+            this.chart1.Size = new System.Drawing.Size(888, 485);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
             // 
@@ -97,7 +85,7 @@ namespace Pvz1
             | System.Windows.Forms.AnchorStyles.Left)));
             this.richTextBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
             this.richTextBox1.Location = new System.Drawing.Point(16, 507);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(4);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(890, 685);
             this.richTextBox1.TabIndex = 1;
@@ -107,7 +95,7 @@ namespace Pvz1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.Location = new System.Drawing.Point(914, 686);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(100, 28);
             this.button1.TabIndex = 2;
@@ -118,30 +106,19 @@ namespace Pvz1
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(922, 17);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(208, 31);
             this.button2.TabIndex = 4;
-            this.button2.Text = "Pirma užduotis";
+            this.button2.Text = "Užduotis";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(922, 206);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(208, 28);
-            this.button3.TabIndex = 5;
-            this.button3.Text = "Antra užduotis";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button4.Location = new System.Drawing.Point(1027, 686);
-            this.button4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button4.Margin = new System.Windows.Forms.Padding(4);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(100, 28);
             this.button4.TabIndex = 6;
@@ -149,108 +126,27 @@ namespace Pvz1
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(922, 360);
-            this.button5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(208, 28);
-            this.button5.TabIndex = 5;
-            this.button5.Text = "Trečia užduotis";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
             // radioButton1
             // 
             this.radioButton1.Checked = true;
             this.radioButton1.Location = new System.Drawing.Point(7, 22);
-            this.radioButton1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButton1.Margin = new System.Windows.Forms.Padding(4);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(184, 29);
             this.radioButton1.TabIndex = 9;
             this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Pasiskirstę tolygiai";
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.button2_Click);
+            this.radioButton1.Text = "Aukščio - h(t)";
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.rodytiGrafika);
             // 
             // radioButton2
             // 
             this.radioButton2.Location = new System.Drawing.Point(7, 54);
-            this.radioButton2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButton2.Margin = new System.Windows.Forms.Padding(4);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(138, 29);
             this.radioButton2.TabIndex = 10;
-            this.radioButton2.Text = "Pagal Čiobyševą";
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.button2_Click);
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(1031, 162);
-            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            30,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(60, 22);
-            this.numericUpDown1.TabIndex = 12;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown1.ValueChanged += new System.EventHandler(this.button2_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(925, 164);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(101, 17);
-            this.label2.TabIndex = 13;
-            this.label2.Text = "Taškų skaičius";
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Checked = true;
-            this.radioButton3.Location = new System.Drawing.Point(6, 31);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(147, 21);
-            this.radioButton3.TabIndex = 15;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Tag = "";
-            this.radioButton3.Text = "Čiobyševo (1 lent.)";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            this.radioButton3.CheckedChanged += new System.EventHandler(this.button3_Click);
-            // 
-            // radioButton4
-            // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(6, 59);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(183, 21);
-            this.radioButton4.TabIndex = 16;
-            this.radioButton4.Text = "Globaliu splainu (2 lent.)";
-            this.radioButton4.UseVisualStyleBackColor = true;
-            this.radioButton4.CheckedChanged += new System.EventHandler(this.button3_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.radioButton4);
-            this.groupBox1.Controls.Add(this.radioButton3);
-            this.groupBox1.Location = new System.Drawing.Point(922, 241);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 100);
-            this.groupBox1.TabIndex = 17;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Metodas";
+            this.radioButton2.Text = "Greičio - v(t)";
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.rodytiGrafika);
             // 
             // groupBox2
             // 
@@ -261,109 +157,41 @@ namespace Pvz1
             this.groupBox2.Size = new System.Drawing.Size(208, 100);
             this.groupBox2.TabIndex = 18;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Taškų pasiskirstymas";
+            this.groupBox2.Text = "Grafikas";
             // 
-            // listBox1
+            // chart2
             // 
-            this.listBox1.AllowDrop = true;
-            this.listBox1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.listBox1.DisplayMember = "1";
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 16;
-            this.listBox1.Items.AddRange(new object[] {
-            "10",
-            "20",
-            "50",
-            "100"});
-            this.listBox1.Location = new System.Drawing.Point(23, 37);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(38, 68);
-            this.listBox1.TabIndex = 19;
-            this.listBox1.SelectedIndex = 0;
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.button5_Click);
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.listBox1);
-            this.groupBox3.Location = new System.Drawing.Point(929, 395);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(201, 132);
-            this.groupBox3.TabIndex = 20;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Interpoliavimo taškų skaičius";
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(922, 547);
-            this.button6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(208, 28);
-            this.button6.TabIndex = 21;
-            this.button6.Text = "Ketvirta užduotis";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(926, 589);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(116, 17);
-            this.label1.TabIndex = 23;
-            this.label1.Text = "Eilės daugianaris";
-            // 
-            // numericUpDown2
-            // 
-            this.numericUpDown2.Location = new System.Drawing.Point(1048, 589);
-            this.numericUpDown2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.numericUpDown2.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(60, 22);
-            this.numericUpDown2.TabIndex = 22;
-            this.numericUpDown2.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.numericUpDown2.ValueChanged += new System.EventHandler(this.button6_Click);
+            chartArea2.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chart2.Legends.Add(legend2);
+            this.chart2.Location = new System.Drawing.Point(16, 15);
+            this.chart2.Margin = new System.Windows.Forms.Padding(4);
+            this.chart2.Name = "chart2";
+            this.chart2.Size = new System.Drawing.Size(888, 485);
+            this.chart2.TabIndex = 24;
+            this.chart2.Text = "chart2";
+            this.chart2.Visible = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1140, 727);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.numericUpDown2);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.chart2);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.numericUpDown1);
-            this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.chart1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "SMA IP_4 Jokūbas Akramas";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -379,7 +207,7 @@ namespace Pvz1
         /// <summary>
         /// Paruošiamas langas vaizdavimui
         /// </summary>
-        public void PreparareForm(float xmin, float xmax, float ymin, float ymax)
+        public void PreparareForm(System.Windows.Forms.DataVisualization.Charting.Chart chart1, float xmin, float xmax, float ymin, float ymax)
         {
             float x_grids = 10;
             //double xmin = 0; double xmax = 2 * Math.PI;
@@ -409,6 +237,7 @@ namespace Pvz1
         }
         #endregion
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Timer timer1;
@@ -421,22 +250,10 @@ namespace Pvz1
         private System.Windows.Forms.Timer timer8;
         private System.Windows.Forms.Timer timer9;
         private System.Windows.Forms.Button button2;
-        private Button button3;
         private Button button4;
-        private Button button5;
         private RadioButton radioButton1;
         private RadioButton radioButton2;
-        private NumericUpDown numericUpDown1;
-        private Label label2;
-        private RadioButton radioButton3;
-        private RadioButton radioButton4;
-        private GroupBox groupBox1;
         private GroupBox groupBox2;
-        private ListBox listBox1;
-        private GroupBox groupBox3;
-        private Button button6;
-        private Label label1;
-        private NumericUpDown numericUpDown2;
     }
 
 
