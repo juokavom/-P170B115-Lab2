@@ -76,10 +76,10 @@ namespace Pvz1
             this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.richTextBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
-            this.richTextBox1.Location = new System.Drawing.Point(16, 507);
+            this.richTextBox1.Location = new System.Drawing.Point(16, 508);
             this.richTextBox1.Margin = new System.Windows.Forms.Padding(4);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(890, 685);
+            this.richTextBox1.Size = new System.Drawing.Size(890, 206);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
             // 
@@ -94,6 +94,10 @@ namespace Pvz1
             this.button1.Text = "Baigti";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // button2
             // 
@@ -117,15 +121,10 @@ namespace Pvz1
             this.button4.Text = "Valyti";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
-            //
-            // timer1
-            //
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // radioButton1
             // 
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(7, 22);
+            this.radioButton1.Location = new System.Drawing.Point(7, 50);
             this.radioButton1.Margin = new System.Windows.Forms.Padding(4);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(184, 29);
@@ -136,11 +135,13 @@ namespace Pvz1
             // 
             // radioButton2
             // 
-            this.radioButton2.Location = new System.Drawing.Point(7, 54);
+            this.radioButton2.Checked = true;
+            this.radioButton2.Location = new System.Drawing.Point(7, 22);
             this.radioButton2.Margin = new System.Windows.Forms.Padding(4);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(138, 29);
             this.radioButton2.TabIndex = 10;
+            this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Greičio - v(t)";
             this.radioButton2.CheckedChanged += new System.EventHandler(this.rodytiGrafika);
             // 
@@ -150,7 +151,7 @@ namespace Pvz1
             this.groupBox2.Controls.Add(this.radioButton1);
             this.groupBox2.Location = new System.Drawing.Point(922, 55);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(208, 100);
+            this.groupBox2.Size = new System.Drawing.Size(208, 86);
             this.groupBox2.TabIndex = 18;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Grafikas";

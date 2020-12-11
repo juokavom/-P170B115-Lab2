@@ -35,12 +35,16 @@ namespace Pvz1
         private static int m1 = 70, m2 = 15, tg = 40;
         private static double k1 = 0.1, k2 = 5, h = 4000, v = 0, g = 9.8, k = k1, m = m1 + m2, t = 0;
         private static double step = 0.03;
+        private static string line = new string('-', 94);
 
         private void button2_Click(object sender, EventArgs e)
         {
             ClearForm1();
             PreparareForm(chart1, -10, 120, -10, 4500);
             PreparareForm(chart2, -10, 120, -10, 100);
+            //---
+            richTextBox1.AppendText("Paprastųjų diferencialinių lygčių sprendimas (7var).\n");
+            richTextBox1.AppendText(line + "\n");
             //---
             z1 = chart1.Series.Add("Aukštis h (m)");
             z1.ChartType = SeriesChartType.Line;
@@ -74,10 +78,11 @@ namespace Pvz1
             p3b.ChartType = SeriesChartType.Point;
             p3b.Color = Color.Blue;
             //---
-            z1.Points.AddXY(0, h);
-            z2.Points.AddXY(0, v);
-            p1a.Points.AddXY(0, h);
-            p1b.Points.AddXY(0, v);
+            richTextBox1.AppendText(string.Format("Iššokta iš lėktuvo, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", h, t, v));
+            z1.Points.AddXY(t, h);
+            z2.Points.AddXY(t, v);
+            p1a.Points.AddXY(t, h);
+            p1b.Points.AddXY(t, v);
             //---
             z1.BorderWidth = 1;
             z2.BorderWidth = 1;
@@ -91,6 +96,7 @@ namespace Pvz1
             timer1.Enabled = true;
             timer1.Interval = 1;
             timer1.Start();
+            //---
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -100,6 +106,7 @@ namespace Pvz1
                 k = k2;
                 p2a.Points.AddXY(t, h);
                 p2b.Points.AddXY(t, v);
+                richTextBox1.AppendText(string.Format("Išskleistas parašiutas, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", h, t, v));
             }
             //---
             h -= step * (v);
@@ -113,6 +120,9 @@ namespace Pvz1
             //---
             if (h <= 0)
             {
+                richTextBox1.AppendText(string.Format("Nusileidimas ant žemės, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", h, t, v));
+                richTextBox1.AppendText(line + "\n");
+                richTextBox1.AppendText("Programa baigė darbą.\n");
                 p3a.Points.AddXY(t, 0);
                 p3b.Points.AddXY(t, v);
                 timer1.Stop();
