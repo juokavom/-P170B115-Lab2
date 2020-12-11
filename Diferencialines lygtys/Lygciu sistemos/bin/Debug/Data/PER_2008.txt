@@ -1,0 +1,12 @@
+19.9918, 2008, Jan Average, Peru, PER
+20.1172, 2008, Feb Average, Peru, PER
+20.1441, 2008, Mar Average, Peru, PER
+19.5697, 2008, Apr Average, Peru, PER
+18.4829, 2008, May Average, Peru, PER
+18.1763, 2008, Jun Average, Peru, PER
+18.6787, 2008, Jul Average, Peru, PER
+19.5166, 2008, Aug Average, Peru, PER
+19.4976, 2008, Sep Average, Peru, PER
+19.8433, 2008, Oct Average, Peru, PER
+20.2053, 2008, Nov Average, Peru, PER
+20.1167, 2008, Dec Average, Peru, PER
