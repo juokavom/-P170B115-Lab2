@@ -3,46 +3,29 @@
 //IV projektinė užduotis
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Factorization;
-using MathNet.Numerics.Optimization;
-using MathNet.Numerics.Statistics;
-using MathNet.Numerics.LinearAlgebra.Double;
-using System.IO;
 
 namespace Pvz1
 {
-
     public partial class Form1 : Form
     {
-
         public Form1()
         {
             InitializeComponent();
             Initialize();
         }
 
-        Series z1, z2;
-
+        Series z1, z2, p1a, p1b, p2a, p2b, p3a, p3b;
         private void rodytiGrafika(object sender, EventArgs e)
         {
-            if (radioButton1.Checked) 
+            if (radioButton1.Checked)
             {
                 chart2.Visible = false;
                 chart1.Visible = true;
-            } else if (radioButton2.Checked) 
+            }
+            else if (radioButton2.Checked)
             {
                 chart1.Visible = false;
                 chart2.Visible = true;
@@ -50,43 +33,87 @@ namespace Pvz1
         }
         private void button2_Click(object sender, EventArgs e)
         {
-
             ClearForm1();
-            PreparareForm(chart1, -2, 120, -2, 4500);
-            PreparareForm(chart2, -2, 120, -2, 100);
+            PreparareForm(chart1, 0, 120, 0, 4500);
+            PreparareForm(chart2, 0, 120, 0, 100);
             //---
             int m1 = 70, m2 = 15, tg = 40;
             double k1 = 0.1, k2 = 5, h = 4000, v = 0, g = 9.8, k = k1, m = m1 + m2, t = 0;
             double step = 0.03;
             //---
-            z1 = chart1.Series.Add("Aukštis (h)");
+            z1 = chart1.Series.Add("Aukštis h (m)");
             z1.ChartType = SeriesChartType.Line;
             z1.Color = Color.Blue;
             //---
-            z2 = chart2.Series.Add("Greitis (v)");
+            z2 = chart2.Series.Add("Greitis v (m/s)");
             z2.ChartType = SeriesChartType.Line;
             z2.Color = Color.Green;
             //---
+            p1a = chart1.Series.Add("Iššokimas iš lėktuvo");
+            p1a.ChartType = SeriesChartType.Point;
+            p1a.Color = Color.Black;
+            //---
+            p1b = chart2.Series.Add("Iššokimas iš lėktuvo");
+            p1b.ChartType = SeriesChartType.Point;
+            p1b.Color = Color.Black;
+            //---
+            p2a = chart1.Series.Add("Parašiuto išskleidimas");
+            p2a.ChartType = SeriesChartType.Point;
+            p2a.Color = Color.Red;
+            //---
+            p2b = chart2.Series.Add("Parašiuto išskleidimas");
+            p2b.ChartType = SeriesChartType.Point;
+            p2b.Color = Color.Red;
+            //---
+            p3a = chart1.Series.Add("Nusileidimas ant žemės");
+            p3a.ChartType = SeriesChartType.Point;
+            p3a.Color = Color.Green;
+            //---
+            p3b = chart2.Series.Add("Nusileidimas ant žemės");
+            p3b.ChartType = SeriesChartType.Point;
+            p3b.Color = Color.Blue;
+            //---
             z1.Points.AddXY(0, h);
             z2.Points.AddXY(0, v);
-            for (double i = 0; h > 0; i++)
+            p1a.Points.AddXY(0, h);
+            p1b.Points.AddXY(0, v);
+            //---
+            for (double i = 0; i < 5000; i++)
             {
-                if (t >= tg) k = k2;
+                //---
+                if (t >= tg && k == k1)
+                {
+                    k = k2;
+                    p2a.Points.AddXY(t, h);
+                    p2b.Points.AddXY(t, v);
+                }
+                //---
                 h -= step * (v);
-                v += step * (g - ((k * Math.Pow(v, 2)) / m)); 
+                v += step * (g - ((k * Math.Pow(v, 2)) / m));
                 t += step;
-                System.Diagnostics.Debug.WriteLine(string.Format("it: {3}, t: {2}, Aukstis: {0}, Greitis: {1}", h, v, t, i));
+                //---
+                //System.Diagnostics.Debug.WriteLine(string.Format("it: {3}, t: {2}, Aukstis: {0}, Greitis: {1}", h, v, t, i));
+                //---
                 z1.Points.AddXY(t, h);
                 z2.Points.AddXY(t, v);
-                if (i == 100000) break;
+                //---
+                if (h <= 0)
+                {
+                    p3a.Points.AddXY(t, 0);
+                    p3b.Points.AddXY(t, v);
+                    break;
+                }
             }
-
+            //---
             z1.BorderWidth = 1;
             z2.BorderWidth = 1;
+            p1a.BorderWidth = 3;
+            p1b.BorderWidth = 3;
+            p2a.BorderWidth = 3;
+            p2b.BorderWidth = 3;
+            p3a.BorderWidth = 3;
+            p3b.BorderWidth = 3;
         }
-        
-
-        // ---------------------------------------------- KITI METODAI ----------------------------------------------
 
         /// <summary>
         /// Uždaroma programa
@@ -95,7 +122,6 @@ namespace Pvz1
         {
             Close();
         }
-
         /// <summary>
         /// Išvalomas grafikas ir consolė
         /// </summary>
@@ -103,14 +129,13 @@ namespace Pvz1
         {
             ClearForm1();
         }
-
-
         public void ClearForm1()
         {
             richTextBox1.Clear(); // isvalomas richTextBox1
 
             // isvalomos visos nubreztos kreives
             chart1.Series.Clear();
+            chart2.Series.Clear();
         }
     }
 }
