@@ -31,15 +31,16 @@ namespace Pvz1
                 chart2.Visible = true;
             }
         }
+
+        private static int m1 = 70, m2 = 15, tg = 40;
+        private static double k1 = 0.1, k2 = 5, h = 4000, v = 0, g = 9.8, k = k1, m = m1 + m2, t = 0;
+        private static double step = 0.03;
+
         private void button2_Click(object sender, EventArgs e)
         {
             ClearForm1();
-            PreparareForm(chart1, 0, 120, 0, 4500);
-            PreparareForm(chart2, 0, 120, 0, 100);
-            //---
-            int m1 = 70, m2 = 15, tg = 40;
-            double k1 = 0.1, k2 = 5, h = 4000, v = 0, g = 9.8, k = k1, m = m1 + m2, t = 0;
-            double step = 0.03;
+            PreparareForm(chart1, -10, 120, -10, 4500);
+            PreparareForm(chart2, -10, 120, -10, 100);
             //---
             z1 = chart1.Series.Add("Aukštis h (m)");
             z1.ChartType = SeriesChartType.Line;
@@ -78,33 +79,6 @@ namespace Pvz1
             p1a.Points.AddXY(0, h);
             p1b.Points.AddXY(0, v);
             //---
-            for (double i = 0; i < 5000; i++)
-            {
-                //---
-                if (t >= tg && k == k1)
-                {
-                    k = k2;
-                    p2a.Points.AddXY(t, h);
-                    p2b.Points.AddXY(t, v);
-                }
-                //---
-                h -= step * (v);
-                v += step * (g - ((k * Math.Pow(v, 2)) / m));
-                t += step;
-                //---
-                //System.Diagnostics.Debug.WriteLine(string.Format("it: {3}, t: {2}, Aukstis: {0}, Greitis: {1}", h, v, t, i));
-                //---
-                z1.Points.AddXY(t, h);
-                z2.Points.AddXY(t, v);
-                //---
-                if (h <= 0)
-                {
-                    p3a.Points.AddXY(t, 0);
-                    p3b.Points.AddXY(t, v);
-                    break;
-                }
-            }
-            //---
             z1.BorderWidth = 1;
             z2.BorderWidth = 1;
             p1a.BorderWidth = 3;
@@ -113,6 +87,36 @@ namespace Pvz1
             p2b.BorderWidth = 3;
             p3a.BorderWidth = 3;
             p3b.BorderWidth = 3;
+            //---
+            timer1.Enabled = true;
+            timer1.Interval = 1;
+            timer1.Start();
+        }
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            //---
+            if (t >= tg && k == k1)
+            {
+                k = k2;
+                p2a.Points.AddXY(t, h);
+                p2b.Points.AddXY(t, v);
+            }
+            //---
+            h -= step * (v);
+            v += step * (g - ((k * Math.Pow(v, 2)) / m));
+            t += step;
+            //---
+            //System.Diagnostics.Debug.WriteLine(string.Format("it: {3}, t: {2}, Aukstis: {0}, Greitis: {1}", h, v, t, i));
+            //---
+            z1.Points.AddXY(t, h);
+            z2.Points.AddXY(t, v);
+            //---
+            if (h <= 0)
+            {
+                p3a.Points.AddXY(t, 0);
+                p3b.Points.AddXY(t, v);
+                timer1.Stop();
+            }
         }
 
         /// <summary>
