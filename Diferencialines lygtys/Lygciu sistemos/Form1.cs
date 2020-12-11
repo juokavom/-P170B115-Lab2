@@ -19,7 +19,7 @@ namespace Pvz1
 
         Series z1a, z1b, z2a, z2b, p1a, p1b, p2a, p2b, p3a, p3b;
         private static int m1, m2, tg;
-        private static double k1, k2, ha, hb, va, vb, g, k, m, t, step;
+        private static double k1, k2, ha, hb, va, vb, g, ka, kb, m, ta, tb, step;
         private static string line = new string('-', 94);
         bool aDone, bDone;
         private void pradinesReiksmes(double local_step)
@@ -34,9 +34,11 @@ namespace Pvz1
             va = 0;
             vb = 0;
             g = 9.8;
-            k = k1;
+            ka = k1;
+            kb = k1;
             m = m1 + m2;
-            t = 0;
+            ta = 0;
+            tb = 0;
             step = local_step;
             aDone = false;
             bDone = false;
@@ -58,11 +60,11 @@ namespace Pvz1
             //---
             z1b = chart1.Series.Add("Aukštis h (m), žingsnis = step/2");
             z1b.ChartType = SeriesChartType.Line;
-            z1b.Color = Color.Blue;
+            z1b.Color = Color.Green;
             //---
             z2a = chart2.Series.Add("Greitis v (m/s), žingsnis = step");
             z2a.ChartType = SeriesChartType.Line;
-            z2a.Color = Color.Green;
+            z2a.Color = Color.Blue;
             //---
             z2b = chart2.Series.Add("Greitis v (m/s), žingsnis = step/2");
             z2b.ChartType = SeriesChartType.Line;
@@ -86,24 +88,26 @@ namespace Pvz1
             //---
             p3a = chart1.Series.Add("Nusileidimas ant žemės");
             p3a.ChartType = SeriesChartType.Point;
-            p3a.Color = Color.Green;
+            p3a.Color = Color.DeepPink;
             //---
             p3b = chart2.Series.Add("Nusileidimas ant žemės");
             p3b.ChartType = SeriesChartType.Point;
-            p3b.Color = Color.Blue;
+            p3b.Color = Color.DeepPink;
             //---
             if (radioButton3.Checked) richTextBox1.AppendText("Sprendžiama Eulerio metodu\n");
             else if (radioButton4.Checked) richTextBox1.AppendText("Sprendžiama 4 eilės Rungės ir Kutos metodu\n");
-            richTextBox1.AppendText(string.Format("(step)   Iššokta iš lėktuvo, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", ha, t, va));
-            richTextBox1.AppendText(string.Format("(step/2) Iššokta iš lėktuvo, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", hb, t, vb));
-            z1a.Points.AddXY(t, ha);
-            z2a.Points.AddXY(t, va);
-            z1b.Points.AddXY(t, hb);
-            z2b.Points.AddXY(t, vb);
-            p1a.Points.AddXY(t, ha);
-            p1a.Points.AddXY(t, hb);
-            p1b.Points.AddXY(t, va);
-            p1b.Points.AddXY(t, vb);
+            richTextBox1.AppendText(string.Format("step = {0}\n", step));
+            richTextBox1.AppendText(string.Format("(step)   Iššokta iš lėktuvo, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", ha, ta, va));
+            richTextBox1.AppendText(string.Format("(step/2) Iššokta iš lėktuvo, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", hb, tb, vb));
+            //---
+            z1a.Points.AddXY(ta, ha);
+            z2a.Points.AddXY(ta, va);
+            z1b.Points.AddXY(tb, hb);
+            z2b.Points.AddXY(tb, vb);
+            p1a.Points.AddXY(ta, ha);
+            p1a.Points.AddXY(tb, hb);
+            p1b.Points.AddXY(ta, va);
+            p1b.Points.AddXY(tb, vb);
             //---
             z1a.BorderWidth = 1;
             z2a.BorderWidth = 1;
@@ -135,72 +139,78 @@ namespace Pvz1
             }
         }
 
-        private double f(double v_local)
+        private double f(double v_local, double k_local)
         {
-            return g - ((k * Math.Pow(v_local, 2)) / m);
+            return g - ((k_local * Math.Pow(v_local, 2)) / m);
         }
-        private double Eulerio(double v_local, double step_local)
+        private double Eulerio(double v_local, double step_local, double k_local)
         {
-            return v_local + step_local * f(v_local);
+            return v_local + step_local * f(v_local, k_local);
         }
-        private double RK(double v_local, double step_local)
+        private double RK(double v_local, double step_local, double k_local)
         {
-            double v1 = v_local + (step_local / 2) * f(v_local);
-            double v2 = v_local + (step_local / 2) * f(v1);
-            double v3 = v_local + step_local * f(v2);
-            double v4 = v_local + (step_local / 6) * (f(v_local) + 2 * f(v1) + 2 * f(v2) + f(v3));
+            double v1 = v_local + (step_local / 2) * f(v_local, k_local);
+            double v2 = v_local + (step_local / 2) * f(v1, k_local);
+            double v3 = v_local + step_local * f(v2, k_local);
+            double v4 = v_local + (step_local / 6) * (f(v_local, k_local) + 2 * f(v1, k_local) + 2 * f(v2, k_local) + f(v3, k_local));
             return v4;
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
             //---
-            if (t >= tg && k == k1)
+            if (ta >= tg && ka == k1)
             {
-                k = k2;
-                p2a.Points.AddXY(t, ha);
-                p2b.Points.AddXY(t, va);
-                p2a.Points.AddXY(t, hb);
-                p2b.Points.AddXY(t, vb);
-                richTextBox1.AppendText(string.Format("(step)   Išskleistas parašiutas, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", ha, t, va));
-                richTextBox1.AppendText(string.Format("(step/2) Išskleistas parašiutas, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", hb, t, vb));
+                ka = k2;
+                p2a.Points.AddXY(ta, ha);
+                p2b.Points.AddXY(ta, va);
+                richTextBox1.AppendText(string.Format("(step)   Išskleistas parašiutas, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", ha, ta, va));
+            }
+            //---
+            if (tb >= tg && kb == k1)
+            {
+                kb = k2;
+                p2b.Points.AddXY(tb, vb);
+                p2b.Points.AddXY(tb, vb);
+                richTextBox1.AppendText(string.Format("(step/2) Išskleistas parašiutas, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", hb, tb, vb));
             }
             //---
             ha -= step * (va);
-            hb -= step * (vb);
+            hb -= step/2 * (vb);
             if (radioButton3.Checked)
             {
-                va = Eulerio(va, step);
-                vb = Eulerio(vb, step / 2);
+                va = Eulerio(va, step, ka);
+                vb = Eulerio(vb, step / 2, kb);
             }
             else if (radioButton4.Checked)
             {
-                va = RK(va, step);
-                vb = RK(vb, step / 2);
+                va = RK(va, step, ka);
+                vb = RK(vb, step / 2, kb);
             }
-            t += step;
+            ta += step;
+            tb += step/2;
             //---
             if (ha > 0)
             {
-                z1a.Points.AddXY(t, ha);
-                z2a.Points.AddXY(t, va);
+                z1a.Points.AddXY(ta, ha);
+                z2a.Points.AddXY(ta, va);
             }
             else if (!aDone)
             {
-                richTextBox1.AppendText(string.Format("(step)   Nusileidimas ant žemės, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", ha, t, va));
-                p3a.Points.AddXY(t, 0);
-                p3b.Points.AddXY(t, va);
+                richTextBox1.AppendText(string.Format("(step)   Nusileidimas ant žemės, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", ha, ta, va));
+                p3a.Points.AddXY(ta, 0);
+                p3b.Points.AddXY(ta, va);
                 aDone = true;
             }
             if (hb > 0)
             {
-                z1b.Points.AddXY(t, hb);
-                z2b.Points.AddXY(t, vb);
+                z1b.Points.AddXY(tb, hb);
+                z2b.Points.AddXY(tb, vb);
             }
             else if (!bDone)
             {
-                richTextBox1.AppendText(string.Format("(step/2) Nusileidimas ant žemės, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", hb, t, vb));
-                p3a.Points.AddXY(t, 0);
-                p3b.Points.AddXY(t, vb);
+                richTextBox1.AppendText(string.Format("(step/2) Nusileidimas ant žemės, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", hb, tb, vb));
+                p3a.Points.AddXY(tb, 0);
+                p3b.Points.AddXY(tb, vb);
                 bDone = true;
             }
             if (aDone && bDone)
