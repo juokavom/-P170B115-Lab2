@@ -15,28 +15,32 @@ namespace Pvz1
         {
             InitializeComponent();
             Initialize();
+            pradinesReiksmes(0.21);
         }
 
         Series z1, z2, p1a, p1b, p2a, p2b, p3a, p3b;
-        private void rodytiGrafika(object sender, EventArgs e)
-        {
-            if (radioButton1.Checked)
-            {
-                chart2.Visible = false;
-                chart1.Visible = true;
-            }
-            else if (radioButton2.Checked)
-            {
-                chart1.Visible = false;
-                chart2.Visible = true;
-            }
-        }
 
-        private static int m1 = 70, m2 = 15, tg = 40;
-        private static double k1 = 0.1, k2 = 5, h = 4000, v = 0, g = 9.8, k = k1, m = m1 + m2, t = 0;
+        private static int m1, m2, tg;
+        private static double k1, k2, h, v, g, k, m, t, step;
+
         //step < 2/|alpha|
-        private static double step = 0.21;
         private static string line = new string('-', 94);
+
+        private void pradinesReiksmes(double local_step)
+        {
+            m1 = 70;
+            m2 = 15;
+            tg = 40;
+            k1 = 0.1;
+            k2 = 5;
+            h = 4000;
+            v = 0;
+            g = 9.8;
+            k = k1;
+            m = m1 + m2;
+            t = 0;
+            step = local_step;
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -79,6 +83,8 @@ namespace Pvz1
             p3b.ChartType = SeriesChartType.Point;
             p3b.Color = Color.Blue;
             //---
+            if (radioButton3.Checked) richTextBox1.AppendText("Sprendžiama Eulerio metodu\n");
+            else if (radioButton4.Checked) richTextBox1.AppendText("Sprendžiama 4 eilės Rungės ir Kutos metodu\n");
             richTextBox1.AppendText(string.Format("Iššokta iš lėktuvo, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", h, t, v));
             z1.Points.AddXY(t, h);
             z2.Points.AddXY(t, v);
@@ -99,6 +105,36 @@ namespace Pvz1
             timer1.Start();
             //---
         }
+        private void rodytiGrafika(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked)
+            {
+                chart2.Visible = false;
+                chart1.Visible = true;
+            }
+            else if (radioButton2.Checked)
+            {
+                chart1.Visible = false;
+                chart2.Visible = true;
+            }
+        }
+
+        private double f(double v_local)
+        {
+            return g - ((k * Math.Pow(v_local, 2)) / m);
+        }
+        private double Eulerio()
+        {
+            return v + step * f(v);
+        }
+        private double RK()
+        {
+            double v1 = v + (step / 2) * f(v);
+            double v2 = v + (step / 2) * f(v1);
+            double v3 = v + step * f(v2);
+            double v4 = v + (step / 6) * (f(v) + 2 * f(v1) + 2 * f(v2) + f(v3));
+            return v4;
+        }
         private void timer1_Tick(object sender, EventArgs e)
         {
             //---
@@ -111,10 +147,9 @@ namespace Pvz1
             }
             //---
             h -= step * (v);
-            v += step * (g - ((k * Math.Pow(v, 2)) / m));
+            if (radioButton3.Checked) v = Eulerio();
+            else if (radioButton4.Checked) v = RK();
             t += step;
-            //---
-            //System.Diagnostics.Debug.WriteLine(string.Format("it: {3}, t: {2}, Aukstis: {0}, Greitis: {1}", h, v, t, i));
             //---
             z1.Points.AddXY(t, h);
             z2.Points.AddXY(t, v);
@@ -123,7 +158,6 @@ namespace Pvz1
             {
                 richTextBox1.AppendText(string.Format("Nusileidimas ant žemės, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", h, t, v));
                 richTextBox1.AppendText(line + "\n");
-                richTextBox1.AppendText("Programa baigė darbą.\n");
                 p3a.Points.AddXY(t, 0);
                 p3b.Points.AddXY(t, v);
                 timer1.Stop();
@@ -147,7 +181,7 @@ namespace Pvz1
         public void ClearForm1()
         {
             richTextBox1.Clear(); // isvalomas richTextBox1
-
+            pradinesReiksmes(0.21);
             // isvalomos visos nubreztos kreives
             chart1.Series.Clear();
             chart2.Series.Clear();

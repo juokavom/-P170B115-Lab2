@@ -53,9 +53,13 @@ namespace Pvz1
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // chart1
@@ -102,7 +106,7 @@ namespace Pvz1
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(922, 17);
+            this.button2.Location = new System.Drawing.Point(922, 77);
             this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(208, 31);
@@ -150,7 +154,7 @@ namespace Pvz1
             // 
             this.groupBox2.Controls.Add(this.radioButton2);
             this.groupBox2.Controls.Add(this.radioButton1);
-            this.groupBox2.Location = new System.Drawing.Point(922, 55);
+            this.groupBox2.Location = new System.Drawing.Point(922, 236);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(208, 86);
             this.groupBox2.TabIndex = 18;
@@ -170,11 +174,46 @@ namespace Pvz1
             this.chart2.TabIndex = 24;
             this.chart2.Text = "chart2";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.radioButton3);
+            this.groupBox1.Controls.Add(this.radioButton4);
+            this.groupBox1.Location = new System.Drawing.Point(922, 125);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(208, 86);
+            this.groupBox1.TabIndex = 19;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Metodas";
+            // 
+            // radioButton3
+            // 
+            this.radioButton3.Checked = true;
+            this.radioButton3.Location = new System.Drawing.Point(7, 22);
+            this.radioButton3.Margin = new System.Windows.Forms.Padding(4);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(138, 29);
+            this.radioButton3.TabIndex = 10;
+            this.radioButton3.TabStop = true;
+            this.radioButton3.Text = "Eulerio";
+            this.radioButton3.CheckedChanged += new System.EventHandler(this.button2_Click);
+            // 
+            // radioButton4
+            // 
+            this.radioButton4.Location = new System.Drawing.Point(7, 50);
+            this.radioButton4.Margin = new System.Windows.Forms.Padding(4);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(184, 29);
+            this.radioButton4.TabIndex = 9;
+            this.radioButton4.TabStop = true;
+            this.radioButton4.Text = "IV eilės Rungės ir Kutos";
+            this.radioButton4.CheckedChanged += new System.EventHandler(this.button2_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1140, 727);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.chart2);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.button4);
@@ -188,6 +227,7 @@ namespace Pvz1
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -243,6 +283,9 @@ namespace Pvz1
         private RadioButton radioButton1;
         private RadioButton radioButton2;
         private GroupBox groupBox2;
+        private GroupBox groupBox1;
+        private RadioButton radioButton3;
+        private RadioButton radioButton4;
     }
 
 
