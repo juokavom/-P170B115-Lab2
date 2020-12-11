@@ -15,15 +15,11 @@ namespace Pvz1
         {
             InitializeComponent();
             Initialize();
-            pradinesReiksmes(0.21);
         }
 
         Series z1, z2, p1a, p1b, p2a, p2b, p3a, p3b;
-
         private static int m1, m2, tg;
         private static double k1, k2, h, v, g, k, m, t, step;
-
-        //step < 2/|alpha|
         private static string line = new string('-', 94);
 
         private void pradinesReiksmes(double local_step)
@@ -151,38 +147,36 @@ namespace Pvz1
             else if (radioButton4.Checked) v = RK();
             t += step;
             //---
-            z1.Points.AddXY(t, h);
-            z2.Points.AddXY(t, v);
-            //---
             if (h <= 0)
             {
                 richTextBox1.AppendText(string.Format("Nusileidimas ant žemės, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", h, t, v));
                 richTextBox1.AppendText(line + "\n");
+                richTextBox1.AppendText("Baigta skaičiuoti.\n");
                 p3a.Points.AddXY(t, 0);
                 p3b.Points.AddXY(t, v);
                 timer1.Stop();
             }
+            else 
+            {
+                z1.Points.AddXY(t, h);
+                z2.Points.AddXY(t, v);
+            }
         }
 
-        /// <summary>
-        /// Uždaroma programa
-        /// </summary>
         private void button1_Click(object sender, EventArgs e)
         {
             Close();
         }
-        /// <summary>
-        /// Išvalomas grafikas ir consolė
-        /// </summary>
         private void button4_Click(object sender, EventArgs e)
         {
             ClearForm1();
         }
         public void ClearForm1()
         {
-            richTextBox1.Clear(); // isvalomas richTextBox1
+            richTextBox1.Clear();
+            //0,34 - runges ir kutos
+            //0,21 - eulerio
             pradinesReiksmes(0.21);
-            // isvalomos visos nubreztos kreives
             chart1.Series.Clear();
             chart2.Series.Clear();
         }
