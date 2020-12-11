@@ -17,11 +17,11 @@ namespace Pvz1
             Initialize();
         }
 
-        Series z1, z2, p1a, p1b, p2a, p2b, p3a, p3b;
+        Series z1a, z1b, z2a, z2b, p1a, p1b, p2a, p2b, p3a, p3b;
         private static int m1, m2, tg;
-        private static double k1, k2, h, v, g, k, m, t, step;
+        private static double k1, k2, ha, hb, va, vb, g, k, m, t, step;
         private static string line = new string('-', 94);
-
+        bool aDone, bDone;
         private void pradinesReiksmes(double local_step)
         {
             m1 = 70;
@@ -29,31 +29,44 @@ namespace Pvz1
             tg = 40;
             k1 = 0.1;
             k2 = 5;
-            h = 4000;
-            v = 0;
+            ha = 4000;
+            hb = 4000;
+            va = 0;
+            vb = 0;
             g = 9.8;
             k = k1;
             m = m1 + m2;
             t = 0;
             step = local_step;
+            aDone = false;
+            bDone = false;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             ClearForm1();
+            step = (double)this.numericUpDown1.Value;
             PreparareForm(chart1, -10, 120, -10, 4500);
             PreparareForm(chart2, -10, 120, -10, 100);
             //---
             richTextBox1.AppendText("Paprastųjų diferencialinių lygčių sprendimas (7var).\n");
             richTextBox1.AppendText(line + "\n");
             //---
-            z1 = chart1.Series.Add("Aukštis h (m)");
-            z1.ChartType = SeriesChartType.Line;
-            z1.Color = Color.Blue;
+            z1a = chart1.Series.Add("Aukštis h (m), žingsnis = step");
+            z1a.ChartType = SeriesChartType.Line;
+            z1a.Color = Color.Blue;
             //---
-            z2 = chart2.Series.Add("Greitis v (m/s)");
-            z2.ChartType = SeriesChartType.Line;
-            z2.Color = Color.Green;
+            z1b = chart1.Series.Add("Aukštis h (m), žingsnis = step/2");
+            z1b.ChartType = SeriesChartType.Line;
+            z1b.Color = Color.Blue;
+            //---
+            z2a = chart2.Series.Add("Greitis v (m/s), žingsnis = step");
+            z2a.ChartType = SeriesChartType.Line;
+            z2a.Color = Color.Green;
+            //---
+            z2b = chart2.Series.Add("Greitis v (m/s), žingsnis = step/2");
+            z2b.ChartType = SeriesChartType.Line;
+            z2b.Color = Color.Green;
             //---
             p1a = chart1.Series.Add("Iššokimas iš lėktuvo");
             p1a.ChartType = SeriesChartType.Point;
@@ -81,14 +94,21 @@ namespace Pvz1
             //---
             if (radioButton3.Checked) richTextBox1.AppendText("Sprendžiama Eulerio metodu\n");
             else if (radioButton4.Checked) richTextBox1.AppendText("Sprendžiama 4 eilės Rungės ir Kutos metodu\n");
-            richTextBox1.AppendText(string.Format("Iššokta iš lėktuvo, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", h, t, v));
-            z1.Points.AddXY(t, h);
-            z2.Points.AddXY(t, v);
-            p1a.Points.AddXY(t, h);
-            p1b.Points.AddXY(t, v);
+            richTextBox1.AppendText(string.Format("(step)   Iššokta iš lėktuvo, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", ha, t, va));
+            richTextBox1.AppendText(string.Format("(step/2) Iššokta iš lėktuvo, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", hb, t, vb));
+            z1a.Points.AddXY(t, ha);
+            z2a.Points.AddXY(t, va);
+            z1b.Points.AddXY(t, hb);
+            z2b.Points.AddXY(t, vb);
+            p1a.Points.AddXY(t, ha);
+            p1a.Points.AddXY(t, hb);
+            p1b.Points.AddXY(t, va);
+            p1b.Points.AddXY(t, vb);
             //---
-            z1.BorderWidth = 1;
-            z2.BorderWidth = 1;
+            z1a.BorderWidth = 1;
+            z2a.BorderWidth = 1;
+            z1b.BorderWidth = 1;
+            z2b.BorderWidth = 1;
             p1a.BorderWidth = 3;
             p1b.BorderWidth = 3;
             p2a.BorderWidth = 3;
@@ -119,16 +139,16 @@ namespace Pvz1
         {
             return g - ((k * Math.Pow(v_local, 2)) / m);
         }
-        private double Eulerio()
+        private double Eulerio(double v_local, double step_local)
         {
-            return v + step * f(v);
+            return v_local + step_local * f(v_local);
         }
-        private double RK()
+        private double RK(double v_local, double step_local)
         {
-            double v1 = v + (step / 2) * f(v);
-            double v2 = v + (step / 2) * f(v1);
-            double v3 = v + step * f(v2);
-            double v4 = v + (step / 6) * (f(v) + 2 * f(v1) + 2 * f(v2) + f(v3));
+            double v1 = v_local + (step_local / 2) * f(v_local);
+            double v2 = v_local + (step_local / 2) * f(v1);
+            double v3 = v_local + step_local * f(v2);
+            double v4 = v_local + (step_local / 6) * (f(v_local) + 2 * f(v1) + 2 * f(v2) + f(v3));
             return v4;
         }
         private void timer1_Tick(object sender, EventArgs e)
@@ -137,29 +157,57 @@ namespace Pvz1
             if (t >= tg && k == k1)
             {
                 k = k2;
-                p2a.Points.AddXY(t, h);
-                p2b.Points.AddXY(t, v);
-                richTextBox1.AppendText(string.Format("Išskleistas parašiutas, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", h, t, v));
+                p2a.Points.AddXY(t, ha);
+                p2b.Points.AddXY(t, va);
+                p2a.Points.AddXY(t, hb);
+                p2b.Points.AddXY(t, vb);
+                richTextBox1.AppendText(string.Format("(step)   Išskleistas parašiutas, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", ha, t, va));
+                richTextBox1.AppendText(string.Format("(step/2) Išskleistas parašiutas, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", hb, t, vb));
             }
             //---
-            h -= step * (v);
-            if (radioButton3.Checked) v = Eulerio();
-            else if (radioButton4.Checked) v = RK();
+            ha -= step * (va);
+            hb -= step * (vb);
+            if (radioButton3.Checked)
+            {
+                va = Eulerio(va, step);
+                vb = Eulerio(vb, step / 2);
+            }
+            else if (radioButton4.Checked)
+            {
+                va = RK(va, step);
+                vb = RK(vb, step / 2);
+            }
             t += step;
             //---
-            if (h <= 0)
+            if (ha > 0)
             {
-                richTextBox1.AppendText(string.Format("Nusileidimas ant žemės, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", h, t, v));
+                z1a.Points.AddXY(t, ha);
+                z2a.Points.AddXY(t, va);
+            }
+            else if (!aDone)
+            {
+                richTextBox1.AppendText(string.Format("(step)   Nusileidimas ant žemės, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", ha, t, va));
+                p3a.Points.AddXY(t, 0);
+                p3b.Points.AddXY(t, va);
+                aDone = true;
+            }
+            if (hb > 0)
+            {
+                z1b.Points.AddXY(t, hb);
+                z2b.Points.AddXY(t, vb);
+            }
+            else if (!bDone)
+            {
+                richTextBox1.AppendText(string.Format("(step/2) Nusileidimas ant žemės, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", hb, t, vb));
+                p3a.Points.AddXY(t, 0);
+                p3b.Points.AddXY(t, vb);
+                bDone = true;
+            }
+            if (aDone && bDone)
+            {
                 richTextBox1.AppendText(line + "\n");
                 richTextBox1.AppendText("Baigta skaičiuoti.\n");
-                p3a.Points.AddXY(t, 0);
-                p3b.Points.AddXY(t, v);
                 timer1.Stop();
-            }
-            else 
-            {
-                z1.Points.AddXY(t, h);
-                z2.Points.AddXY(t, v);
             }
         }
 

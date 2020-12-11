@@ -56,10 +56,12 @@ namespace Pvz1
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // chart1
@@ -106,7 +108,7 @@ namespace Pvz1
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(922, 77);
+            this.button2.Location = new System.Drawing.Point(922, 42);
             this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(208, 31);
@@ -208,11 +210,39 @@ namespace Pvz1
             this.radioButton4.Text = "IV eilės Rungės ir Kutos";
             this.radioButton4.CheckedChanged += new System.EventHandler(this.button2_Click);
             // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numericUpDown1.Location = new System.Drawing.Point(993, 97);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            34,
+            0,
+            0,
+            131072});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 22);
+            this.numericUpDown1.TabIndex = 25;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            15,
+            0,
+            0,
+            131072});
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1140, 727);
+            this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.chart2);
             this.Controls.Add(this.groupBox2);
@@ -228,6 +258,7 @@ namespace Pvz1
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
             this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -286,6 +317,7 @@ namespace Pvz1
         private GroupBox groupBox1;
         private RadioButton radioButton3;
         private RadioButton radioButton4;
+        private NumericUpDown numericUpDown1;
     }
 
 
