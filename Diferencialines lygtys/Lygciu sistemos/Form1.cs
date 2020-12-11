@@ -34,7 +34,8 @@ namespace Pvz1
 
         private static int m1 = 70, m2 = 15, tg = 40;
         private static double k1 = 0.1, k2 = 5, h = 4000, v = 0, g = 9.8, k = k1, m = m1 + m2, t = 0;
-        private static double step = 0.03;
+        //step < 2/|alpha|
+        private static double step = 0.21;
         private static string line = new string('-', 94);
 
         private void button2_Click(object sender, EventArgs e)
