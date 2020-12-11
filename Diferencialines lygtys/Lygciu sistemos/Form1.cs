@@ -5,6 +5,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Pvz1
@@ -18,36 +19,82 @@ namespace Pvz1
         }
 
         Series z1a, z1b, z2a, z2b, p1a, p1b, p2a, p2b, p3a, p3b;
-        private static int m1, m2, tg;
-        private static double k1, k2, ha, hb, va, vb, g, ka, kb, m, ta, tb, step;
         private static string line = new string('-', 94);
-        bool aDone, bDone;
-        private void pradinesReiksmes(double local_step)
+        private double[] t_step_pilnas, h_step_pilnas, v_step_pilnas;
+        private double[] t_step_pusiau, h_step_pusiau, v_step_pusiau;
+        int it_iskleidimas_pilnas, it_nusileidimas_pilnas, it_pilnas;
+        int it_iskleidimas_pusiau, it_nusileidimas_pusiau, it_pusiau;
+        private double f(double v, double k)
         {
-            m1 = 70;
-            m2 = 15;
-            tg = 40;
-            k1 = 0.1;
-            k2 = 5;
-            ha = 4000;
-            hb = 4000;
-            va = 0;
-            vb = 0;
-            g = 9.8;
-            ka = k1;
-            kb = k1;
-            m = m1 + m2;
-            ta = 0;
-            tb = 0;
-            step = local_step;
-            aDone = false;
-            bDone = false;
+            int m1 = 70, m2 = 15;
+            double g = 9.8, m = m1 + m2;
+            //---
+            return g - ((k * Math.Pow(v, 2)) / m);
         }
-
+        private double Eulerio(double v, double step, double k)
+        {
+            return v + step * f(v, k);
+        }
+        private double RK(double v, double step, double k)
+        {
+            double v1 = v + (step / 2) * f(v, k);
+            double v2 = v + (step / 2) * f(v1, k);
+            double v3 = v + step * f(v2, k);
+            double v4 = v + (step / 6) * (f(v, k) + 2 * f(v1, k) + 2 * f(v2, k) + f(v3, k));
+            return v4;
+        }
+        private void Sprendimas(double step, ref double[] t_array, ref double[] h_array, ref double[] v_array, out int it_iskleidimas, out int it_nusileidimas)
+        {
+            double k1 = 0.1, k2 = 5, h = 4000, tg = 40, v = 0, k = k1, t = 0;
+            //---
+            List<double> h_list = new List<double>();
+            List<double> v_list = new List<double>();
+            List<double> t_list = new List<double>();
+            //---
+            it_iskleidimas = 0;
+            it_nusileidimas = 0;
+            //---
+            h_list.Add(h);
+            v_list.Add(v);
+            t_list.Add(t);
+            //---
+            for (int i = 0; i < 5000; i++)
+            {
+                if (t >= tg && k == k1)
+                {
+                    k = k2;
+                    it_iskleidimas = i;
+                }
+                //---
+                h -= step * v;
+                if (radioButton3.Checked) v = Eulerio(v, step, k);
+                else if (radioButton4.Checked) v = RK(v, step, k);
+                t += step;
+                //---
+                if (h > 0)
+                {
+                    h_list.Add(h);
+                    v_list.Add(v);
+                    t_list.Add(t);
+                }
+                else
+                {
+                    it_nusileidimas = i;
+                    t_array = t_list.ToArray();
+                    h_array = h_list.ToArray();
+                    v_array = v_list.ToArray();
+                    break;
+                }
+            }
+        }
         private void button2_Click(object sender, EventArgs e)
         {
             ClearForm1();
-            step = (double)this.numericUpDown1.Value;
+            //---
+            //0,34 - runges ir kutos
+            //0,21 - eulerio
+            double step = 0.2;
+            //---
             PreparareForm(chart1, -10, 120, -10, 4500);
             PreparareForm(chart2, -10, 120, -10, 100);
             //---
@@ -94,20 +141,16 @@ namespace Pvz1
             p3b.ChartType = SeriesChartType.Point;
             p3b.Color = Color.DeepPink;
             //---
+            Sprendimas(step, ref t_step_pilnas, ref h_step_pilnas, ref v_step_pilnas, out it_iskleidimas_pilnas, out it_nusileidimas_pilnas);
+            Sprendimas(step / 2, ref t_step_pusiau, ref h_step_pusiau, ref v_step_pusiau, out it_iskleidimas_pusiau, out it_nusileidimas_pusiau);
+            //---
+            /*
             if (radioButton3.Checked) richTextBox1.AppendText("Sprendžiama Eulerio metodu\n");
             else if (radioButton4.Checked) richTextBox1.AppendText("Sprendžiama 4 eilės Rungės ir Kutos metodu\n");
             richTextBox1.AppendText(string.Format("step = {0}\n", step));
             richTextBox1.AppendText(string.Format("(step)   Iššokta iš lėktuvo, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", ha, ta, va));
             richTextBox1.AppendText(string.Format("(step/2) Iššokta iš lėktuvo, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", hb, tb, vb));
-            //---
-            z1a.Points.AddXY(ta, ha);
-            z2a.Points.AddXY(ta, va);
-            z1b.Points.AddXY(tb, hb);
-            z2b.Points.AddXY(tb, vb);
-            p1a.Points.AddXY(ta, ha);
-            p1a.Points.AddXY(tb, hb);
-            p1b.Points.AddXY(ta, va);
-            p1b.Points.AddXY(tb, vb);
+            */
             //---
             z1a.BorderWidth = 1;
             z2a.BorderWidth = 1;
@@ -120,10 +163,15 @@ namespace Pvz1
             p3a.BorderWidth = 3;
             p3b.BorderWidth = 3;
             //---
+            it_pilnas = 0;
             timer1.Enabled = true;
             timer1.Interval = 1;
             timer1.Start();
-            //---
+            //---   
+            it_pusiau = 0;
+            timer2.Enabled = true;
+            timer2.Interval = 1;
+            timer2.Start();
         }
         private void rodytiGrafika(object sender, EventArgs e)
         {
@@ -139,86 +187,58 @@ namespace Pvz1
             }
         }
 
-        private double f(double v_local, double k_local)
-        {
-            return g - ((k_local * Math.Pow(v_local, 2)) / m);
-        }
-        private double Eulerio(double v_local, double step_local, double k_local)
-        {
-            return v_local + step_local * f(v_local, k_local);
-        }
-        private double RK(double v_local, double step_local, double k_local)
-        {
-            double v1 = v_local + (step_local / 2) * f(v_local, k_local);
-            double v2 = v_local + (step_local / 2) * f(v1, k_local);
-            double v3 = v_local + step_local * f(v2, k_local);
-            double v4 = v_local + (step_local / 6) * (f(v_local, k_local) + 2 * f(v1, k_local) + 2 * f(v2, k_local) + f(v3, k_local));
-            return v4;
-        }
+
+        /*
+        private double[] t_step_pilnas, h_step_pilnas, v_step_pilnas;
+        private double[] t_step_pusiau, h_step_pusiau, v_step_pusiau;
+        int it_iskleidimas_pilnas, it_nusileidimas_pilnas;
+        int it_iskleidimas_pusiau, it_nusileidimas_pusiau;
+        */
         private void timer1_Tick(object sender, EventArgs e)
         {
-            //---
-            if (ta >= tg && ka == k1)
+            int i = it_pilnas;
+            z1a.Points.AddXY(t_step_pilnas[i], h_step_pilnas[i]);
+            z2a.Points.AddXY(t_step_pilnas[i], v_step_pilnas[i]);
+            if (i == 0)
             {
-                ka = k2;
-                p2a.Points.AddXY(ta, ha);
-                p2b.Points.AddXY(ta, va);
-                richTextBox1.AppendText(string.Format("(step)   Išskleistas parašiutas, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", ha, ta, va));
+                p1a.Points.AddXY(t_step_pilnas[0], h_step_pilnas[0]);
+                p1b.Points.AddXY(t_step_pilnas[0], v_step_pilnas[0]);
             }
-            //---
-            if (tb >= tg && kb == k1)
+            else if (i == it_iskleidimas_pilnas)
             {
-                kb = k2;
-                p2b.Points.AddXY(tb, vb);
-                p2b.Points.AddXY(tb, vb);
-                richTextBox1.AppendText(string.Format("(step/2) Išskleistas parašiutas, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", hb, tb, vb));
+                p2a.Points.AddXY(t_step_pilnas[i], h_step_pilnas[i]);
+                p2b.Points.AddXY(t_step_pilnas[i], v_step_pilnas[i]);
             }
-            //---
-            ha -= step * (va);
-            hb -= step/2 * (vb);
-            if (radioButton3.Checked)
+            else if (i == it_nusileidimas_pilnas)
             {
-                va = Eulerio(va, step, ka);
-                vb = Eulerio(vb, step / 2, kb);
-            }
-            else if (radioButton4.Checked)
-            {
-                va = RK(va, step, ka);
-                vb = RK(vb, step / 2, kb);
-            }
-            ta += step;
-            tb += step/2;
-            //---
-            if (ha > 0)
-            {
-                z1a.Points.AddXY(ta, ha);
-                z2a.Points.AddXY(ta, va);
-            }
-            else if (!aDone)
-            {
-                richTextBox1.AppendText(string.Format("(step)   Nusileidimas ant žemės, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", ha, ta, va));
-                p3a.Points.AddXY(ta, 0);
-                p3b.Points.AddXY(ta, va);
-                aDone = true;
-            }
-            if (hb > 0)
-            {
-                z1b.Points.AddXY(tb, hb);
-                z2b.Points.AddXY(tb, vb);
-            }
-            else if (!bDone)
-            {
-                richTextBox1.AppendText(string.Format("(step/2) Nusileidimas ant žemės, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", hb, tb, vb));
-                p3a.Points.AddXY(tb, 0);
-                p3b.Points.AddXY(tb, vb);
-                bDone = true;
-            }
-            if (aDone && bDone)
-            {
-                richTextBox1.AppendText(line + "\n");
-                richTextBox1.AppendText("Baigta skaičiuoti.\n");
+                p3a.Points.AddXY(t_step_pilnas[i], h_step_pilnas[i]);
+                p3b.Points.AddXY(t_step_pilnas[i], v_step_pilnas[i]); 
                 timer1.Stop();
             }
+            it_pilnas++;
+        }
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            int i = it_pusiau;
+            z1b.Points.AddXY(t_step_pusiau[i], h_step_pusiau[i]);
+            z2b.Points.AddXY(t_step_pusiau[i], v_step_pusiau[i]);
+            if (i == 0)
+            {
+                p1a.Points.AddXY(t_step_pusiau[0], h_step_pusiau[0]);
+                p1b.Points.AddXY(t_step_pusiau[0], v_step_pusiau[0]);
+            }
+            else if (i == it_iskleidimas_pusiau)
+            {
+                p2a.Points.AddXY(t_step_pusiau[i], h_step_pusiau[i]);
+                p2b.Points.AddXY(t_step_pusiau[i], v_step_pusiau[i]);
+            }
+            else if (i == it_nusileidimas_pusiau)
+            {
+                p3a.Points.AddXY(t_step_pusiau[i], h_step_pusiau[i]);
+                p3b.Points.AddXY(t_step_pusiau[i], v_step_pusiau[i]);
+                timer2.Stop();
+            }
+            it_pusiau++;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -232,9 +252,6 @@ namespace Pvz1
         public void ClearForm1()
         {
             richTextBox1.Clear();
-            //0,34 - runges ir kutos
-            //0,21 - eulerio
-            pradinesReiksmes(0.21);
             chart1.Series.Clear();
             chart2.Series.Clear();
         }

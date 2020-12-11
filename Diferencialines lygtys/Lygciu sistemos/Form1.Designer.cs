@@ -47,6 +47,7 @@ namespace Pvz1
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.button2 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
@@ -80,7 +81,7 @@ namespace Pvz1
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.richTextBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
             this.richTextBox1.Location = new System.Drawing.Point(16, 508);
@@ -105,6 +106,7 @@ namespace Pvz1
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
             // button2
             // 
@@ -301,7 +303,7 @@ namespace Pvz1
             chart1.ChartAreas[0].CursorX.Interval = 0.01;
             chart1.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
             chart1.ChartAreas[0].CursorY.Interval = 0.01;
-            
+
         }
         #endregion
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
@@ -309,6 +311,7 @@ namespace Pvz1
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.Button button2;
         private Button button4;
         private RadioButton radioButton1;
