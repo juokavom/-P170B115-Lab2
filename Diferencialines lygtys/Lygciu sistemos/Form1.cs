@@ -19,11 +19,12 @@ namespace Pvz1
         }
 
         Series z1a, z1b, z2a, z2b, p1a, p1b, p2a, p2b, p3a, p3b;
-        private static string line = new string('-', 94);
+        private static string line = new string('-', 102);
         private double[] t_step_pilnas, h_step_pilnas, v_step_pilnas;
         private double[] t_step_pusiau, h_step_pusiau, v_step_pusiau;
         int it_iskleidimas_pilnas, it_nusileidimas_pilnas, it_pilnas;
         int it_iskleidimas_pusiau, it_nusileidimas_pusiau, it_pusiau;
+        bool uzbaigta;
         private double f(double v, double k)
         {
             int m1 = 70, m2 = 15;
@@ -87,13 +88,26 @@ namespace Pvz1
                 }
             }
         }
+        private double tikslumas()
+        {
+            int pilnas = t_step_pilnas.Length;
+            int pusiau = t_step_pusiau.Length;
+            int it_size = (pilnas > pusiau/2) ? pusiau/2 : pilnas;
+            double suma = 0;
+            for (int i = 0; i < it_size; i++)
+            {
+                suma += (v_step_pilnas[i] - v_step_pusiau[i * 2]);
+            }
+            return Math.Abs(suma / it_size);
+        }
         private void button2_Click(object sender, EventArgs e)
         {
             ClearForm1();
             //---
-            //0,34 - runges ir kutos
-            //0,21 - eulerio
-            double step = 0.2;
+            //0,34 < runges ir kutos
+            //0,21 < eulerio
+            //double step = 0.2;
+            double step = Double.Parse((string)listBox1.SelectedItem);
             //---
             PreparareForm(chart1, -10, 120, -10, 4500);
             PreparareForm(chart2, -10, 120, -10, 100);
@@ -143,14 +157,12 @@ namespace Pvz1
             //---
             Sprendimas(step, ref t_step_pilnas, ref h_step_pilnas, ref v_step_pilnas, out it_iskleidimas_pilnas, out it_nusileidimas_pilnas);
             Sprendimas(step / 2, ref t_step_pusiau, ref h_step_pusiau, ref v_step_pusiau, out it_iskleidimas_pusiau, out it_nusileidimas_pusiau);
-            //---
-            /*
+            //---     
+            richTextBox1.AppendText("žingsnis(step) = " + step + "\n");
             if (radioButton3.Checked) richTextBox1.AppendText("Sprendžiama Eulerio metodu\n");
             else if (radioButton4.Checked) richTextBox1.AppendText("Sprendžiama 4 eilės Rungės ir Kutos metodu\n");
-            richTextBox1.AppendText(string.Format("step = {0}\n", step));
-            richTextBox1.AppendText(string.Format("(step)   Iššokta iš lėktuvo, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", ha, ta, va));
-            richTextBox1.AppendText(string.Format("(step/2) Iššokta iš lėktuvo, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", hb, tb, vb));
-            */
+            richTextBox1.AppendText("tikslumas = " + tikslumas() + "\n");
+            richTextBox1.AppendText(line + "\n");
             //---
             z1a.BorderWidth = 1;
             z2a.BorderWidth = 1;
@@ -163,11 +175,13 @@ namespace Pvz1
             p3a.BorderWidth = 3;
             p3b.BorderWidth = 3;
             //---
+            uzbaigta = false;
             it_pilnas = 0;
             timer1.Enabled = true;
             timer1.Interval = 1;
             timer1.Start();
             //---   
+            uzbaigta = false;
             it_pusiau = 0;
             timer2.Enabled = true;
             timer2.Interval = 1;
@@ -187,13 +201,6 @@ namespace Pvz1
             }
         }
 
-
-        /*
-        private double[] t_step_pilnas, h_step_pilnas, v_step_pilnas;
-        private double[] t_step_pusiau, h_step_pusiau, v_step_pusiau;
-        int it_iskleidimas_pilnas, it_nusileidimas_pilnas;
-        int it_iskleidimas_pusiau, it_nusileidimas_pusiau;
-        */
         private void timer1_Tick(object sender, EventArgs e)
         {
             int i = it_pilnas;
@@ -201,18 +208,23 @@ namespace Pvz1
             z2a.Points.AddXY(t_step_pilnas[i], v_step_pilnas[i]);
             if (i == 0)
             {
+                richTextBox1.AppendText(string.Format("(step)     Iššokta iš lėktuvo, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", h_step_pilnas[0], t_step_pilnas[0], v_step_pilnas[0]));
                 p1a.Points.AddXY(t_step_pilnas[0], h_step_pilnas[0]);
                 p1b.Points.AddXY(t_step_pilnas[0], v_step_pilnas[0]);
             }
             else if (i == it_iskleidimas_pilnas)
             {
+                richTextBox1.AppendText(string.Format("(step)     Išskleistas parašiutas, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", h_step_pilnas[i], t_step_pilnas[i], v_step_pilnas[i]));
                 p2a.Points.AddXY(t_step_pilnas[i], h_step_pilnas[i]);
                 p2b.Points.AddXY(t_step_pilnas[i], v_step_pilnas[i]);
             }
             else if (i == it_nusileidimas_pilnas)
             {
+                richTextBox1.AppendText(string.Format("(step)     Nusileidimas ant žemės, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", h_step_pilnas[i], t_step_pilnas[i], v_step_pilnas[i]));
                 p3a.Points.AddXY(t_step_pilnas[i], h_step_pilnas[i]);
-                p3b.Points.AddXY(t_step_pilnas[i], v_step_pilnas[i]); 
+                p3b.Points.AddXY(t_step_pilnas[i], v_step_pilnas[i]);
+                if (uzbaigta) richTextBox1.AppendText(line + "\n");
+                uzbaigta = true;
                 timer1.Stop();
             }
             it_pilnas++;
@@ -224,18 +236,23 @@ namespace Pvz1
             z2b.Points.AddXY(t_step_pusiau[i], v_step_pusiau[i]);
             if (i == 0)
             {
+                richTextBox1.AppendText(string.Format("(step)/2   Iššokta iš lėktuvo, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", h_step_pusiau[0], t_step_pusiau[0], v_step_pusiau[0]));
                 p1a.Points.AddXY(t_step_pusiau[0], h_step_pusiau[0]);
                 p1b.Points.AddXY(t_step_pusiau[0], v_step_pusiau[0]);
             }
             else if (i == it_iskleidimas_pusiau)
             {
+                richTextBox1.AppendText(string.Format("(step)/2   Išskleistas parašiutas, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", h_step_pusiau[i], t_step_pusiau[i], v_step_pusiau[i]));
                 p2a.Points.AddXY(t_step_pusiau[i], h_step_pusiau[i]);
                 p2b.Points.AddXY(t_step_pusiau[i], v_step_pusiau[i]);
             }
             else if (i == it_nusileidimas_pusiau)
             {
+                richTextBox1.AppendText(string.Format("(step)/2   Nusileidimas ant žemės, aukštis: {0, 0:F3}m, laikas nuo iššokimo: {1, 0:F3}s, greitis: {2, 0:F3}m/s\n", h_step_pusiau[i], t_step_pusiau[i], v_step_pusiau[i]));
                 p3a.Points.AddXY(t_step_pusiau[i], h_step_pusiau[i]);
                 p3b.Points.AddXY(t_step_pusiau[i], v_step_pusiau[i]);
+                if(uzbaigta) richTextBox1.AppendText(line + "\n");
+                uzbaigta = true;
                 timer2.Stop();
             }
             it_pusiau++;

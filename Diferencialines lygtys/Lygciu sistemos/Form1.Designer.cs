@@ -57,12 +57,13 @@ namespace Pvz1
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // chart1
@@ -81,7 +82,7 @@ namespace Pvz1
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.richTextBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
             this.richTextBox1.Location = new System.Drawing.Point(16, 508);
@@ -106,6 +107,9 @@ namespace Pvz1
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // timer2
+            // 
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
             // button2
@@ -158,7 +162,7 @@ namespace Pvz1
             // 
             this.groupBox2.Controls.Add(this.radioButton2);
             this.groupBox2.Controls.Add(this.radioButton1);
-            this.groupBox2.Location = new System.Drawing.Point(922, 236);
+            this.groupBox2.Location = new System.Drawing.Point(922, 207);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(208, 86);
             this.groupBox2.TabIndex = 18;
@@ -182,7 +186,7 @@ namespace Pvz1
             // 
             this.groupBox1.Controls.Add(this.radioButton3);
             this.groupBox1.Controls.Add(this.radioButton4);
-            this.groupBox1.Location = new System.Drawing.Point(922, 125);
+            this.groupBox1.Location = new System.Drawing.Point(922, 96);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(208, 86);
             this.groupBox1.TabIndex = 19;
@@ -212,39 +216,36 @@ namespace Pvz1
             this.radioButton4.Text = "IV eilės Rungės ir Kutos";
             this.radioButton4.CheckedChanged += new System.EventHandler(this.button2_Click);
             // 
-            // numericUpDown1
+            // listBox1
             // 
-            this.numericUpDown1.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.numericUpDown1.Location = new System.Drawing.Point(993, 97);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            34,
-            0,
-            0,
-            131072});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 22);
-            this.numericUpDown1.TabIndex = 25;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            15,
-            0,
-            0,
-            131072});
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 16;
+            this.listBox1.Items.AddRange(new object[] {
+            "0.05",
+            "0.1",
+            "0.15",
+            "0.2"});
+            this.listBox1.Location = new System.Drawing.Point(7, 21);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(60, 68);
+            this.listBox1.TabIndex = 25;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.listBox1);
+            this.groupBox3.Location = new System.Drawing.Point(922, 308);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(208, 115);
+            this.groupBox3.TabIndex = 19;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Žingsnis";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1140, 727);
-            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.chart2);
             this.Controls.Add(this.groupBox2);
@@ -260,7 +261,7 @@ namespace Pvz1
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
             this.groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -320,7 +321,8 @@ namespace Pvz1
         private GroupBox groupBox1;
         private RadioButton radioButton3;
         private RadioButton radioButton4;
-        private NumericUpDown numericUpDown1;
+        private ListBox listBox1;
+        private GroupBox groupBox3;
     }
 
 
