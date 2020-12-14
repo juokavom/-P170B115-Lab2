@@ -67,9 +67,9 @@ namespace Pvz1
                     it_iskleidimas = i;
                 }
                 //---
-                h -= step * v;
                 if (radioButton3.Checked) v = Eulerio(v, step, k);
                 else if (radioButton4.Checked) v = RK(v, step, k);
+                h -= step * v;
                 t += step;
                 //---
                 if (h > 0)
@@ -97,6 +97,7 @@ namespace Pvz1
             for (int i = 0; i < it_size; i++)
             {
                 suma += (v_step_pilnas[i] - v_step_pusiau[i * 2]);
+                System.Diagnostics.Debug.WriteLine(string.Format("reiksme = {2}, (t) = pilnas: {0}, pusiau: {1}\n", t_step_pilnas[i], t_step_pusiau[i*2], suma));
             }
             return Math.Abs(suma / it_size);
         }

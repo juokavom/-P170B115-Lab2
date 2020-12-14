@@ -1,0 +1,16 @@
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\bin\Debug\Data\PER_2008.txt
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\bin\Debug\Data\X.txt
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\bin\Debug\Data\Y.txt
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\bin\Debug\Pvz1.exe.config
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\bin\Debug\Pvz1.exe
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\bin\Debug\Pvz1.pdb
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\bin\Debug\MathNet.Numerics.dll
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\bin\Debug\MathNet.Numerics.xml
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\obj\Debug\Figuros.csprojAssemblyReference.cache
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\obj\Debug\Pvz1.Form1.resources
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\obj\Debug\Pvz1.Properties.Resources.resources
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\obj\Debug\Figuros.csproj.GenerateResource.cache
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\obj\Debug\Figuros.csproj.CoreCompileInputs.cache
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\obj\Debug\Figuros.csproj.CopyComplete
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\obj\Debug\Pvz1.exe
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Egzaminui. Figuros\Lygciu sistemos\obj\Debug\Pvz1.pdb
