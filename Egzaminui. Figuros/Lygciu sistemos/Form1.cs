@@ -12,8 +12,8 @@ namespace Pvz1
 {
     public partial class Form1 : Form
     {
-        int X_max = 9;
-        int Y_max = 9;
+        int X_max = 110;
+        int Y_max = 110;
         int X_min = 0;
         int Y_min = 0;
         private class Cell
@@ -37,6 +37,63 @@ namespace Pvz1
                 Visited = true;
                 return true;
             }
+        }
+        private class Figure
+        {
+            public double[] O { get; set; }
+            public double[,] XY { get; set; }
+            public double R { get; set; }
+            public int N { get; set; }
+            public double Angle { get; set; }
+
+            public Figure(double xmin, double xmax, double ymin, double ymax)
+            {
+                O = new double[2];
+                Random rnd = new Random();
+                double d = xmax - xmin;
+                O[0] = xmin + d / 2;
+                O[1] = ymin + d / 2;
+                R = d * 0.9 / 2;
+               // N = rnd.Next(3, 8);
+                N = 5;
+                XY = new double[N, 2];
+                Angle = 0;
+                CalculateXY();
+            }
+
+            public void CalculateXY()
+            {
+                for (int i = 0; i < N; i++)
+                {
+                    XY[i, 0] = O[0] + Math.Cos(Angle) * R;
+                    XY[i, 1] = O[1] + Math.Sin(Angle) * R;
+                    Angle += 2 * Math.PI / N;
+                }
+            }
+
+            public void Draw(Series z, Series p)
+            {
+                p.Points.AddXY(O[0], O[1]);
+                for (int i = 0; i < N; i++)
+                {
+                    z.Points.AddXY(XY[i, 0], XY[i, 1]);
+                }
+                z.Points.AddXY(XY[0, 0], XY[0, 1]);
+            }
+
+            public bool isInside(double x, double y)
+            {
+                double sum = 0;
+                for (int i = 0; i < N; i++)
+                {
+                    sum += Math.Sqrt(Math.Pow(XY[i, 0] - x, 2) + Math.Pow(XY[i, 1] - y, 2));
+                }
+                System.Diagnostics.Debug.WriteLine(string.Format("sum = {0}, R*N = {1}", sum, R*N));
+
+                if (sum <= R * (N+2) ) return true;
+                return false;
+            }
+
         }
         public Form1()
         {
@@ -170,40 +227,36 @@ namespace Pvz1
             }
             System.Diagnostics.Debug.WriteLine(line);
         }
+        private int[] getFigureLayout(int n)
+        {
+            double value = Math.Sqrt(n);
+            int upper = (int)value + 1;
+            int lower = value < 0.5 ? (int)value : upper;
+            return new int[] { lower, upper };
+        }
         private void button2_Click(object sender, EventArgs e)
         {
             ClearForm1();
             //---
-            PreparareForm(0, 12, 0, 12);
+            PreparareForm(0, 110, 0, 110);
             richTextBox1.AppendText("Paleidimas\n");
             //---
-            /* Cell[,] A = new Cell[X_max + 1, Y_max + 1];
-             //---
-             for (int i = 0; i < A.GetLength(0); i++)
-             {
-                 for (int u = 0; u < A.GetLength(1); u++)
-                 {
-                     A[i, u] = new Cell(true);
-                 }
-             }
-             //---
-             printMatrix(A);
-             int[] start = { 0, 1 };
-             int[] end = { 9, 9 };
-             A[2, 3].Valid = false;
-             A[3, 3].Valid = false;
-             int[][] route = BFS(A, start, end);
-             for (int i = 0; i < route.GetLength(0); i++)
-             {
-                 System.Diagnostics.Debug.WriteLine(route[i][0] + " " + route[i][1]);
-             }
-             printMatrix(A);
-             */
+            Cell[,] A = new Cell[X_max + 1, Y_max + 1];
+            //---
+            for (int i = 0; i < A.GetLength(0); i++)
+            {
+                for (int u = 0; u < A.GetLength(1); u++)
+                {
+                    A[i, u] = new Cell(true);
+                }
+            }
+            //---
+            //---
             z1 = chart1.Series.Add("Pradine figura");
             z1.ChartType = SeriesChartType.Line;
             z1.Color = Color.Blue;
             //---
-            z2 = chart1.Series.Add("Pasukta figura");
+            z2 = chart1.Series.Add("Maršrutas");
             z2.ChartType = SeriesChartType.Line;
             z2.Color = Color.Red;
             //---
@@ -214,29 +267,36 @@ namespace Pvz1
             z1.BorderWidth = 1;
             p1.BorderWidth = 3;
 
-            double[] O = { 5, 5 };
-            double r = 4;
-            double n = 5;
-            double angle = 0;
+            //int N = 7;
+            //int[] Layout = getFigureLayout(N);
 
-            p1.Points.AddXY(O[0], O[1]);
-            for (int i = 0; i < n+1; i++)
+            Figure f = new Figure(10, 90, 10, 90);
+            f.Draw(z1, p1);
+
+            int[] start = { 0, 0 };
+            int[] end = { 99, 99 };
+
+            printMatrix(A);
+
+            for (int i = 0; i < A.GetLength(0); i++)
             {
-                double x = O[0] + Math.Cos(angle) * r;
-                double y = O[1] + Math.Sin(angle) * r;
-                z1.Points.AddXY(x, y);
-                angle += 2 * Math.PI / n;
-            }
-            angle = Math.PI/6;
-            for (int i = 0; i < n+1; i++)
-            {
-                double x = O[0] + Math.Cos(angle) * r;
-                double y = O[1] + Math.Sin(angle) * r;
-                z2.Points.AddXY(x, y);
-                angle += 2 * Math.PI / n;
+                for (int u = 0; u < A.GetLength(1); u++)
+                {
+                    if (f.isInside(i, u))
+                    {
+                        A[i, u].Valid = false;
+                        A[i, u].Symbol = 'Q';
+                    }
+                }
             }
 
-            
+            int[][] route = BFS(A, start, end);
+            for (int i = 0; i < route.GetLength(0); i++)
+            {
+                System.Diagnostics.Debug.WriteLine(route[i][0] + " " + route[i][1]);
+                z2.Points.AddXY(route[i][0], route[i][1]);
+            }
+            printMatrix(A);
             //---
         }
 
