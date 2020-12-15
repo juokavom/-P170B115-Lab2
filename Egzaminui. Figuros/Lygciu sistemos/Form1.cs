@@ -103,6 +103,46 @@ namespace Pvz1
                         visited[endIndex++] = new int[] { x, y + 1 };
                     }
                 }
+                if (x > X_min && x <= X_max && y > Y_min && y <= Y_max)
+                {
+                    // # # #
+                    // # o #
+                    // x # #
+                    if (A[x - 1, y - 1].Visit(visited[currentIndex]))
+                    {
+                        visited[endIndex++] = new int[] { x - 1, y - 1 };
+                    }
+                }
+                if (x > X_min && x <= X_max && y < Y_max && y >= Y_min)
+                {
+                    // x # #
+                    // # o #
+                    // # # #
+                    if (A[x - 1, y + 1].Visit(visited[currentIndex]))
+                    {
+                        visited[endIndex++] = new int[] { x - 1, y + 1 };
+                    }
+                }
+                if (x < X_max && x >= X_min && y > Y_min && y <= Y_max)
+                {
+                    // # # #
+                    // # o #
+                    // # # x
+                    if (A[x + 1, y - 1].Visit(visited[currentIndex]))
+                    {
+                        visited[endIndex++] = new int[] { x + 1, y - 1 };
+                    }
+                }
+                if (x < X_max && x >= X_min && y < Y_max && y >= Y_min)
+                {
+                    // # # x
+                    // # o #
+                    // # # #
+                    if (A[x + 1, y + 1].Visit(visited[currentIndex]))
+                    {
+                        visited[endIndex++] = new int[] { x + 1, y + 1};
+                    }
+                }
                 for (int i = 0; i < currentIndex; i++)
                 {
                     System.Diagnostics.Debug.Write("|" + visited[i][0] + "," + visited[i][1]);
