@@ -45,7 +45,7 @@ namespace Pvz1
         }
 
         //Series z1, p1;
-        private void BFS(Cell[,] A)
+        private int[][] BFS(Cell[,] A)
         {
             int[] start = { 0, 3 };
             int[] end = { 4, 0 };
@@ -56,7 +56,6 @@ namespace Pvz1
             visited[0] = start;
             A[0, 3].Visited = true;
             A[0, 3].Parent = new int[] { -1, -1 };
-            System.Diagnostics.Debug.WriteLine(visited.GetLength(0));
 
             while (true)
             {
@@ -140,26 +139,22 @@ namespace Pvz1
                     // # # #
                     if (A[x + 1, y + 1].Visit(visited[currentIndex]))
                     {
-                        visited[endIndex++] = new int[] { x + 1, y + 1};
+                        visited[endIndex++] = new int[] { x + 1, y + 1 };
                     }
                 }
-                for (int i = 0; i < currentIndex; i++)
-                {
-                    System.Diagnostics.Debug.Write("|" + visited[i][0] + "," + visited[i][1]);
-                }
-                System.Diagnostics.Debug.WriteLine("|");
                 if (currentIndex < visited.GetLength(0)) currentIndex++;
                 if (A[end[0], end[1]].Visited) break;
             }
 
-            System.Diagnostics.Debug.WriteLine("Atgaline seka:");
-            System.Diagnostics.Debug.Write(string.Format("|{0};{1}", end[0], end[1]));
+            List<int[]> list = new List<int[]>();
+            list.Add(new int[] { end[0], end[1] });
             for (Cell curr = A[end[0], end[1]]; curr.Parent[0] != -1; curr = A[curr.Parent[0], curr.Parent[1]])
             {
                 curr.Symbol = '-';
-                System.Diagnostics.Debug.Write(string.Format("|{0};{1}", curr.Parent[0], curr.Parent[1]));
+                list.Add(new int[] { curr.Parent[0], curr.Parent[1] });
             }
-            System.Diagnostics.Debug.WriteLine("|");
+            list.Reverse();
+            return list.ToArray();
 
         }
         private void printMatrix(Cell[,] array)
@@ -194,7 +189,11 @@ namespace Pvz1
             }
             //---
             printMatrix(A);
-            BFS(A);
+            int[][] route = BFS(A);
+            for (int i = 0; i < route.GetLength(0); i++)
+            {
+                System.Diagnostics.Debug.WriteLine(route[i][0] + " " + route[i][1]);
+            }
             printMatrix(A);
             /*
             z1 = chart1.Series.Add("Aukštis h (m), žingsnis = step");
