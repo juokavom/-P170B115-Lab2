@@ -60,7 +60,6 @@ namespace Pvz1
             this.chart1.Size = new System.Drawing.Size(1776, 940);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
-            this.chart1.Visible = false;
             // 
             // richTextBox1
             // 

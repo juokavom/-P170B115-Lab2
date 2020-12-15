@@ -44,7 +44,7 @@ namespace Pvz1
             Initialize();
         }
 
-        //Series z1, p1;
+        Series z1, z2, p1;
         private int[][] BFS(Cell[,] A, int[] start, int[] end)
         {
             int currentIndex = 0;
@@ -177,39 +177,66 @@ namespace Pvz1
             PreparareForm(0, 12, 0, 12);
             richTextBox1.AppendText("Paleidimas\n");
             //---
-            Cell[,] A = new Cell[X_max + 1, Y_max + 1];
-            //---
-            for (int i = 0; i < A.GetLength(0); i++)
-            {
-                for (int u = 0; u < A.GetLength(1); u++)
-                {
-                    A[i, u] = new Cell(true);
-                }
-            }
-            //---
-            printMatrix(A);
-            int[] start = { 0, 1 };
-            int[] end = { 9, 9 };
-            A[2, 3].Valid = false;
-            A[3, 3].Valid = false;
-            int[][] route = BFS(A, start, end);
-            for (int i = 0; i < route.GetLength(0); i++)
-            {
-                System.Diagnostics.Debug.WriteLine(route[i][0] + " " + route[i][1]);
-            }
-            printMatrix(A);
-            /*
-            z1 = chart1.Series.Add("Aukštis h (m), žingsnis = step");
+            /* Cell[,] A = new Cell[X_max + 1, Y_max + 1];
+             //---
+             for (int i = 0; i < A.GetLength(0); i++)
+             {
+                 for (int u = 0; u < A.GetLength(1); u++)
+                 {
+                     A[i, u] = new Cell(true);
+                 }
+             }
+             //---
+             printMatrix(A);
+             int[] start = { 0, 1 };
+             int[] end = { 9, 9 };
+             A[2, 3].Valid = false;
+             A[3, 3].Valid = false;
+             int[][] route = BFS(A, start, end);
+             for (int i = 0; i < route.GetLength(0); i++)
+             {
+                 System.Diagnostics.Debug.WriteLine(route[i][0] + " " + route[i][1]);
+             }
+             printMatrix(A);
+             */
+            z1 = chart1.Series.Add("Pradine figura");
             z1.ChartType = SeriesChartType.Line;
             z1.Color = Color.Blue;
             //---
-            p1 = chart1.Series.Add("Iššokimas iš lėktuvo");
+            z2 = chart1.Series.Add("Pasukta figura");
+            z2.ChartType = SeriesChartType.Line;
+            z2.Color = Color.Red;
+            //---
+            p1 = chart1.Series.Add("O");
             p1.ChartType = SeriesChartType.Point;
             p1.Color = Color.Black;
             //---
             z1.BorderWidth = 1;
             p1.BorderWidth = 3;
-            */
+
+            double[] O = { 5, 5 };
+            double r = 4;
+            double n = 5;
+            double angle = 0;
+
+            p1.Points.AddXY(O[0], O[1]);
+            for (int i = 0; i < n+1; i++)
+            {
+                double x = O[0] + Math.Cos(angle) * r;
+                double y = O[1] + Math.Sin(angle) * r;
+                z1.Points.AddXY(x, y);
+                angle += 2 * Math.PI / n;
+            }
+            angle = Math.PI/6;
+            for (int i = 0; i < n+1; i++)
+            {
+                double x = O[0] + Math.Cos(angle) * r;
+                double y = O[1] + Math.Sin(angle) * r;
+                z2.Points.AddXY(x, y);
+                angle += 2 * Math.PI / n;
+            }
+
+            
             //---
         }
 
