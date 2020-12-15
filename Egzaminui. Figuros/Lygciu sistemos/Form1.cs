@@ -12,8 +12,8 @@ namespace Pvz1
 {
     public partial class Form1 : Form
     {
-        int X_max = 4;
-        int Y_max = 4;
+        int X_max = 9;
+        int Y_max = 9;
         int X_min = 0;
         int Y_min = 0;
         private class Cell
@@ -32,7 +32,7 @@ namespace Pvz1
 
             public bool Visit(int[] parent)
             {
-                if (Visited) return false;
+                if (Visited || !Valid) return false;
                 Parent = parent;
                 Visited = true;
                 return true;
@@ -45,17 +45,16 @@ namespace Pvz1
         }
 
         //Series z1, p1;
-        private int[][] BFS(Cell[,] A)
+        private int[][] BFS(Cell[,] A, int[] start, int[] end)
         {
-            int[] start = { 0, 3 };
-            int[] end = { 4, 0 };
             int currentIndex = 0;
             int endIndex = 1;
 
             int[][] visited = new int[A.GetLength(0) * A.GetLength(1)][];
             visited[0] = start;
-            A[0, 3].Visited = true;
-            A[0, 3].Parent = new int[] { -1, -1 };
+            A[start[0], start[1]].Symbol = '-';
+            A[start[0], start[1]].Visited = true;
+            A[start[0], start[1]].Parent = new int[] { -1, -1 };
 
             while (true)
             {
@@ -189,7 +188,11 @@ namespace Pvz1
             }
             //---
             printMatrix(A);
-            int[][] route = BFS(A);
+            int[] start = { 0, 1 };
+            int[] end = { 9, 9 };
+            A[2, 3].Valid = false;
+            A[3, 3].Valid = false;
+            int[][] route = BFS(A, start, end);
             for (int i = 0; i < route.GetLength(0); i++)
             {
                 System.Diagnostics.Debug.WriteLine(route[i][0] + " " + route[i][1]);
