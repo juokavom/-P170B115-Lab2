@@ -1,0 +1,16 @@
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\bin\Debug\Data\PER_2008.txt
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\bin\Debug\Data\X.txt
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\bin\Debug\Data\Y.txt
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\bin\Debug\Pvz1.exe.config
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\bin\Debug\Pvz1.exe
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\bin\Debug\Pvz1.pdb
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\bin\Debug\MathNet.Numerics.dll
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\bin\Debug\MathNet.Numerics.xml
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\obj\Debug\Pvz1.Form1.resources
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\obj\Debug\Pvz1.Properties.Resources.resources
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\obj\Debug\Diferencialines lygtys.csproj.GenerateResource.cache
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\obj\Debug\Diferencialines lygtys.csproj.CoreCompileInputs.cache
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\obj\Debug\Diferencialines lygtys.csproj.CopyComplete
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\obj\Debug\Pvz1.exe
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\obj\Debug\Pvz1.pdb
+C:\Users\Studies\Desktop\Skaitiniai metodai ir algoritmai\repo\LAB2\Diferencialines lygtys\Lygciu sistemos\obj\Debug\Diferencialines lygtys.csprojAssemblyReference.cache

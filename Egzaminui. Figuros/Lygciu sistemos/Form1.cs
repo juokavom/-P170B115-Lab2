@@ -12,10 +12,10 @@ namespace Pvz1
 {
     public partial class Form1 : Form
     {
-        int X_max = 110;
-        int Y_max = 110;
-        int X_min = 0;
-        int Y_min = 0;
+        static int X_max = 110;
+        static int Y_max = 110;
+        static int X_min = 0;
+        static int Y_min = 0;
         private class Cell
         {
             public char Symbol { get; set; }
@@ -45,20 +45,23 @@ namespace Pvz1
             public double R { get; set; }
             public int N { get; set; }
             public double Angle { get; set; }
+            public Cell[,] A { get; set; }
 
-            public Figure(double xmin, double xmax, double ymin, double ymax)
+            public Figure(Cell[,] A, double xmin, double xmax, double ymin, double ymax)
             {
+                this.A = A;
                 O = new double[2];
                 Random rnd = new Random();
                 double d = xmax - xmin;
                 O[0] = xmin + d / 2;
                 O[1] = ymin + d / 2;
                 R = d * 0.9 / 2;
-               // N = rnd.Next(3, 8);
+                // N = rnd.Next(3, 8);
                 N = 5;
                 XY = new double[N, 2];
                 Angle = 0;
                 CalculateXY();
+                shapeMatrix();
             }
 
             public void CalculateXY()
@@ -81,6 +84,33 @@ namespace Pvz1
                 z.Points.AddXY(XY[0, 0], XY[0, 1]);
             }
 
+            public void shapeMatrix()
+            {
+                for (int i = 0; i < N; i++)
+                {
+                    int startX = (int)XY[i, 0];
+                    int startY = (int)XY[i, 1];
+                    int endX;
+                    int endY;
+                    if (i + 1 == N)
+                    {
+                        endX = (int)XY[0, 0];
+                        endY = (int)XY[0, 1];
+                    }
+                    else
+                    {
+                        endX = (int)XY[i + 1, 0];
+                        endY = (int)XY[i + 1, 1];
+                    }
+                    int[][] route = BFS(A, new int[] { startX, startY }, new int[] { endX, endY });
+                    for (int u = 0; i < route.GetLength(0); u++)
+                    {
+                        A[route[i][0], route[i][1]].Valid = false;
+                        A[route[i][0], route[i][1]].Symbol = 'Q';
+                    }
+                }
+            }
+
             public bool isInside(double x, double y)
             {
                 double sum = 0;
@@ -88,9 +118,9 @@ namespace Pvz1
                 {
                     sum += Math.Sqrt(Math.Pow(XY[i, 0] - x, 2) + Math.Pow(XY[i, 1] - y, 2));
                 }
-                System.Diagnostics.Debug.WriteLine(string.Format("sum = {0}, R*N = {1}", sum, R*N));
+                System.Diagnostics.Debug.WriteLine(string.Format("sum = {0}, R*N = {1}", sum, R * N));
 
-                if (sum <= R * (N+2) ) return true;
+                if (sum <= R * (N + 2)) return true;
                 return false;
             }
 
@@ -102,7 +132,7 @@ namespace Pvz1
         }
 
         Series z1, z2, p1;
-        private int[][] BFS(Cell[,] A, int[] start, int[] end)
+        private static int[][] BFS(Cell[,] A, int[] start, int[] end)
         {
             int currentIndex = 0;
             int endIndex = 1;
@@ -270,7 +300,7 @@ namespace Pvz1
             //int N = 7;
             //int[] Layout = getFigureLayout(N);
 
-            Figure f = new Figure(10, 90, 10, 90);
+            Figure f = new Figure(A, 10, 90, 10, 90);
             f.Draw(z1, p1);
 
             int[] start = { 0, 0 };
@@ -278,6 +308,7 @@ namespace Pvz1
 
             printMatrix(A);
 
+            /*
             for (int i = 0; i < A.GetLength(0); i++)
             {
                 for (int u = 0; u < A.GetLength(1); u++)
@@ -289,6 +320,7 @@ namespace Pvz1
                     }
                 }
             }
+            */
 
             int[][] route = BFS(A, start, end);
             for (int i = 0; i < route.GetLength(0); i++)
