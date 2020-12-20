@@ -37,7 +37,6 @@ namespace Pvz1
             public void drawPaths(int[,] B)
             {
                 possiblePaths.ForEach(i => B[i[0], i[1]] = 9);
-                B[X, Y] = Name;
             }            
             public abstract void GeneratePaths();
         }
@@ -115,56 +114,47 @@ namespace Pvz1
 
             public override void GeneratePaths()
             {
-                List<int> list = new List<int>();
-                if (X != 7 && Y != 7) list.Add(9);
-                if (X != 0 && Y != 7) list.Add(7);
-                if (X != 7 && Y != 0) list.Add(3);
-                if (X != 0 && Y != 0) list.Add(1);
-                Random rnd = new Random();
-                int move = rnd.Next(0, list.Count);
-                int x1 = X, y1 = Y;
-                while (A[x1, y1] != 0)
+                possiblePaths = new List<int[]>();
+                if (X != 7 && Y != 7)
                 {
-                    switch (list[move])
+                    int deltaX = 7 - X;
+                    int deltaY = 7 - Y;
+                    int length = (deltaX < deltaY) ? deltaX : deltaY;
+                    for (int i = 1; i <= length; i++)
                     {
-                        case 9:
-                            int deltaX = 7 - X;
-                            int deltaY = 7 - Y;
-                            int length = (deltaX < deltaY) ? deltaX : deltaY;
-                            int step = rnd.Next(1, length);
-                            x1 = X + step;
-                            y1 = Y + step;
-                            break;
-                        case 7:
-                            deltaX = X;
-                            deltaY = 7 - Y;
-                            length = (deltaX < deltaY) ? deltaX : deltaY;
-                            step = rnd.Next(1, length);
-                            x1 = X - step;
-                            y1 = Y + step;
-                            break;
-                        case 3:
-                            deltaX = 7 - X;
-                            deltaY = Y;
-                            length = (deltaX < deltaY) ? deltaX : deltaY;
-                            step = rnd.Next(1, length);
-                            x1 = X + step;
-                            y1 = Y - step;
-                            break;
-                        case 1:
-                            deltaX = X;
-                            deltaY = Y;
-                            length = (deltaX < deltaY) ? deltaX : deltaY;
-                            step = rnd.Next(1, length);
-                            x1 = X - step;
-                            y1 = Y - step;
-                            break;
+                        possiblePaths.Add(new int[] { X + i, Y + i });
                     }
                 }
-                A[X, Y] = 0;
-                X = x1;
-                Y = y1;
-                A[X, Y] = Name;
+                if (X != 0 && Y != 7)
+                {
+                    int deltaX = X;
+                    int deltaY = 7 - Y;
+                    int length = (deltaX < deltaY) ? deltaX : deltaY;
+                    for (int i = 1; i <= length; i++)
+                    {
+                        possiblePaths.Add(new int[] { X - i, Y + i });
+                    }
+                }
+                if (X != 7 && Y != 0)
+                {
+                    int deltaX = 7 - X;
+                    int deltaY = Y;
+                    int length = (deltaX < deltaY) ? deltaX : deltaY;
+                    for (int i = 1; i <= length; i++)
+                    {
+                        possiblePaths.Add(new int[] { X + i, Y - i });
+                    }
+                }
+                if (X != 0 && Y != 0)
+                {
+                    int deltaX = X;
+                    int deltaY = Y;
+                    int length = (deltaX < deltaY) ? deltaX : deltaY;
+                    for (int i = 1; i <= length; i++)
+                    {
+                        possiblePaths.Add(new int[] { X - i, Y - i });
+                    }
+                }
             }
         }
         private class Horse : Figure
@@ -194,28 +184,28 @@ namespace Pvz1
                 possiblePaths = new List<int[]>();
                 if (X != 7)
                 {
-                    for (int x1 = X; x1 <= 7; x1++)
+                    for (int x1 = X+1; x1 <= 7; x1++)
                     {
                         possiblePaths.Add(new int[] { x1, Y });
                     }
                 }
                 if (X != 0)
                 {
-                    for (int x1 = X; x1 >= 0; x1--)
+                    for (int x1 = X-1; x1 >= 0; x1--)
                     {
                         possiblePaths.Add(new int[] { x1, Y });
                     }
                 }
                 if (Y != 7)
                 {
-                    for (int y1 = Y; y1 <= 7; y1++)
+                    for (int y1 = Y+1; y1 <= 7; y1++)
                     {
                         possiblePaths.Add(new int[] { X, y1 });
                     }
                 }
                 if (Y != 0)
                 {
-                    for (int y1 = Y; y1 >= 0; y1--)
+                    for (int y1 = Y-1; y1 >= 0; y1--)
                     {
                         possiblePaths.Add(new int[] { X, y1 });
                     }
@@ -294,7 +284,7 @@ namespace Pvz1
             A[whiteKing.X, whiteKing.Y] = whiteKing.Name;
 
             printMatrix(A);
-            Rook rook = (Rook)blacks[1];
+            Bishop rook = (Bishop)blacks[2];
 
             rook.GeneratePaths();
             for (int i = 0; i < 10; i++)
