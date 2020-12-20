@@ -44,7 +44,57 @@ namespace Pvz1
 
             public override void Move()
             {
-                throw new NotImplementedException();
+                List<int> list = new List<int>();
+                if (X != 7 && Y != 7) list.Add(9);
+                if (X != 0 && Y != 7) list.Add(7);
+                if (X != 7 && Y != 0) list.Add(3);
+                if (X != 0 && Y != 0) list.Add(1);
+                Random rnd = new Random();
+                int move = rnd.Next(0, list.Count);
+                System.Diagnostics.Debug.WriteLine(string.Format("Rnd:{0}, list.Count: {1}, list[rnd]: {2}.", move, list.Count, list[move]));
+                int x1 = X, y1 = Y;
+                while (A[x1, y1] != 0)
+                {
+                    switch (list[move])
+                    {
+                        case 9:
+                            int deltaX = 7 - X;
+                            int deltaY = 7 - Y;
+                            int length = (deltaX < deltaY) ? deltaX : deltaY;
+                            int step = rnd.Next(1, length);
+                            x1 = X + step;
+                            y1 = Y + step;
+                            break;
+                        case 7:
+                            deltaX = X;
+                            deltaY = 7 - Y;
+                            length = (deltaX < deltaY) ? deltaX : deltaY;
+                            step = rnd.Next(1, length);
+                            x1 = X - step;
+                            y1 = Y + step;
+                            break;
+                        case 3:
+                            deltaX = 7 - X;
+                            deltaY = Y;
+                            length = (deltaX < deltaY) ? deltaX : deltaY;
+                            step = rnd.Next(1, length);
+                            x1 = X + step;
+                            y1 = Y - step;
+                            break;
+                        case 1:
+                            deltaX = X;
+                            deltaY = Y;
+                            length = (deltaX < deltaY) ? deltaX : deltaY;
+                            step = rnd.Next(1, length);
+                            x1 = X - step;
+                            y1 = Y - step;
+                            break;
+                    }
+                }
+                A[X, Y] = 0;
+                X = x1;
+                Y = y1;
+                A[X, Y] = Name;
             }
         }
         private class Horse : Figure
@@ -187,7 +237,7 @@ namespace Pvz1
 
             for (int i = 0; i < 10; i++)
             {
-                blacks[1].Move();
+                blacks[2].Move();
                 printMatrix(A);
                 WriteLine("");
             }
