@@ -127,7 +127,15 @@ namespace Pvz1
 
             public override void GeneratePaths()
             {
-                throw new NotImplementedException();
+                possiblePaths = new List<int[]>();
+                if (X < 7 && Y < 6) possiblePaths.Add(new int[] { X + 1, Y + 2 });
+                if (X < 6 && Y < 7) possiblePaths.Add(new int[] { X + 2, Y + 1 });
+                if (X > 0 && Y < 6) possiblePaths.Add(new int[] { X - 1, Y + 2 });
+                if (X > 1 && Y < 7) possiblePaths.Add(new int[] { X - 2, Y + 1 });
+                if (X < 7 && Y > 1) possiblePaths.Add(new int[] { X + 1, Y - 2 });
+                if (X < 6 && Y > 0) possiblePaths.Add(new int[] { X + 2, Y - 1 });
+                if (X > 0 && Y > 1) possiblePaths.Add(new int[] { X - 1, Y - 2 });
+                if (X > 1 && Y > 0) possiblePaths.Add(new int[] { X - 2, Y - 1 });
             }
         }
         private class Rook : Figure
@@ -243,17 +251,17 @@ namespace Pvz1
             A[whiteKing.X, whiteKing.Y] = whiteKing.Name;
 
             printMatrix(A);
-            King rook = (King)blacks[0];
+            int u = 3;
+            blacks[u].GeneratePaths();
 
-            rook.GeneratePaths();
             for (int i = 0; i < 10; i++)
             {
                 WriteLine("");
-                rook.Move();
-                rook.GeneratePaths();
+                blacks[u].Move();
+                blacks[u].GeneratePaths();
 
                 int[,] B = (int[,])A.Clone();
-                rook.drawPaths(B);
+                blacks[u].drawPaths(B);
                 printMatrix(B);
             }
 
