@@ -17,7 +17,9 @@ namespace Pvz1
             public int X;
             public int Y;
             public int Name;
+            public List<int[]> possiblePaths;
             public abstract void Move();
+            //public abstract void GeneratePaths();
         }
         private class King : Figure
         {
@@ -167,42 +169,48 @@ namespace Pvz1
                 Y = y;
                 Name = name;
             }
-            public override void Move()
+            public void GeneratePaths()
             {
-                List<int> list = new List<int>();
-                if (X != 7) list.Add(6);
-                if (X != 0) list.Add(4);
-                if (Y != 7) list.Add(8);
-                if (Y != 0) list.Add(2);
-                Random rnd = new Random();
-                int move = rnd.Next(0, list.Count);
-                int x1 = X, y1 = Y;
-                while (A[x1, y1] != 0)
+                possiblePaths = new List<int[]>();
+                if (X != 7)
                 {
-                    switch (list[move])
+                    for (int x1 = X; x1 <= 7; x1++)
                     {
-                        case 6:
-                            int length = 7 - X;
-                            int step = rnd.Next(1, length);
-                            x1 = X + step;
-                            break;
-                        case 4:
-                            length = X;
-                            step = rnd.Next(1, length);
-                            x1 = X - step;
-                            break;
-                        case 8:
-                            length = 7 - Y;
-                            step = rnd.Next(1, length);
-                            y1 = Y + step;
-                            break;
-                        case 2:
-                            length = Y;
-                            step = rnd.Next(1, length);
-                            y1 = Y - step;
-                            break;
+                        possiblePaths.Add(new int[] { x1, Y });
                     }
                 }
+                if (X != 0)
+                {
+                    for (int x1 = X; x1 >= 0; x1--)
+                    {
+                        possiblePaths.Add(new int[] { x1, Y });
+                    }
+                }
+                if (Y != 7)
+                {
+                    for (int y1 = Y; y1 <= 7; y1++)
+                    {
+                        possiblePaths.Add(new int[] { X, y1 });
+                    }
+                }
+                if (Y != 0)
+                {
+                    for (int y1 = Y; y1 >= 0; y1--)
+                    {
+                        possiblePaths.Add(new int[] { X, y1 });
+                    }
+                }
+            }
+            public override void Move()
+            {
+                Random rnd = new Random();
+                int move, x1, y1;
+                do
+                {
+                    move = rnd.Next(0, possiblePaths.Count - 1);
+                    x1 = possiblePaths[move][0];
+                    y1 = possiblePaths[move][1];
+                } while (A[x1, y1] != 0);
                 A[X, Y] = 0;
                 X = x1;
                 Y = y1;
@@ -275,17 +283,18 @@ namespace Pvz1
             blacks.Add(new Rook(7, 7, 2));
             blacks.Add(new Bishop(5, 7, 3));
             blacks.Add(new Horse(1, 7, 4));
-            blacks.ForEach(figure => A[figure.X, figure.Y] = figure.Name);
+            blacks.ForEach(figure => {A[figure.X, figure.Y] = figure.Name;});
 
             King whiteKing = new King(4, 0, 8);
             A[whiteKing.X, whiteKing.Y] = whiteKing.Name;
 
             printMatrix(A);
-
+            Rook rook = (Rook)blacks[1];
             for (int i = 0; i < 10; i++)
             {
                 WriteLine("");
-                blacks[0].Move();
+                rook.GeneratePaths();
+                rook.Move();
                 printMatrix(A);
             }
 
