@@ -11,18 +11,63 @@ namespace Pvz1
 {
     public partial class Form1 : Form
     {
+        private static int[,] A = new int[8, 8];
         private abstract class Figure
         {
             public int X;
             public int Y;
+            public int Name;
             public abstract void Move();
         }
-        private class Rook : Figure
+        private class King : Figure
         {
-            public Rook(int x, int y)
+            public King(int x, int y, int name)
             {
                 X = x;
                 Y = y;
+                Name = name;
+            }
+
+            public override void Move()
+            {
+                throw new NotImplementedException();
+            }
+        }
+        private class Bishop : Figure
+        {
+            public Bishop(int x, int y, int name)
+            {
+                X = x;
+                Y = y;
+                Name = name;
+            }
+
+            public override void Move()
+            {
+                throw new NotImplementedException();
+            }
+        }
+        private class Horse : Figure
+        {
+            public Horse(int x, int y, int name)
+            {
+                X = x;
+                Y = y;
+                Name = name;
+            }
+
+            public override void Move()
+            {
+                throw new NotImplementedException();
+            }
+        }
+        private class Rook : Figure
+        {
+            public Rook(int x, int y, int name)
+            {
+                X = x;
+                Y = y;
+                Name = name;
             }
             public override void Move()
             {
@@ -34,29 +79,37 @@ namespace Pvz1
                 Random rnd = new Random();
                 int move = rnd.Next(0, list.Count);
                 System.Diagnostics.Debug.WriteLine(string.Format("Rnd:{0}, list.Count: {1}, list[rnd]: {2}.", move, list.Count, list[move]));
-                switch (list[move])
+                int x1 = X, y1 = Y;
+                while (A[x1, y1] != 0)
                 {
-                    case 6:
-                        int length = 7 - X;
-                        int step = rnd.Next(1, length);
-                        X += step;
-                        break;
-                    case 4:
-                        length = X;
-                        step = rnd.Next(1, length);
-                        X -= step;
-                        break;
-                    case 8:
-                        length = 7 - Y;
-                        step = rnd.Next(1, length);
-                        Y += step;
-                        break;
-                    case 2:
-                        length = Y;
-                        step = rnd.Next(1, length);
-                        Y -= step;
-                        break;
+                    switch (list[move])
+                    {
+                        case 6:
+                            int length = 7 - X;
+                            int step = rnd.Next(1, length);
+                            x1 = X + step;
+                            break;
+                        case 4:
+                            length = X;
+                            step = rnd.Next(1, length);
+                            x1 = X - step;
+                            break;
+                        case 8:
+                            length = 7 - Y;
+                            step = rnd.Next(1, length);
+                            y1 = Y + step;
+                            break;
+                        case 2:
+                            length = Y;
+                            step = rnd.Next(1, length);
+                            y1 = Y - step;
+                            break;
+                    }
                 }
+                A[X, Y] = 0;
+                X = x1;
+                Y = y1;
+                A[X, Y] = Name;
             }
         }
         public Form1()
@@ -95,10 +148,10 @@ namespace Pvz1
                 }
             }
 
-        } 
+        }
         private void printMatrix(int[,] A)
         {
-            for (int i = A.GetLength(1) - 1; i >= 0 ; i--)
+            for (int i = A.GetLength(1) - 1; i >= 0; i--)
             {
                 for (int u = 0; u < A.GetLength(0); u++)
                 {
@@ -116,26 +169,25 @@ namespace Pvz1
         {
             Write(text + "\n");
         }
-       
+
         private void Solution()
         {
-            int[,] A = new int[8, 8];
             fillValues(A);
-            Rook rook = new Rook(7, 7);
+            List<Figure> blacks = new List<Figure>();
+            blacks.Add(new King(4, 7, 1));
+            blacks.Add(new Rook(7, 7, 2));
+            blacks.Add(new Bishop(5, 7, 3));
+            blacks.Add(new Horse(1, 7, 4));
+            blacks.ForEach(figure => A[figure.X, figure.Y] = figure.Name);
 
-            A[4, 0] = 8;
-            A[4, 7] = 1;
-            A[5, 7] = 3;
-            A[7, 7] = 2;
-            A[1, 7] = 4;
+            King whiteKing = new King(4, 0, 8);
+            A[whiteKing.X, whiteKing.Y] = whiteKing.Name;
 
             printMatrix(A);
 
             for (int i = 0; i < 10; i++)
             {
-                A[rook.X, rook.Y] = 0;
-                rook.Move();
-                A[rook.X, rook.Y] = 2;
+                blacks[1].Move();
                 printMatrix(A);
                 WriteLine("");
             }
