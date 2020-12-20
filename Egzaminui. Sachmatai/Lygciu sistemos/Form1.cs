@@ -51,56 +51,15 @@ namespace Pvz1
 
             public override void GeneratePaths()
             {
-                List<int> list = new List<int>();
-                if (X != 7 && Y != 7) list.Add(9);
-                if (X != 0 && Y != 7) list.Add(7);
-                if (X != 7 && Y != 0) list.Add(3);
-                if (X != 0 && Y != 0) list.Add(1);
-                if (X != 7) list.Add(6);
-                if (X != 0) list.Add(4);
-                if (Y != 7) list.Add(8);
-                if (Y != 0) list.Add(2);
-                Random rnd = new Random();
-                int move = rnd.Next(0, list.Count);
-                int x1 = X, y1 = Y;
-                while (A[x1, y1] != 0)
-                {
-                    switch (list[move])
-                    {
-                        case 9:
-                            x1 = X + 1;
-                            y1 = Y + 1;
-                            break;
-                        case 7:
-                            x1 = X - 1;
-                            y1 = Y + 1;
-                            break;
-                        case 3:
-                            x1 = X + 1;
-                            y1 = Y - 1;
-                            break;
-                        case 1:
-                            x1 = X - 1;
-                            y1 = Y - 1;
-                            break;
-                        case 6:
-                            x1 = X + 1;
-                            break;
-                        case 4:
-                            x1 = X - 1;
-                            break;
-                        case 8:
-                            y1 = Y + 1;
-                            break;
-                        case 2:
-                            y1 = Y - 1;
-                            break;
-                    }
-                }
-                A[X, Y] = 0;
-                X = x1;
-                Y = y1;
-                A[X, Y] = Name;
+                possiblePaths = new List<int[]>();
+                if (X != 7 && Y != 7) possiblePaths.Add(new int[] { X + 1, Y + 1 });
+                if (X != 0 && Y != 7) possiblePaths.Add(new int[] { X - 1, Y + 1 });
+                if (X != 7 && Y != 0) possiblePaths.Add(new int[] { X + 1, Y - 1 });
+                if (X != 0 && Y != 0) possiblePaths.Add(new int[] { X - 1, Y - 1 });
+                if (X != 7) possiblePaths.Add(new int[] { X + 1, Y });
+                if (X != 0) possiblePaths.Add(new int[] { X - 1, Y });
+                if (Y != 7) possiblePaths.Add(new int[] { X, Y + 1 });
+                if (Y != 0) possiblePaths.Add(new int[] { X, Y - 1 });
             }
         }
         private class Bishop : Figure
@@ -284,7 +243,7 @@ namespace Pvz1
             A[whiteKing.X, whiteKing.Y] = whiteKing.Name;
 
             printMatrix(A);
-            Bishop rook = (Bishop)blacks[2];
+            King rook = (King)blacks[0];
 
             rook.GeneratePaths();
             for (int i = 0; i < 10; i++)
