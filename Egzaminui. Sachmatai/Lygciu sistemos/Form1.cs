@@ -15,7 +15,8 @@ namespace Pvz1
         private static int[,] A = new int[8, 8];
         private static PictureBox[,] pbErr = new PictureBox[8, 8];
         private static List<Figure> blacks;
-       
+        private static List<int[]> PATHS;
+
         private abstract class Figure
         {
             public int X;
@@ -51,14 +52,6 @@ namespace Pvz1
                 Y = y1;
                 A[X, Y] = Name;
                 imageLocation(X, Y, pb);
-            }
-            public void pathVisibility(bool val)
-            {
-                possiblePaths.ForEach(i => pbErr[i[0], i[1]].Visible = val);
-            }
-            public void drawPaths(int[,] B)
-            {
-                possiblePaths.ForEach(i => B[i[0], i[1]] = 9);
             }
             public abstract void GeneratePaths();
         }
@@ -103,7 +96,7 @@ namespace Pvz1
                     int deltaX = 7 - X;
                     int deltaY = 7 - Y;
                     int length = (deltaX < deltaY) ? deltaX : deltaY;
-                    for (int i = 1; i <= length; i++)
+                    for (int i = 0; i <= length; i++)
                     {
                         possiblePaths.Add(new int[] { X + i, Y + i });
                     }
@@ -113,7 +106,7 @@ namespace Pvz1
                     int deltaX = X;
                     int deltaY = 7 - Y;
                     int length = (deltaX < deltaY) ? deltaX : deltaY;
-                    for (int i = 1; i <= length; i++)
+                    for (int i = 0; i <= length; i++)
                     {
                         possiblePaths.Add(new int[] { X - i, Y + i });
                     }
@@ -123,7 +116,7 @@ namespace Pvz1
                     int deltaX = 7 - X;
                     int deltaY = Y;
                     int length = (deltaX < deltaY) ? deltaX : deltaY;
-                    for (int i = 1; i <= length; i++)
+                    for (int i = 0; i <= length; i++)
                     {
                         possiblePaths.Add(new int[] { X + i, Y - i });
                     }
@@ -133,7 +126,7 @@ namespace Pvz1
                     int deltaX = X;
                     int deltaY = Y;
                     int length = (deltaX < deltaY) ? deltaX : deltaY;
-                    for (int i = 1; i <= length; i++)
+                    for (int i = 0; i <= length; i++)
                     {
                         possiblePaths.Add(new int[] { X - i, Y - i });
                     }
@@ -177,28 +170,28 @@ namespace Pvz1
                 possiblePaths = new List<int[]>();
                 if (X != 7)
                 {
-                    for (int x1 = X + 1; x1 <= 7; x1++)
+                    for (int x1 = X; x1 <= 7; x1++)
                     {
                         possiblePaths.Add(new int[] { x1, Y });
                     }
                 }
                 if (X != 0)
                 {
-                    for (int x1 = X - 1; x1 >= 0; x1--)
+                    for (int x1 = X; x1 >= 0; x1--)
                     {
                         possiblePaths.Add(new int[] { x1, Y });
                     }
                 }
                 if (Y != 7)
                 {
-                    for (int y1 = Y + 1; y1 <= 7; y1++)
+                    for (int y1 = Y; y1 <= 7; y1++)
                     {
                         possiblePaths.Add(new int[] { X, y1 });
                     }
                 }
                 if (Y != 0)
                 {
-                    for (int y1 = Y - 1; y1 >= 0; y1--)
+                    for (int y1 = Y; y1 >= 0; y1--)
                     {
                         possiblePaths.Add(new int[] { X, y1 });
                     }
@@ -210,23 +203,61 @@ namespace Pvz1
             InitializeComponent();
             Initialize();
 
-            Solution();
+            DrawModels();
         }
         Series z1, z2, p1;
+
+        public void pathVisibility(bool val, List<int[]> paths)
+        {
+            paths.ForEach(i => pbErr[i[0], i[1]].Visible = val);
+        }
+        public List<int[]> combinePaths()
+        {
+            //possiblePaths.ForEach(i => B[i[0], i[1]] = 9);
+            List<int[]> paths = new List<int[]>();
+
+            blacks[0].possiblePaths.ForEach(i => paths.Add(i));
+            blacks[3].possiblePaths.ForEach(i => paths.Add(i));
+
+            for (int q = 1; q < 3; q++)
+            {
+                bool skip = false;
+                blacks[q].possiblePaths.ForEach(i =>
+                {
+                    if (i[0] == blacks[q].X && i[1] == blacks[q].Y) skip = false;
+                    if (!skip)
+                    {
+                        int sum = 0;
+                        for (int u = 0; u < blacks.Count; u++)
+                        {
+                            if (u == q) continue;
+                            else
+                            {
+                                if (blacks[u].X == i[0] && blacks[u].Y == i[1]) sum++;
+                            }
+                        }
+                        skip = (sum > 0) ? true : false;
+                    }
+                    if (!skip) paths.Add(i);
+                });
+            }
+
+            return paths;
+        }
         private void button2_Click(object sender, EventArgs e)
         {
+            if (checkBox1.Checked) pathVisibility(false, PATHS);
             //---
-            if (checkBox1.Checked) blacks.ForEach(figure => { figure.pathVisibility(false); });
-
             Random rnd = new Random();
             int u = rnd.Next(0, 4);
             WriteLine("");
             blacks[u].Move();
             blacks[u].GeneratePaths();
-
-            int[,] B = (int[,])A.Clone();
-            blacks.ForEach(figure => { A[figure.X, figure.Y] = figure.Name; figure.drawPaths(B);});
-            if (checkBox1.Checked) blacks.ForEach(figure => { figure.pathVisibility(true); });
+            PATHS = combinePaths();
+            //---
+            /*int[,] B = (int[,])A.Clone();
+            blacks.ForEach(figure => { A[figure.X, figure.Y] = figure.Name; figure.combinePaths(B); });*/
+            if (checkBox1.Checked) pathVisibility(true, PATHS);
         }
         private void fillValues(int[,] A)
         {
@@ -260,7 +291,7 @@ namespace Pvz1
             Write(text + "\n");
         }
 
-        private void Solution()
+        private void DrawModels()
         {
             fillValues(A);
             blacks = new List<Figure>();
@@ -269,6 +300,7 @@ namespace Pvz1
             blacks.Add(new Bishop(5, 7, 3, "Data/BB.jpg"));
             blacks.Add(new Horse(1, 7, 4, "Data/BH.jpg"));
             blacks.ForEach(figure => { A[figure.X, figure.Y] = figure.Name; figure.GeneratePaths(); chart1.Controls.Add(figure.pb); });
+            PATHS = combinePaths();
 
             King whiteKing = new King(4, 0, 8, @"Data/WK.jpg");
             chart1.Controls.Add(whiteKing.pb);
@@ -305,7 +337,7 @@ namespace Pvz1
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            blacks.ForEach(figure => { figure.pathVisibility(checkBox1.Checked); });
+            pathVisibility(checkBox1.Checked, PATHS);
         }
 
         private void button4_Click(object sender, EventArgs e)
