@@ -19,6 +19,7 @@ namespace Pvz1
         private static King whiteKing;
         private static List<int[]> whiteKingPaths;
         private static List<int[]> PATHS;
+        bool ab = false, cd = false;
 
         private abstract class Figure
         {
@@ -233,7 +234,9 @@ namespace Pvz1
             InitializeComponent();
             Initialize();
 
-            //InitModels();
+            button2.Enabled = false;
+            button3.Enabled = false;
+            checkBox1.Enabled = false;
         }
         public void pathVisibility(bool val, List<int[]> paths)
         {
@@ -484,6 +487,28 @@ namespace Pvz1
             richTextBox1.Clear();
             InitModels();
             button2.Enabled = true;
+            pathVisibility(checkBox1.Checked, PATHS);
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+            ab = true;
+            enableButtons();
+        }
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+            cd = true;
+            enableButtons();
+        }
+        private void enableButtons()
+        {
+            if (ab && cd)
+            {
+                button2.Enabled = true;
+                button3.Enabled = true;
+                checkBox1.Enabled = true;
+                InitModels();
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
