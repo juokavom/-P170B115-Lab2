@@ -15,6 +15,8 @@ namespace Pvz1
         private static int[,] A = new int[8, 8];
         private static PictureBox[,] pbErr = new PictureBox[8, 8];
         private static List<Figure> blacks;
+        private static King whiteKing;
+        private static List<int[]> whiteKingPaths;
         private static List<int[]> PATHS;
 
         private abstract class Figure
@@ -76,6 +78,18 @@ namespace Pvz1
                 if (X != 0) possiblePaths.Add(new int[] { X - 1, Y });
                 if (Y != 7) possiblePaths.Add(new int[] { X, Y + 1 });
                 if (Y != 0) possiblePaths.Add(new int[] { X, Y - 1 });
+            }
+            public void GeneratePathsWithDIrection()
+            {
+                possiblePaths = new List<int[]>();
+                if (X != 7 && Y != 7) possiblePaths.Add(new int[] { X + 1, Y + 1, 9 });
+                if (X != 0 && Y != 7) possiblePaths.Add(new int[] { X - 1, Y + 1, 7 });
+                if (X != 7 && Y != 0) possiblePaths.Add(new int[] { X + 1, Y - 1, 3 });
+                if (X != 0 && Y != 0) possiblePaths.Add(new int[] { X - 1, Y - 1, 1 });
+                if (X != 7) possiblePaths.Add(new int[] { X + 1, Y, 6 });
+                if (X != 0) possiblePaths.Add(new int[] { X - 1, Y, 4 });
+                if (Y != 7) possiblePaths.Add(new int[] { X, Y + 1, 8 });
+                if (Y != 0) possiblePaths.Add(new int[] { X, Y - 1, 2 });
             }
         }
         private class Bishop : Figure
@@ -203,17 +217,14 @@ namespace Pvz1
             InitializeComponent();
             Initialize();
 
-            DrawModels();
+            InitModels();
         }
-        Series z1, z2, p1;
-
         public void pathVisibility(bool val, List<int[]> paths)
         {
             paths.ForEach(i => pbErr[i[0], i[1]].Visible = val);
         }
         public List<int[]> combinePaths()
         {
-            //possiblePaths.ForEach(i => B[i[0], i[1]] = 9);
             List<int[]> paths = new List<int[]>();
 
             blacks[0].possiblePaths.ForEach(i => paths.Add(i));
@@ -244,20 +255,66 @@ namespace Pvz1
 
             return paths;
         }
+        private void findWhiteKingPaths()
+        {
+            whiteKing.GeneratePathsWithDIrection();
+            whiteKingPaths = new List<int[]>();
+            whiteKing.possiblePaths.ForEach(i =>
+            {
+                bool contains = false;
+                PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) contains = true; });
+                if (!contains)
+                {
+                    whiteKingPaths.Add(i);
+                }
+            });
+            //---
+            whiteKingPaths.ForEach(i => richTextBox1.AppendText(string.Format("Possible: {0} {1}, direction: {2}\n", i[0], i[1], i[2])));
+            richTextBox1.AppendText("\n");
+        } 
+        private bool whiteKingMove()
+        {
+            int selectedPath = 0;
+            bool left = (whiteKing.X > 3) ? true : false;
+            whiteKingPaths.ForEach(i => { if (i[2] == 8) selectedPath = i[2]; }); // Jei i virsu
+            if(selectedPath == 0 && left) whiteKingPaths.ForEach(i => { if (i[2] == 7) selectedPath = i[2]; }); //Jei i virsu ir kaire
+            if(selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 9) selectedPath = i[2]; }); //Jei i virsu ir desine
+            if(selectedPath == 0 && left) whiteKingPaths.ForEach(i => { if (i[2] == 4) selectedPath = i[2]; }); //Jei i kaire
+            if(selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 6) selectedPath = i[2]; }); //Jei i desine
+            if(selectedPath == 0 && left) whiteKingPaths.ForEach(i => { if (i[2] == 1) selectedPath = i[2]; }); //Jei zemyn ir i kaire
+            if(selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 3) selectedPath = i[2]; }); //Jei zemyn ir i desine
+            if(selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 2) selectedPath = i[2]; }); //Jei zemyn
+            //---
+            if (selectedPath == 0) return false;
+            //---
+            richTextBox1.AppendText(string.Format("Selected path: {0}\n", selectedPath));
+            richTextBox1.AppendText("\n");
+            //---
+            A[whiteKing.X, whiteKing.Y] = 0;
+            int[] nextPoint = whiteKingPaths.Find(i => i[2] == selectedPath);
+            whiteKing.X = nextPoint[0];
+            whiteKing.Y = nextPoint[1];
+            A[whiteKing.X, whiteKing.Y] = whiteKing.Name;
+            Figure.imageLocation(whiteKing.X, whiteKing.Y, whiteKing.pb);
+            //---
+            return true;
+        }
         private void button2_Click(object sender, EventArgs e)
         {
+            bool moved = whiteKingMove();
+            if (!moved) richTextBox1.AppendText("Nueiti neimanoma\n");
+            else if (whiteKing.Y == 7) richTextBox1.AppendText("Sekmingai nueita\n");
+            //---
             if (checkBox1.Checked) pathVisibility(false, PATHS);
             //---
             Random rnd = new Random();
             int u = rnd.Next(0, 4);
-            WriteLine("");
             blacks[u].Move();
             blacks[u].GeneratePaths();
             PATHS = combinePaths();
             //---
-            /*int[,] B = (int[,])A.Clone();
-            blacks.ForEach(figure => { A[figure.X, figure.Y] = figure.Name; figure.combinePaths(B); });*/
             if (checkBox1.Checked) pathVisibility(true, PATHS);
+            findWhiteKingPaths();
         }
         private void fillValues(int[,] A)
         {
@@ -290,8 +347,7 @@ namespace Pvz1
         {
             Write(text + "\n");
         }
-
-        private void DrawModels()
+        private void InitModels()
         {
             fillValues(A);
             blacks = new List<Figure>();
@@ -302,7 +358,7 @@ namespace Pvz1
             blacks.ForEach(figure => { A[figure.X, figure.Y] = figure.Name; figure.GeneratePaths(); chart1.Controls.Add(figure.pb); });
             PATHS = combinePaths();
 
-            King whiteKing = new King(4, 0, 8, @"Data/WK.jpg");
+            whiteKing = new King(4, 0, 8, @"Data/WK.jpg");
             chart1.Controls.Add(whiteKing.pb);
             A[whiteKing.X, whiteKing.Y] = whiteKing.Name;
 
@@ -329,17 +385,16 @@ namespace Pvz1
             pb.BackColor = Color.Transparent;
             chart1.Controls.Add(pb);
 
+            findWhiteKingPaths();
         }
         private void button1_Click(object sender, EventArgs e)
         {
             Close();
         }
-
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             pathVisibility(checkBox1.Checked, PATHS);
         }
-
         private void button4_Click(object sender, EventArgs e)
         {
             ClearForm1();
