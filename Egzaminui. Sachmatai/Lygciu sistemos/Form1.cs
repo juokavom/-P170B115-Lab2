@@ -1,6 +1,6 @@
 ﻿//Jokubas Akramas IFF-8/12 7 var.
 //P170B115 Skaitiniai metodai ir algoritmai (6 kr.)
-//Egzamino užduotis
+//Egzamino užduotis. Šachmatai.
 
 using System;
 using System.Collections.Generic;
@@ -380,7 +380,6 @@ namespace Pvz1
 
                             paths.Add(i);
                         }
-                        //if (!skip) paths.Add(i);
                     });
                 }
             }
@@ -536,9 +535,7 @@ namespace Pvz1
             {
                 if (B[i, 7].Valid)
                 {
-
                     Cell[,] C = (Cell[,])B.Clone();
-                    Array.Copy(B, C, B.Length);
                     bool sucess;
                     List<int[]> lst = BFS(C, new int[] { whiteKing.X, whiteKing.Y }, new int[] { i, 7 }, out sucess);
                     if (sucess) lists.Add(lst);
@@ -559,8 +556,8 @@ namespace Pvz1
                 {
                     B[i, u] = new Cell(true);
                     bool condition = false;
-                    if (radioButton2.Checked) PATHS.ForEach(q => { if (q[0] == i && q[1] == u) condition = true; });
-                    else if (radioButton1.Checked) PATHS.ForEach(q => { if (q[0] == i && q[1] == u) { if (A[i, u] == 1 || q[2] == 1) condition = true; }; });
+                    if (radioButton2.Checked) PATHS.ForEach(q => { if (q[0] == i && q[1] == u) condition = true; }); //d) Nekerta juodu
+                    else if (radioButton1.Checked) PATHS.ForEach(q => { if (q[0] == i && q[1] == u) { if (A[i, u] == 1 || q[2] == 1) condition = true; }; }); //c) Kerta juodus, iskyrus karaliu
                     if (condition)
                     {
                         B[i, u].Valid = false; B[i, u].Symbol = 'o';
@@ -568,20 +565,6 @@ namespace Pvz1
                 }
             }
             return B;
-        }
-        private void printMatrix(Cell[,] array)
-        {
-            string line = new string('-', array.GetLength(0) * 2 - 1);
-            System.Diagnostics.Debug.WriteLine(line);
-            for (int y = array.GetLength(1) - 1; y >= 0; y--)
-            {
-                for (int x = 0; x < array.GetLength(0); x++)
-                {
-                    System.Diagnostics.Debug.Write(string.Format("{0} ", array[x, y].Symbol));
-                }
-                System.Diagnostics.Debug.WriteLine("");
-            }
-            System.Diagnostics.Debug.WriteLine(line);
         }
         private bool whiteKingMove()
         {
@@ -656,12 +639,12 @@ namespace Pvz1
             //---
             return true;
         }
+
+        //KITI METODAi
         public void pathVisibility(bool val, List<int[]> paths)
         {
             paths.ForEach(i => pbErr[i[0], i[1]].Visible = val);
         }
-
-        //KITI METODAi
         private void fillValues(int[,] A)
         {
             for (int i = 0; i < A.GetLength(0); i++)
@@ -684,6 +667,20 @@ namespace Pvz1
                 WriteLine("");
             }
 
+        }
+        private void printMatrix(Cell[,] array)
+        {
+            string line = new string('-', array.GetLength(0) * 2 - 1);
+            System.Diagnostics.Debug.WriteLine(line);
+            for (int y = array.GetLength(1) - 1; y >= 0; y--)
+            {
+                for (int x = 0; x < array.GetLength(0); x++)
+                {
+                    System.Diagnostics.Debug.Write(string.Format("{0} ", array[x, y].Symbol));
+                }
+                System.Diagnostics.Debug.WriteLine("");
+            }
+            System.Diagnostics.Debug.WriteLine(line);
         }
         private void Write(string text)
         {
