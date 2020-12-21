@@ -227,10 +227,10 @@ namespace Pvz1
         {
             List<int[]> paths = new List<int[]>();
 
-            blacks[0].possiblePaths.ForEach(i => paths.Add(i));
-            blacks[3].possiblePaths.ForEach(i => paths.Add(i));
+            //blacks[0].possiblePaths.ForEach(i => paths.Add(i));
+            //blacks[3].possiblePaths.ForEach(i => paths.Add(i));
 
-            for (int q = 1; q < 3; q++)
+            for (int q = 0; q < 4; q++)
             {
                 bool skip = false;
                 blacks[q].possiblePaths.ForEach(i =>
@@ -262,7 +262,8 @@ namespace Pvz1
             whiteKing.possiblePaths.ForEach(i =>
             {
                 bool contains = false;
-                PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) contains = true; });
+                PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) contains = true; }); //Nekerta juodu
+                //PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1] && A[i[0], i[1]] != 1) contains = true; }); //Kerta juodus, iskyrus karaliu
                 if (!contains)
                 {
                     whiteKingPaths.Add(i);
@@ -271,19 +272,19 @@ namespace Pvz1
             //---
             whiteKingPaths.ForEach(i => richTextBox1.AppendText(string.Format("Possible: {0} {1}, direction: {2}\n", i[0], i[1], i[2])));
             richTextBox1.AppendText("\n");
-        } 
+        }
         private bool whiteKingMove()
         {
             int selectedPath = 0;
             bool left = (whiteKing.X > 3) ? true : false;
             whiteKingPaths.ForEach(i => { if (i[2] == 8) selectedPath = i[2]; }); // Jei i virsu
-            if(selectedPath == 0 && left) whiteKingPaths.ForEach(i => { if (i[2] == 7) selectedPath = i[2]; }); //Jei i virsu ir kaire
-            if(selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 9) selectedPath = i[2]; }); //Jei i virsu ir desine
-            if(selectedPath == 0 && left) whiteKingPaths.ForEach(i => { if (i[2] == 4) selectedPath = i[2]; }); //Jei i kaire
-            if(selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 6) selectedPath = i[2]; }); //Jei i desine
-            if(selectedPath == 0 && left) whiteKingPaths.ForEach(i => { if (i[2] == 1) selectedPath = i[2]; }); //Jei zemyn ir i kaire
-            if(selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 3) selectedPath = i[2]; }); //Jei zemyn ir i desine
-            if(selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 2) selectedPath = i[2]; }); //Jei zemyn
+            if (selectedPath == 0 && left) whiteKingPaths.ForEach(i => { if (i[2] == 7) selectedPath = i[2]; }); //Jei i virsu ir kaire
+            if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 9) selectedPath = i[2]; }); //Jei i virsu ir desine
+            if (selectedPath == 0 && left) whiteKingPaths.ForEach(i => { if (i[2] == 4) selectedPath = i[2]; }); //Jei i kaire
+            if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 6) selectedPath = i[2]; }); //Jei i desine
+            if (selectedPath == 0 && left) whiteKingPaths.ForEach(i => { if (i[2] == 1) selectedPath = i[2]; }); //Jei zemyn ir i kaire
+            if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 3) selectedPath = i[2]; }); //Jei zemyn ir i desine
+            if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 2) selectedPath = i[2]; }); //Jei zemyn
             //---
             if (selectedPath == 0) return false;
             //---
@@ -302,8 +303,10 @@ namespace Pvz1
         private void button2_Click(object sender, EventArgs e)
         {
             bool moved = whiteKingMove();
-            if (!moved) richTextBox1.AppendText("Nueiti neimanoma\n");
-            else if (whiteKing.Y == 7) richTextBox1.AppendText("Sekmingai nueita\n");
+            button2.Enabled = false;
+            if (!moved) { richTextBox1.AppendText("Nueiti neimanoma\n"); return; }
+            else if (whiteKing.Y == 7) { richTextBox1.AppendText("Sekmingai nueita\n"); return; }
+            else button2.Enabled = true;
             //---
             if (checkBox1.Checked) pathVisibility(false, PATHS);
             //---
