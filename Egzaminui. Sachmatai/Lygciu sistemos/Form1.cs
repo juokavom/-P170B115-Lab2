@@ -76,6 +76,7 @@ namespace Pvz1
             public override void GeneratePaths()
             {
                 possiblePaths = new List<int[]>();
+                possiblePaths.Add(new int[] { X, Y, 0 });
                 if (X != 7 && Y != 7) possiblePaths.Add(new int[] { X + 1, Y + 1, 1 });
                 if (X != 0 && Y != 7) possiblePaths.Add(new int[] { X - 1, Y + 1, 1 });
                 if (X != 7 && Y != 0) possiblePaths.Add(new int[] { X + 1, Y - 1, 1 });
@@ -170,6 +171,7 @@ namespace Pvz1
             public override void GeneratePaths()
             {
                 possiblePaths = new List<int[]>();
+                possiblePaths.Add(new int[] { X, Y, 0 });
                 if (X < 7 && Y < 6) possiblePaths.Add(new int[] { X + 1, Y + 2, 1 });
                 if (X < 6 && Y < 7) possiblePaths.Add(new int[] { X + 2, Y + 1, 1 });
                 if (X > 0 && Y < 6) possiblePaths.Add(new int[] { X - 1, Y + 2, 1 });
@@ -231,7 +233,7 @@ namespace Pvz1
             InitializeComponent();
             Initialize();
 
-            InitModels();
+            //InitModels();
         }
         public void pathVisibility(bool val, List<int[]> paths)
         {
@@ -275,10 +277,9 @@ namespace Pvz1
             whiteKingPaths = new List<int[]>();
             whiteKing.possiblePaths.ForEach(i =>
             {
-                int count = 0;
                 bool contains = false;
-                if(radioButton2.Checked) PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) contains = true; }); //Nekerta juodu
-                else if (radioButton1.Checked) PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) { count++; if (A[i[0], i[1]] == 1 || q[2] == 1) contains = true; }; }); //Kerta juodus, iskyrus karaliu
+                if (radioButton2.Checked) PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) contains = true; }); //Nekerta juodu
+                else if (radioButton1.Checked) PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) { if (A[i[0], i[1]] == 1 || q[2] == 1) contains = true; }; }); //Kerta juodus, iskyrus karaliu
                 if (!contains)
                 {
                     whiteKingPaths.Add(i);
@@ -404,11 +405,34 @@ namespace Pvz1
             A = new int[8, 8];
             pbErr = new PictureBox[8, 8];
             fillValues(A);
+            Random rnd = new Random();
+            List<int[]> pos = new List<int[]>();
+            if (radioButton4.Checked)
+            {
+                pos.Add(new int[] { 4, 7 });
+                pos.Add(new int[] { 7, 7 });
+                pos.Add(new int[] { 5, 7 });
+                pos.Add(new int[] { 1, 7 });
+            }
+            if (radioButton3.Checked)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    int x, y;
+                    do
+                    {
+                        x = rnd.Next(0, 8);
+                        y = rnd.Next(0, 8);
+                    } while (pos.Contains(new int[] { x, y }) || (x == 4 && y == 0));
+                    pos.Add(new int[] { x, y });
+                }
+
+            }
             blacks = new List<Figure>();
-            blacks.Add(new King(4, 7, 1, "Data/BK.jpg"));
-            blacks.Add(new Rook(7, 7, 2, "Data/BR.jpg"));
-            blacks.Add(new Bishop(5, 7, 3, "Data/BB.jpg"));
-            blacks.Add(new Horse(1, 7, 4, "Data/BH.jpg"));
+            blacks.Add(new King(pos[0][0], pos[0][1], 1, "Data/BK.jpg"));
+            blacks.Add(new Rook(pos[1][0], pos[1][1], 2, "Data/BR.jpg"));
+            blacks.Add(new Bishop(pos[2][0], pos[2][1], 3, "Data/BB.jpg"));
+            blacks.Add(new Horse(pos[3][0], pos[3][1], 4, "Data/BH.jpg"));
             blacks.ForEach(figure => { A[figure.X, figure.Y] = figure.Name; figure.GeneratePaths(); chart1.Controls.Add(figure.pb); });
             PATHS = combinePaths();
 
@@ -456,14 +480,15 @@ namespace Pvz1
         }
         public void ClearForm1()
         {
+            chart1.Controls.Clear();
             richTextBox1.Clear();
-            chart1.Series.Clear();
+            InitModels();
+            button2.Enabled = true;
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            chart1.Controls.Clear();
-            InitModels();
+            ClearForm1();
         }
     }
 }
