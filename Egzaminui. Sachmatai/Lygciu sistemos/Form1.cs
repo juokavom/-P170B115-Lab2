@@ -13,6 +13,7 @@ namespace Pvz1
 {
     public partial class Form1 : Form
     {
+        private static char[] abc = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
         private static int[,] A;
         private static PictureBox[,] pbErr;
         private static List<Figure> blacks;
@@ -20,6 +21,7 @@ namespace Pvz1
         private static List<int[]> whiteKingPaths;
         private static List<int[]> PATHS;
         bool ab = false, cd = false;
+        private int counter;
 
         private abstract class Figure
         {
@@ -289,8 +291,8 @@ namespace Pvz1
                 }
             });
             //---
-            whiteKingPaths.ForEach(i => richTextBox1.AppendText(string.Format("Possible: {0} {1}, direction: {2}\n", i[0], i[1], i[2])));
-            richTextBox1.AppendText("\n");
+            //whiteKingPaths.ForEach(i => richTextBox1.AppendText(string.Format("Possible: {0} {1}, direction: {2}\n", i[0], i[1], i[2])));
+            //richTextBox1.AppendText("\n");
         }
         private bool whiteKingMove()
         {
@@ -334,8 +336,8 @@ namespace Pvz1
             //---
             if (selectedPath == 0) return false;
             //---
-            richTextBox1.AppendText(string.Format("Selected path: {0}\n", selectedPath));
-            richTextBox1.AppendText("\n");
+            //richTextBox1.AppendText(string.Format("Selected path: {0}\n", selectedPath));
+            //richTextBox1.AppendText("\n");
             //---
             A[whiteKing.X, whiteKing.Y] = 0;
             int[] nextPoint = whiteKingPaths.Find(i => i[2] == selectedPath);
@@ -348,6 +350,7 @@ namespace Pvz1
             whiteKing.Y = nextPoint[1];
             A[whiteKing.X, whiteKing.Y] = whiteKing.Name;
             Figure.imageLocation(whiteKing.X, whiteKing.Y, whiteKing.pb);
+            richTextBox1.AppendText(string.Format("Ėjimas: {0}, Koordinatės: {1}{2}\n", ++counter, abc[whiteKing.X], whiteKing.Y));
             //---
             return true;
         }
@@ -357,8 +360,8 @@ namespace Pvz1
             WriteLine("");
             bool moved = whiteKingMove();
             button2.Enabled = false;
-            if (!moved) { richTextBox1.AppendText("Nueiti neimanoma\n"); return; }
-            else if (whiteKing.Y == 7) { richTextBox1.AppendText("Sekmingai nueita\n"); return; }
+            if (!moved) { richTextBox1.AppendText("---NUEITI NEįMANOMA!---\n"); return; }
+            else if (whiteKing.Y == 7) { richTextBox1.AppendText("---SĖKMINGAI NUEITA!---\n"); return; }
             else button2.Enabled = true;
             //---
             if (checkBox1.Checked) pathVisibility(false, PATHS);
@@ -407,6 +410,7 @@ namespace Pvz1
         {
             A = new int[8, 8];
             pbErr = new PictureBox[8, 8];
+            counter = 0;
             fillValues(A);
             Random rnd = new Random();
             List<int[]> pos = new List<int[]>();
@@ -489,7 +493,6 @@ namespace Pvz1
             button2.Enabled = true;
             pathVisibility(checkBox1.Checked, PATHS);
         }
-
         private void groupBox2_Enter(object sender, EventArgs e)
         {
             ab = true;
@@ -510,7 +513,6 @@ namespace Pvz1
                 InitModels();
             }
         }
-
         private void button3_Click(object sender, EventArgs e)
         {
             ClearForm1();
