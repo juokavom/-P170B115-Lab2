@@ -55,6 +55,11 @@ namespace Pvz1
                 A[X, Y] = Name;
                 imageLocation(X, Y, pb);
             }
+            public void Remove()
+            {
+                A[X, Y] = 0;
+                pb.Visible = false;
+            }
             public abstract void GeneratePaths();
         }
         private class King : Figure
@@ -226,31 +231,35 @@ namespace Pvz1
         public List<int[]> combinePaths()
         {
             List<int[]> paths = new List<int[]>();
-
+            
             //blacks[0].possiblePaths.ForEach(i => paths.Add(i));
             //blacks[3].possiblePaths.ForEach(i => paths.Add(i));
 
-            for (int q = 0; q < 4; q++)
+            for (int q = 0; q < blacks.Count; q++)
             {
                 bool skip = false;
-                blacks[q].possiblePaths.ForEach(i =>
+                if (blacks[q].Name == 1 || blacks[q].Name == 4) blacks[q].possiblePaths.ForEach(i => paths.Add(i));
+                else
                 {
-                    if (i[0] == blacks[q].X && i[1] == blacks[q].Y) skip = false;
-                    if (!skip)
+                    blacks[q].possiblePaths.ForEach(i =>
                     {
-                        int sum = 0;
-                        for (int u = 0; u < blacks.Count; u++)
+                        if (i[0] == blacks[q].X && i[1] == blacks[q].Y) skip = false;
+                        if (!skip)
                         {
-                            if (u == q) continue;
-                            else
+                            int sum = 0;
+                            for (int u = 0; u < blacks.Count; u++)
                             {
-                                if (blacks[u].X == i[0] && blacks[u].Y == i[1]) sum++;
+                                if (u == q) continue;
+                                else
+                                {
+                                    if (blacks[u].X == i[0] && blacks[u].Y == i[1]) sum++;
+                                }
                             }
+                            skip = (sum > 0) ? true : false;
                         }
-                        skip = (sum > 0) ? true : false;
-                    }
-                    if (!skip) paths.Add(i);
-                });
+                        if (!skip) paths.Add(i);
+                    });
+                }
             }
 
             return paths;
@@ -262,8 +271,10 @@ namespace Pvz1
             whiteKing.possiblePaths.ForEach(i =>
             {
                 bool contains = false;
-                PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) contains = true; }); //Nekerta juodu
-                //PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1] && A[i[0], i[1]] != 1) contains = true; }); //Kerta juodus, iskyrus karaliu
+                //PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) contains = true; }); //Nekerta juodu
+                PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) contains = true; }); //Kerta juodus, iskyrus karaliu
+                //if (contains && A[i[0], i[1]] > 1) contains = false;
+                //if(blacks[0].X )
                 if (!contains)
                 {
                     whiteKingPaths.Add(i);
@@ -277,13 +288,40 @@ namespace Pvz1
         {
             int selectedPath = 0;
             bool left = (whiteKing.X > 3) ? true : false;
+            //I virsu
             whiteKingPaths.ForEach(i => { if (i[2] == 8) selectedPath = i[2]; }); // Jei i virsu
-            if (selectedPath == 0 && left) whiteKingPaths.ForEach(i => { if (i[2] == 7) selectedPath = i[2]; }); //Jei i virsu ir kaire
-            if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 9) selectedPath = i[2]; }); //Jei i virsu ir desine
-            if (selectedPath == 0 && left) whiteKingPaths.ForEach(i => { if (i[2] == 4) selectedPath = i[2]; }); //Jei i kaire
-            if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 6) selectedPath = i[2]; }); //Jei i desine
-            if (selectedPath == 0 && left) whiteKingPaths.ForEach(i => { if (i[2] == 1) selectedPath = i[2]; }); //Jei zemyn ir i kaire
-            if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 3) selectedPath = i[2]; }); //Jei zemyn ir i desine
+            if (left)
+            {
+                if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 7) selectedPath = i[2]; }); //Jei i virsu ir kaire
+                if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 9) selectedPath = i[2]; }); //Jei i virsu ir desine
+            }
+            else 
+            {
+                if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 9) selectedPath = i[2]; }); //Jei i virsu ir kaire
+                if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 7) selectedPath = i[2]; }); //Jei i virsu ir desine
+            }
+            //Esamoj Y
+            if (left)
+            {
+                if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 4) selectedPath = i[2]; }); //Jei i kaire
+                if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 6) selectedPath = i[2]; }); //Jei i desine
+            }
+            else
+            {
+                if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 6) selectedPath = i[2]; }); //Jei i desine
+                if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 4) selectedPath = i[2]; }); //Jei i kaire
+            }
+            //Zemyn
+            if (left)
+            {
+                if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 1) selectedPath = i[2]; }); //Jei zemyn ir i kaire
+                if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 3) selectedPath = i[2]; }); //Jei zemyn ir i desine
+            }
+            else
+            {
+                if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 3) selectedPath = i[2]; }); //Jei zemyn ir i desine
+                if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 1) selectedPath = i[2]; }); //Jei zemyn ir i kaire
+            }
             if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 2) selectedPath = i[2]; }); //Jei zemyn
             //---
             if (selectedPath == 0) return false;
@@ -293,6 +331,11 @@ namespace Pvz1
             //---
             A[whiteKing.X, whiteKing.Y] = 0;
             int[] nextPoint = whiteKingPaths.Find(i => i[2] == selectedPath);
+            /*
+            Figure remove = null;
+            blacks.ForEach(i => { if (i.X == nextPoint[0] && i.Y == nextPoint[1]) { i.Remove(); remove = i; }; }); //Jei kerta juodus
+            if (remove != null) blacks.Remove(remove);
+            */
             whiteKing.X = nextPoint[0];
             whiteKing.Y = nextPoint[1];
             A[whiteKing.X, whiteKing.Y] = whiteKing.Name;
@@ -302,6 +345,8 @@ namespace Pvz1
         }
         private void button2_Click(object sender, EventArgs e)
         {
+            printMatrix(A);
+            WriteLine("");
             bool moved = whiteKingMove();
             button2.Enabled = false;
             if (!moved) { richTextBox1.AppendText("Nueiti neimanoma\n"); return; }
@@ -311,7 +356,7 @@ namespace Pvz1
             if (checkBox1.Checked) pathVisibility(false, PATHS);
             //---
             Random rnd = new Random();
-            int u = rnd.Next(0, 4);
+            int u = rnd.Next(0, blacks.Count);
             blacks[u].Move();
             blacks[u].GeneratePaths();
             PATHS = combinePaths();
@@ -389,6 +434,7 @@ namespace Pvz1
             chart1.Controls.Add(pb);
 
             findWhiteKingPaths();
+            printMatrix(A);
         }
         private void button1_Click(object sender, EventArgs e)
         {
