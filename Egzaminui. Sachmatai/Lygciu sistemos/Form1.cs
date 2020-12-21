@@ -402,7 +402,7 @@ namespace Pvz1
             //whiteKingPaths.ForEach(i => richTextBox1.AppendText(string.Format("Possible: {0} {1}, direction: {2}\n", i[0], i[1], i[2])));
             //richTextBox1.AppendText("\n");
         }
-        private static int[][] BFS(Cell[,] A, int[] start, int[] end, ref bool success)
+        private static List<int[]> BFS(Cell[,] A, int[] start, int[] end, out bool success)
         {
             int X_min = 0;
             int X_max = 7;
@@ -514,7 +514,7 @@ namespace Pvz1
                 }
                 if (currentIndex < visited.GetLength(0)) currentIndex++;
                 if (A[end[0], end[1]].Visited) { success = true; break; }
-                if (!changed) { success = false; break; }
+                if (!changed) { success = false; return null; }
             }
             List<int[]> list = new List<int[]>();
             list.Add(new int[] { end[0], end[1] });
@@ -524,17 +524,28 @@ namespace Pvz1
                 list.Add(new int[] { curr.Parent[0], curr.Parent[1] });
             }
             list.Reverse();
-            return list.ToArray();
+            return list;
 
         }
-        private int BFSOLUTION()
-        {/*
-            int sum = 0;
-            for (int i = 0; i < 7; i++) 
+        private int[] BFSOLUTION(Cell[,] B)
+        {
+            List<List<int[]>> lists = new List<List<int[]>>();
+            for (int i = 0; i < 7; i++)
             {
-                if(A[i, 7] == )
-            }*/
-            return 0;
+                if (B[i, 7].Valid)
+                {
+                    Cell[,] C = new Cell[8, 8];
+                    Array.Copy(B, C, B.Length);
+                    bool sucess;
+                    List<int[]> lst = BFS(C, new int[] { whiteKing.X, whiteKing.Y }, new int[] { i, 7 }, out sucess);
+                    if (sucess) lists.Add(lst);
+                }
+            }
+            if (lists.Count == 0) return new int[] { 0, 0 };
+            var min = lists.Min(i => i.Count);
+            int[] value = { 0, 0 };
+            lists.ForEach(i => { if (i.Count == min) value = i[1]; });
+            return value;
         }
         private Cell[,] spreadMatrix()
         {
@@ -571,8 +582,10 @@ namespace Pvz1
         }
         private bool whiteKingMove()
         {
-            int selectedPath = BFSOLUTION();
             Cell[,] SM = spreadMatrix();
+            int[] xy = BFSOLUTION(SM);
+            int selectedPath = 0;
+            if (xy[0] != 0 && xy[1] != 0) selectedPath = -1;
             //
             //BFS (jei ne, tai ims zemesnius)
             //
@@ -619,7 +632,15 @@ namespace Pvz1
             //richTextBox1.AppendText("\n");
             //---
             A[whiteKing.X, whiteKing.Y] = 0;
-            int[] nextPoint = whiteKingPaths.Find(i => i[2] == selectedPath);
+            int[] nextPoint;
+            if (selectedPath == -1)
+            {
+                nextPoint = xy;
+            }
+            else
+            {
+                nextPoint = whiteKingPaths.Find(i => i[2] == selectedPath);
+            }
 
             Figure remove = null;
             blacks.ForEach(i => { if (i.X == nextPoint[0] && i.Y == nextPoint[1]) { i.Remove(); remove = i; }; }); //Jei kerta juodus
