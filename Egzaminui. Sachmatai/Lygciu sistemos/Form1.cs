@@ -377,8 +377,10 @@ namespace Pvz1
                                 }
                             }
                             skip = (sum > 0) ? true : false;
+
+                            paths.Add(i);
                         }
-                        if (!skip) paths.Add(i);
+                        //if (!skip) paths.Add(i);
                     });
                 }
             }
@@ -534,7 +536,8 @@ namespace Pvz1
             {
                 if (B[i, 7].Valid)
                 {
-                    Cell[,] C = new Cell[8, 8];
+
+                    Cell[,] C = (Cell[,])B.Clone();
                     Array.Copy(B, C, B.Length);
                     bool sucess;
                     List<int[]> lst = BFS(C, new int[] { whiteKing.X, whiteKing.Y }, new int[] { i, 7 }, out sucess);
@@ -584,11 +587,10 @@ namespace Pvz1
         {
             Cell[,] SM = spreadMatrix();
             int[] xy = BFSOLUTION(SM);
+            printMatrix(SM);
             int selectedPath = 0;
             if (xy[0] != 0 && xy[1] != 0) selectedPath = -1;
-            //
-            //BFS (jei ne, tai ims zemesnius)
-            //
+            //---
             bool left = (whiteKing.X > 3) ? true : false;
             //I virsu
             if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 8) selectedPath = i[2]; }); // Jei i virsu
