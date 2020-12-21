@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -12,8 +13,8 @@ namespace Pvz1
 {
     public partial class Form1 : Form
     {
-        private static int[,] A = new int[8, 8];
-        private static PictureBox[,] pbErr = new PictureBox[8, 8];
+        private static int[,] A;
+        private static PictureBox[,] pbErr;
         private static List<Figure> blacks;
         private static King whiteKing;
         private static List<int[]> whiteKingPaths;
@@ -75,14 +76,14 @@ namespace Pvz1
             public override void GeneratePaths()
             {
                 possiblePaths = new List<int[]>();
-                if (X != 7 && Y != 7) possiblePaths.Add(new int[] { X + 1, Y + 1 });
-                if (X != 0 && Y != 7) possiblePaths.Add(new int[] { X - 1, Y + 1 });
-                if (X != 7 && Y != 0) possiblePaths.Add(new int[] { X + 1, Y - 1 });
-                if (X != 0 && Y != 0) possiblePaths.Add(new int[] { X - 1, Y - 1 });
-                if (X != 7) possiblePaths.Add(new int[] { X + 1, Y });
-                if (X != 0) possiblePaths.Add(new int[] { X - 1, Y });
-                if (Y != 7) possiblePaths.Add(new int[] { X, Y + 1 });
-                if (Y != 0) possiblePaths.Add(new int[] { X, Y - 1 });
+                if (X != 7 && Y != 7) possiblePaths.Add(new int[] { X + 1, Y + 1, 1 });
+                if (X != 0 && Y != 7) possiblePaths.Add(new int[] { X - 1, Y + 1, 1 });
+                if (X != 7 && Y != 0) possiblePaths.Add(new int[] { X + 1, Y - 1, 1 });
+                if (X != 0 && Y != 0) possiblePaths.Add(new int[] { X - 1, Y - 1, 1 });
+                if (X != 7) possiblePaths.Add(new int[] { X + 1, Y, 1 });
+                if (X != 0) possiblePaths.Add(new int[] { X - 1, Y, 1 });
+                if (Y != 7) possiblePaths.Add(new int[] { X, Y + 1, 1 });
+                if (Y != 0) possiblePaths.Add(new int[] { X, Y - 1, 1 });
             }
             public void GeneratePathsWithDIrection()
             {
@@ -115,9 +116,10 @@ namespace Pvz1
                     int deltaX = 7 - X;
                     int deltaY = 7 - Y;
                     int length = (deltaX < deltaY) ? deltaX : deltaY;
-                    for (int i = 0; i <= length; i++)
+                    possiblePaths.Add(new int[] { X, Y, 0 });
+                    for (int i = 1; i <= length; i++)
                     {
-                        possiblePaths.Add(new int[] { X + i, Y + i });
+                        possiblePaths.Add(new int[] { X + i, Y + i, 1 });
                     }
                 }
                 if (X != 0 && Y != 7)
@@ -125,9 +127,10 @@ namespace Pvz1
                     int deltaX = X;
                     int deltaY = 7 - Y;
                     int length = (deltaX < deltaY) ? deltaX : deltaY;
-                    for (int i = 0; i <= length; i++)
+                    possiblePaths.Add(new int[] { X, Y, 0 });
+                    for (int i = 1; i <= length; i++)
                     {
-                        possiblePaths.Add(new int[] { X - i, Y + i });
+                        possiblePaths.Add(new int[] { X - i, Y + i, 1 });
                     }
                 }
                 if (X != 7 && Y != 0)
@@ -135,9 +138,10 @@ namespace Pvz1
                     int deltaX = 7 - X;
                     int deltaY = Y;
                     int length = (deltaX < deltaY) ? deltaX : deltaY;
-                    for (int i = 0; i <= length; i++)
+                    possiblePaths.Add(new int[] { X, Y, 0 });
+                    for (int i = 1; i <= length; i++)
                     {
-                        possiblePaths.Add(new int[] { X + i, Y - i });
+                        possiblePaths.Add(new int[] { X + i, Y - i, 1 });
                     }
                 }
                 if (X != 0 && Y != 0)
@@ -145,9 +149,10 @@ namespace Pvz1
                     int deltaX = X;
                     int deltaY = Y;
                     int length = (deltaX < deltaY) ? deltaX : deltaY;
-                    for (int i = 0; i <= length; i++)
+                    possiblePaths.Add(new int[] { X, Y, 0 });
+                    for (int i = 1; i <= length; i++)
                     {
-                        possiblePaths.Add(new int[] { X - i, Y - i });
+                        possiblePaths.Add(new int[] { X - i, Y - i, 1 });
                     }
                 }
             }
@@ -165,14 +170,14 @@ namespace Pvz1
             public override void GeneratePaths()
             {
                 possiblePaths = new List<int[]>();
-                if (X < 7 && Y < 6) possiblePaths.Add(new int[] { X + 1, Y + 2 });
-                if (X < 6 && Y < 7) possiblePaths.Add(new int[] { X + 2, Y + 1 });
-                if (X > 0 && Y < 6) possiblePaths.Add(new int[] { X - 1, Y + 2 });
-                if (X > 1 && Y < 7) possiblePaths.Add(new int[] { X - 2, Y + 1 });
-                if (X < 7 && Y > 1) possiblePaths.Add(new int[] { X + 1, Y - 2 });
-                if (X < 6 && Y > 0) possiblePaths.Add(new int[] { X + 2, Y - 1 });
-                if (X > 0 && Y > 1) possiblePaths.Add(new int[] { X - 1, Y - 2 });
-                if (X > 1 && Y > 0) possiblePaths.Add(new int[] { X - 2, Y - 1 });
+                if (X < 7 && Y < 6) possiblePaths.Add(new int[] { X + 1, Y + 2, 1 });
+                if (X < 6 && Y < 7) possiblePaths.Add(new int[] { X + 2, Y + 1, 1 });
+                if (X > 0 && Y < 6) possiblePaths.Add(new int[] { X - 1, Y + 2, 1 });
+                if (X > 1 && Y < 7) possiblePaths.Add(new int[] { X - 2, Y + 1, 1 });
+                if (X < 7 && Y > 1) possiblePaths.Add(new int[] { X + 1, Y - 2, 1 });
+                if (X < 6 && Y > 0) possiblePaths.Add(new int[] { X + 2, Y - 1, 1 });
+                if (X > 0 && Y > 1) possiblePaths.Add(new int[] { X - 1, Y - 2, 1 });
+                if (X > 1 && Y > 0) possiblePaths.Add(new int[] { X - 2, Y - 1, 1 });
             }
         }
         private class Rook : Figure
@@ -189,30 +194,34 @@ namespace Pvz1
                 possiblePaths = new List<int[]>();
                 if (X != 7)
                 {
-                    for (int x1 = X; x1 <= 7; x1++)
+                    possiblePaths.Add(new int[] { X, Y, 0 });
+                    for (int x1 = X + 1; x1 <= 7; x1++)
                     {
-                        possiblePaths.Add(new int[] { x1, Y });
+                        possiblePaths.Add(new int[] { x1, Y, 1 });
                     }
                 }
                 if (X != 0)
                 {
-                    for (int x1 = X; x1 >= 0; x1--)
+                    possiblePaths.Add(new int[] { X, Y, 0 });
+                    for (int x1 = X - 1; x1 >= 0; x1--)
                     {
-                        possiblePaths.Add(new int[] { x1, Y });
+                        possiblePaths.Add(new int[] { x1, Y, 1 });
                     }
                 }
                 if (Y != 7)
                 {
-                    for (int y1 = Y; y1 <= 7; y1++)
+                    possiblePaths.Add(new int[] { X, Y, 0 });
+                    for (int y1 = Y + 1; y1 <= 7; y1++)
                     {
-                        possiblePaths.Add(new int[] { X, y1 });
+                        possiblePaths.Add(new int[] { X, y1, 1 });
                     }
                 }
                 if (Y != 0)
                 {
-                    for (int y1 = Y; y1 >= 0; y1--)
+                    possiblePaths.Add(new int[] { X, Y, 0 });
+                    for (int y1 = Y - 1; y1 >= 0; y1--)
                     {
-                        possiblePaths.Add(new int[] { X, y1 });
+                        possiblePaths.Add(new int[] { X, y1, 1 });
                     }
                 }
             }
@@ -231,9 +240,6 @@ namespace Pvz1
         public List<int[]> combinePaths()
         {
             List<int[]> paths = new List<int[]>();
-            
-            //blacks[0].possiblePaths.ForEach(i => paths.Add(i));
-            //blacks[3].possiblePaths.ForEach(i => paths.Add(i));
 
             for (int q = 0; q < blacks.Count; q++)
             {
@@ -261,7 +267,6 @@ namespace Pvz1
                     });
                 }
             }
-
             return paths;
         }
         private void findWhiteKingPaths()
@@ -270,11 +275,10 @@ namespace Pvz1
             whiteKingPaths = new List<int[]>();
             whiteKing.possiblePaths.ForEach(i =>
             {
+                int count = 0;
                 bool contains = false;
-                //PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) contains = true; }); //Nekerta juodu
-                PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) contains = true; }); //Kerta juodus, iskyrus karaliu
-                //if (contains && A[i[0], i[1]] > 1) contains = false;
-                //if(blacks[0].X )
+                if(radioButton2.Checked) PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) contains = true; }); //Nekerta juodu
+                else if (radioButton1.Checked) PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) { count++; if (A[i[0], i[1]] == 1 || q[2] == 1) contains = true; }; }); //Kerta juodus, iskyrus karaliu
                 if (!contains)
                 {
                     whiteKingPaths.Add(i);
@@ -295,7 +299,7 @@ namespace Pvz1
                 if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 7) selectedPath = i[2]; }); //Jei i virsu ir kaire
                 if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 9) selectedPath = i[2]; }); //Jei i virsu ir desine
             }
-            else 
+            else
             {
                 if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 9) selectedPath = i[2]; }); //Jei i virsu ir kaire
                 if (selectedPath == 0) whiteKingPaths.ForEach(i => { if (i[2] == 7) selectedPath = i[2]; }); //Jei i virsu ir desine
@@ -331,11 +335,11 @@ namespace Pvz1
             //---
             A[whiteKing.X, whiteKing.Y] = 0;
             int[] nextPoint = whiteKingPaths.Find(i => i[2] == selectedPath);
-            /*
+
             Figure remove = null;
             blacks.ForEach(i => { if (i.X == nextPoint[0] && i.Y == nextPoint[1]) { i.Remove(); remove = i; }; }); //Jei kerta juodus
             if (remove != null) blacks.Remove(remove);
-            */
+
             whiteKing.X = nextPoint[0];
             whiteKing.Y = nextPoint[1];
             A[whiteKing.X, whiteKing.Y] = whiteKing.Name;
@@ -397,6 +401,8 @@ namespace Pvz1
         }
         private void InitModels()
         {
+            A = new int[8, 8];
+            pbErr = new PictureBox[8, 8];
             fillValues(A);
             blacks = new List<Figure>();
             blacks.Add(new King(4, 7, 1, "Data/BK.jpg"));
@@ -452,6 +458,12 @@ namespace Pvz1
         {
             richTextBox1.Clear();
             chart1.Series.Clear();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            chart1.Controls.Clear();
+            InitModels();
         }
     }
 }
