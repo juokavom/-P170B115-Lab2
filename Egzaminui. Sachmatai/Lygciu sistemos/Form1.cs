@@ -17,12 +17,21 @@ namespace Pvz1
         private static int[,] A;
         private static PictureBox[,] pbErr;
         private static List<Figure> blacks;
+        private static List<int[]> PATHS;
         private static King whiteKing;
         private static List<int[]> whiteKingPaths;
-        private static List<int[]> PATHS;
         bool ab = false, cd = false;
         private int counter;
 
+        public Form1()
+        {
+            InitializeComponent();
+            Initialize();
+
+            button2.Enabled = false;
+            button3.Enabled = false;
+            checkBox1.Enabled = false;
+        }
         private abstract class Figure
         {
             public int X;
@@ -231,18 +240,90 @@ namespace Pvz1
                 }
             }
         }
-        public Form1()
+        private void InitModels()
         {
-            InitializeComponent();
-            Initialize();
+            A = new int[8, 8];
+            pbErr = new PictureBox[8, 8];
+            counter = 0;
+            fillValues(A);
+            Random rnd = new Random();
+            List<int[]> pos = new List<int[]>();
+            if (radioButton4.Checked) // a)
+            {
+                pos.Add(new int[] { 4, 7 });
+                pos.Add(new int[] { 7, 7 });
+                pos.Add(new int[] { 5, 7 });
+                pos.Add(new int[] { 1, 7 });
+            }
+            if (radioButton3.Checked) // b)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    int x, y;
+                    do
+                    {
+                        x = rnd.Next(0, 8);
+                        y = rnd.Next(0, 8);
+                    } while (pos.Contains(new int[] { x, y }) || (x == 4 && y == 0));
+                    pos.Add(new int[] { x, y });
+                }
 
-            button2.Enabled = false;
-            button3.Enabled = false;
-            checkBox1.Enabled = false;
+            }
+            blacks = new List<Figure>();
+            blacks.Add(new King(pos[0][0], pos[0][1], 1, "Data/BK.jpg"));
+            blacks.Add(new Rook(pos[1][0], pos[1][1], 2, "Data/BR.jpg"));
+            blacks.Add(new Bishop(pos[2][0], pos[2][1], 3, "Data/BB.jpg"));
+            blacks.Add(new Horse(pos[3][0], pos[3][1], 4, "Data/BH.jpg"));
+            blacks.ForEach(figure => { A[figure.X, figure.Y] = figure.Name; figure.GeneratePaths(); chart1.Controls.Add(figure.pb); });
+            PATHS = combinePaths();
+
+            whiteKing = new King(4, 0, 8, @"Data/WK.jpg");
+            chart1.Controls.Add(whiteKing.pb);
+            A[whiteKing.X, whiteKing.Y] = whiteKing.Name;
+
+            for (int i = 0; i < 8; i++)
+            {
+                for (int u = 0; u < 8; u++)
+                {
+                    PictureBox pb1 = new PictureBox();
+                    pb1.Location = new Point(0, 0);
+                    Figure.imageLocation(i, u, pb1);
+                    pb1.Size = new Size(40, 40);
+                    pb1.Image = Image.FromFile("Data/checked.png");
+                    pb1.Visible = false;
+                    pbErr[i, u] = pb1;
+                    chart1.Controls.Add(pbErr[i, u]);
+                }
+            }
+
+            PictureBox pb = new PictureBox();
+            pb.Location = new Point(0, 0);
+            pb.Size = new Size(400, 400);
+            pb.Image = Image.FromFile(@"Data/Board.jpg");
+            pb.Visible = true;
+            pb.BackColor = Color.Transparent;
+            chart1.Controls.Add(pb);
+
+            findWhiteKingPaths();
         }
-        public void pathVisibility(bool val, List<int[]> paths)
+        private void button2_Click(object sender, EventArgs e)
         {
-            paths.ForEach(i => pbErr[i[0], i[1]].Visible = val);
+            bool moved = whiteKingMove();
+            button2.Enabled = false;
+            if (!moved) { richTextBox1.AppendText("---NUEITI NEįMANOMA!---\n"); return; }
+            else if (whiteKing.Y == 7) { richTextBox1.AppendText("---SĖKMINGAI NUEITA!---\n"); return; }
+            else button2.Enabled = true;
+            //---
+            if (checkBox1.Checked) pathVisibility(false, PATHS);
+            //---
+            Random rnd = new Random();
+            int u = rnd.Next(0, blacks.Count);
+            blacks[u].Move();
+            blacks[u].GeneratePaths();
+            PATHS = combinePaths();
+            //---
+            if (checkBox1.Checked) pathVisibility(true, PATHS);
+            findWhiteKingPaths();
         }
         public List<int[]> combinePaths()
         {
@@ -283,8 +364,8 @@ namespace Pvz1
             whiteKing.possiblePaths.ForEach(i =>
             {
                 bool contains = false;
-                if (radioButton2.Checked) PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) contains = true; }); //Nekerta juodu
-                else if (radioButton1.Checked) PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) { if (A[i[0], i[1]] == 1 || q[2] == 1) contains = true; }; }); //Kerta juodus, iskyrus karaliu
+                if (radioButton2.Checked) PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) contains = true; }); //d) Nekerta juodu
+                else if (radioButton1.Checked) PATHS.ForEach(q => { if (q[0] == i[0] && q[1] == i[1]) { if (A[i[0], i[1]] == 1 || q[2] == 1) contains = true; }; }); //c) Kerta juodus, iskyrus karaliu
                 if (!contains)
                 {
                     whiteKingPaths.Add(i);
@@ -354,27 +435,12 @@ namespace Pvz1
             //---
             return true;
         }
-        private void button2_Click(object sender, EventArgs e)
+        public void pathVisibility(bool val, List<int[]> paths)
         {
-            printMatrix(A);
-            WriteLine("");
-            bool moved = whiteKingMove();
-            button2.Enabled = false;
-            if (!moved) { richTextBox1.AppendText("---NUEITI NEįMANOMA!---\n"); return; }
-            else if (whiteKing.Y == 7) { richTextBox1.AppendText("---SĖKMINGAI NUEITA!---\n"); return; }
-            else button2.Enabled = true;
-            //---
-            if (checkBox1.Checked) pathVisibility(false, PATHS);
-            //---
-            Random rnd = new Random();
-            int u = rnd.Next(0, blacks.Count);
-            blacks[u].Move();
-            blacks[u].GeneratePaths();
-            PATHS = combinePaths();
-            //---
-            if (checkBox1.Checked) pathVisibility(true, PATHS);
-            findWhiteKingPaths();
+            paths.ForEach(i => pbErr[i[0], i[1]].Visible = val);
         }
+              
+        //KITI METODAi
         private void fillValues(int[,] A)
         {
             for (int i = 0; i < A.GetLength(0); i++)
@@ -405,74 +471,7 @@ namespace Pvz1
         private void WriteLine(string text)
         {
             Write(text + "\n");
-        }
-        private void InitModels()
-        {
-            A = new int[8, 8];
-            pbErr = new PictureBox[8, 8];
-            counter = 0;
-            fillValues(A);
-            Random rnd = new Random();
-            List<int[]> pos = new List<int[]>();
-            if (radioButton4.Checked)
-            {
-                pos.Add(new int[] { 4, 7 });
-                pos.Add(new int[] { 7, 7 });
-                pos.Add(new int[] { 5, 7 });
-                pos.Add(new int[] { 1, 7 });
-            }
-            if (radioButton3.Checked)
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    int x, y;
-                    do
-                    {
-                        x = rnd.Next(0, 8);
-                        y = rnd.Next(0, 8);
-                    } while (pos.Contains(new int[] { x, y }) || (x == 4 && y == 0));
-                    pos.Add(new int[] { x, y });
-                }
-
-            }
-            blacks = new List<Figure>();
-            blacks.Add(new King(pos[0][0], pos[0][1], 1, "Data/BK.jpg"));
-            blacks.Add(new Rook(pos[1][0], pos[1][1], 2, "Data/BR.jpg"));
-            blacks.Add(new Bishop(pos[2][0], pos[2][1], 3, "Data/BB.jpg"));
-            blacks.Add(new Horse(pos[3][0], pos[3][1], 4, "Data/BH.jpg"));
-            blacks.ForEach(figure => { A[figure.X, figure.Y] = figure.Name; figure.GeneratePaths(); chart1.Controls.Add(figure.pb); });
-            PATHS = combinePaths();
-
-            whiteKing = new King(4, 0, 8, @"Data/WK.jpg");
-            chart1.Controls.Add(whiteKing.pb);
-            A[whiteKing.X, whiteKing.Y] = whiteKing.Name;
-
-            for (int i = 0; i < 8; i++)
-            {
-                for (int u = 0; u < 8; u++)
-                {
-                    PictureBox pb1 = new PictureBox();
-                    pb1.Location = new Point(0, 0);
-                    Figure.imageLocation(i, u, pb1);
-                    pb1.Size = new Size(40, 40);
-                    pb1.Image = Image.FromFile("Data/checked.png");
-                    pb1.Visible = false;
-                    pbErr[i, u] = pb1;
-                    chart1.Controls.Add(pbErr[i, u]);
-                }
-            }
-
-            PictureBox pb = new PictureBox();
-            pb.Location = new Point(0, 0);
-            pb.Size = new Size(400, 400);
-            pb.Image = Image.FromFile(@"Data/Board.jpg");
-            pb.Visible = true;
-            pb.BackColor = Color.Transparent;
-            chart1.Controls.Add(pb);
-
-            findWhiteKingPaths();
-            printMatrix(A);
-        }
+        }       
         private void button1_Click(object sender, EventArgs e)
         {
             Close();
