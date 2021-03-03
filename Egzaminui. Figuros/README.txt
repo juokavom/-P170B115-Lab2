@@ -1,0 +1,1 @@
+neatlikta iki galo. 
